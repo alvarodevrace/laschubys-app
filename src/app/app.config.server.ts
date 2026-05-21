@@ -1,0 +1,19 @@
+import { ApplicationConfig, mergeApplicationConfig } from '@angular/core';
+import { provideServerRendering, withRoutes, RenderMode, ServerRoute } from '@angular/ssr';
+
+import { appConfig } from './app.config';
+
+const serverRoutes: ServerRoute[] = [
+  { path: 'blog/:slug', renderMode: RenderMode.Server },
+  { path: 'admin', renderMode: RenderMode.Client },
+  { path: 'auth/callback', renderMode: RenderMode.Client },
+  { path: 'checkout', renderMode: RenderMode.Client },
+  { path: 'carrito', renderMode: RenderMode.Client },
+  { path: '**', renderMode: RenderMode.Prerender },
+];
+
+const serverConfig: ApplicationConfig = {
+  providers: [provideServerRendering(withRoutes(serverRoutes))],
+};
+
+export const config = mergeApplicationConfig(appConfig, serverConfig);

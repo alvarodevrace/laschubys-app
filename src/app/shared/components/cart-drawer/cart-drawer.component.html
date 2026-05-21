@@ -1,0 +1,42 @@
+<aside class="cart-drawer" [attr.aria-hidden]="!isOpen()">
+  <button class="cart-drawer__backdrop" type="button" (click)="close()" aria-label="Cerrar carrito"></button>
+
+  <div class="cart-drawer__panel">
+    <div class="cart-drawer__header">
+      <h2>Tu selección</h2>
+      <button class="cart-drawer__close" type="button" (click)="close()">Cerrar</button>
+    </div>
+
+    <div class="cart-drawer__content">
+      @if (items().length === 0) {
+        <div class="cart-empty">
+          <p>Tu carrito está vacío.</p>
+          <a routerLink="/tienda" (click)="close()">Ir a la tienda</a>
+        </div>
+      } @else {
+        <div class="cdd-items">
+          @for (item of items(); track item.id) {
+            <article class="cdd-item">
+              <img [src]="item.image" [alt]="item.name" loading="lazy" />
+              <div class="cdd-item__body">
+                <p class="cdd-item__name">{{ item.name }}</p>
+                <p class="cdd-item__meta">{{ item.qty }} x {{ item.price | currency:'USD':'symbol':'1.0-0' }}</p>
+                <button class="cdd-item__remove" type="button" (click)="remove(item.id)">Eliminar</button>
+              </div>
+            </article>
+          }
+        </div>
+
+        <div class="cdd-footer">
+          <div class="cdd-footer__row">
+            <span>Total</span>
+            <strong>{{ total() | currency:'USD':'symbol':'1.0-0' }}</strong>
+          </div>
+
+          <a class="button-primary" routerLink="/carrito" (click)="close()">Ver carrito</a>
+          <button class="button-secondary" type="button" (click)="clear()">Vaciar carrito</button>
+        </div>
+      }
+    </div>
+  </div>
+</aside>

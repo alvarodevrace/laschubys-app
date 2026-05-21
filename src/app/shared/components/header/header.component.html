@@ -1,0 +1,237 @@
+<div class="nav-shell" [class.is-pinned]="isPinned()" [class.is-home]="isHome()" id="nav-shell">
+  <div class="topbar">
+    <div class="topbar__inner">
+      <div class="topbar__left">
+        <span>Las Chubys · Tienda, blog y caos felino.</span>
+        <a class="topbar__link" href="https://wa.me/593960463743" rel="noreferrer" target="_blank">WhatsApp</a>
+      </div>
+      <div class="topbar__right">
+        <a class="topbar__link" href="mailto:laschubys.oficial@gmail.com">Correo</a>
+        <a class="topbar__link" href="https://www.instagram.com/laschubys.oficial/" rel="noreferrer" target="_blank">Instagram</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="main-header">
+    <div class="main-header__inner">
+      <button class="nav-hamburger" type="button" (click)="toggleMobileMenu()" aria-label="Abrir menú" [attr.aria-expanded]="isMenuOpen()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 6h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 18h16"></path>
+        </svg>
+      </button>
+
+      <a class="main-header__brand" routerLink="/" aria-label="Inicio Las Chubys">
+        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" />
+      </a>
+
+      <form class="main-header__search" role="search" (ngSubmit)="submitSearch()">
+        <input
+          #searchInput
+          type="search"
+          name="q"
+          placeholder="Buscar productos para los michis..."
+          autocomplete="off"
+          aria-label="Buscar productos"
+          [value]="searchQuery()"
+          (input)="searchQuery.set(searchInput.value)"
+        />
+        <button type="submit" aria-label="Buscar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="6.5"></circle>
+            <path d="M16.2 16.2 21 21"></path>
+          </svg>
+        </button>
+      </form>
+
+      <div class="main-header__actions">
+        @if (user(); as currentUser) {
+          <div class="nav-user">
+            <button class="header-action-btn" type="button" (click)="toggleUserMenu()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 20a8 8 0 1 0-16 0"></path>
+                <circle cx="12" cy="8" r="3.5"></circle>
+              </svg>
+              <span>{{ firstName() }}</span>
+            </button>
+
+            @if (isUserMenuOpen()) {
+              <div class="nav-user__menu is-open">
+                @if (currentUser.role === 'admin') {
+                  <a routerLink="/admin" (click)="toggleUserMenu()">Panel</a>
+                }
+                <button type="button" (click)="logout()">Salir</button>
+              </div>
+            }
+          </div>
+        } @else {
+          <a class="header-action-btn" routerLink="/auth/login">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 20a8 8 0 1 0-16 0"></path>
+              <circle cx="12" cy="8" r="3.5"></circle>
+            </svg>
+            <span>Mi Cuenta</span>
+          </a>
+        }
+
+        <button class="header-action-btn header-cart-btn" type="button" (click)="openCart()" aria-label="Carrito de compras">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="19" r="1.4"></circle>
+            <circle cx="17" cy="19" r="1.4"></circle>
+            <path d="M3 4h2.2l1.7 8.2a1.4 1.4 0 0 0 1.4 1.1h8.8a1.4 1.4 0 0 0 1.4-1.1L20 7H7.1"></path>
+            <path d="M8.5 16h10.2"></path>
+          </svg>
+          <span>Carrito</span>
+          @if (count() > 0) {
+            <span class="cart-badge" data-cart-count>{{ count() }}</span>
+          } @else {
+            <span class="cart-badge" data-cart-count hidden>0</span>
+          }
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="cat-nav" aria-label="Categorías">
+    <div class="cat-nav__grid">
+      <a routerLink="/tienda" routerLinkActive="is-active" class="cat-nav__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <path d="M3 6h18"></path>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+        <span>Tienda</span>
+      </a>
+      <a routerLink="/servicios" routerLinkActive="is-active" class="cat-nav__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          <path d="M9 7h6"></path>
+          <path d="M9 11h6"></path>
+          <path d="M9 15h4"></path>
+        </svg>
+        <span>Servicios</span>
+      </a>
+      <a routerLink="/about" routerLinkActive="is-active" class="cat-nav__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span>Nosotras</span>
+      </a>
+      <a routerLink="/blog" routerLinkActive="is-active" class="cat-nav__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+        </svg>
+        <span>Blog</span>
+      </a>
+      <a routerLink="/contact" routerLinkActive="is-active" class="cat-nav__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22 6 12 13 2 6"></polyline>
+        </svg>
+        <span>Contacto</span>
+      </a>
+    </div>
+  </nav>
+</div>
+
+<div class="nav-mobile" [attr.aria-hidden]="!isMenuOpen()">
+  <button class="nav-mobile__backdrop" type="button" (click)="closeMobileMenu()" aria-label="Cerrar menú"></button>
+  <div class="nav-mobile__panel">
+    <div class="nav-mobile__head">
+      <a class="nav-mobile__brand" routerLink="/" (click)="closeMobileMenu()">
+        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" />
+      </a>
+      <button class="nav-mobile__close" type="button" (click)="closeMobileMenu()" aria-label="Cerrar menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18"></path>
+          <path d="M6 6 18 18"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="nav-mobile__links">
+      <a class="nav-mobile__link" routerLink="/tienda" (click)="closeMobileMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 6h16l-1.5 12h-13z"></path>
+          <path d="M8 6V4.5A4 4 0 0 1 12 1a4 4 0 0 1 4 3.5V6"></path>
+        </svg>
+        <span>Tienda</span>
+      </a>
+      <a class="nav-mobile__link" routerLink="/blog" (click)="closeMobileMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"></path>
+          <path d="M8 8h7"></path>
+          <path d="M8 12h7"></path>
+        </svg>
+        <span>Blog</span>
+      </a>
+      <a class="nav-mobile__link" routerLink="/about" (click)="closeMobileMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 21s7-4.7 7-11.2A4.8 4.8 0 0 0 12 5a4.8 4.8 0 0 0-7 4.8C5 16.3 12 21 12 21z"></path>
+        </svg>
+        <span>Nosotras</span>
+      </a>
+      <a class="nav-mobile__link" routerLink="/servicios" (click)="closeMobileMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          <path d="M9 7h6"></path>
+          <path d="M9 11h6"></path>
+          <path d="M9 15h4"></path>
+        </svg>
+        <span>Servicios</span>
+      </a>
+      <a class="nav-mobile__link" routerLink="/contact" (click)="closeMobileMenu()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22 6 12 13 2 6"></polyline>
+        </svg>
+        <span>Contacto</span>
+      </a>
+    </nav>
+
+    <div class="nav-mobile__footer">
+      @if (user(); as currentUser) {
+        <div class="nav-mobile__user">
+          <span class="nav-mobile__user-name">{{ currentUser.name }}</span>
+          @if (currentUser.role === 'admin') {
+            <a class="nav-mobile__action" routerLink="/admin" (click)="closeMobileMenu()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="4" width="6.5" height="6.5" rx="1.2"></rect>
+                <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"></rect>
+                <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"></rect>
+                <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"></rect>
+              </svg>
+              <span>Panel admin</span>
+            </a>
+          }
+          <button class="nav-mobile__action" type="button" (click)="logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 17l5-5-5-5"></path>
+              <path d="M15 12H4"></path>
+              <path d="M20 4v16"></path>
+            </svg>
+            <span>Cerrar sesión</span>
+          </button>
+        </div>
+      } @else {
+        <a class="nav-mobile__signin" routerLink="/auth/login" (click)="closeMobileMenu()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M10 17l5-5-5-5"></path>
+            <path d="M15 12H4"></path>
+            <path d="M20 4v16"></path>
+          </svg>
+          <span>Ingresar</span>
+        </a>
+      }
+
+      <div class="nav-mobile__socials">
+        @for (channel of socialChannels.slice(0, 2); track channel.name) {
+          <a [href]="channel.href" class="nav-mobile__social" rel="noreferrer" target="_blank">{{ channel.name }}</a>
+        }
+      </div>
+    </div>
+  </div>
+</div>
