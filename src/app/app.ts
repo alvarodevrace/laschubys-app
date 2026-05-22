@@ -6,4 +6,8 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet],
   template: '<router-outlet />'
 })
-export class App {}
+export class App {
+  throwTestError(): void {
+    throw new Error('Sentry Test Error — laschubys-app');
+  }
+}
