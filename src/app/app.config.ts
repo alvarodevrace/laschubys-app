@@ -1,8 +1,9 @@
-import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer, provideZonelessChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, ErrorHandler, importProvidersFrom, inject, provideAppInitializer, provideZonelessChangeDetection } from '@angular/core';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideRouter, Router, withViewTransitions } from '@angular/router';
 import { LucideAngularModule, LayoutGrid, Menu, Search, ShoppingCart, UserRound, X } from 'lucide-angular';
+import * as Sentry from '@sentry/angular';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/auth/auth.interceptor';
@@ -18,5 +19,8 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       LucideAngularModule.pick({ LayoutGrid, Menu, Search, ShoppingCart, UserRound, X })
     ),
+    { provide: ErrorHandler, useValue: Sentry.createErrorHandler() },
+    { provide: Sentry.TraceService, deps: [Router] },
+    { provide: APP_INITIALIZER, useFactory: () => () => {}, deps: [Sentry.TraceService], multi: true },
   ]
 };
