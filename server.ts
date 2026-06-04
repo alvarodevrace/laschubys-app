@@ -74,7 +74,7 @@ if (isMainModule(import.meta.url)) {
   const port = parseInt(process.env['PORT'] || '4321', 10);
 
   createServer((req, res) => {
-    if (req.url?.startsWith('/api')) {
+    if (req.url?.startsWith('/api') || req.url === '/sitemap.xml') {
       proxyToApi(req, res);
       return;
     }

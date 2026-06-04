@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, inject, resource, signal } from '@angular/core';
+import { Component, computed, effect, inject, resource, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -306,6 +306,29 @@ export class TiendaComponent {
 
   constructor() {
     this.seo.setPage('Tienda | Las Chubys', 'Catálogo completo para michis y michi lovers.', '/images/banner1.PNG', '/tienda');
+
+    effect(() => {
+      const products = this.productsResource.value();
+      if (!products?.length) return;
+      this.seo.setJsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'Tienda Las Chubys',
+        url: 'https://laschubys.com/tienda',
+        numberOfItems: products.length,
+        itemListElement: products.map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'Product',
+            name: p.name,
+            description: p.description || p.copy,
+            image: p.images[0],
+            offers: { '@type': 'Offer', price: p.priceValue, priceCurrency: 'USD' },
+          },
+        })),
+      });
+    });
   }
 
   protected addToCart(product: ProductPick) {
