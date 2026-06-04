@@ -1,4 +1,9 @@
-import { AngularNodeAppEngine, createNodeRequestHandler, isMainModule, writeResponseToNodeResponse } from '@angular/ssr/node';
+import {
+  AngularNodeAppEngine,
+  createNodeRequestHandler,
+  isMainModule,
+  writeResponseToNodeResponse,
+} from '@angular/ssr/node';
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer, request as httpRequest, IncomingMessage, ServerResponse } from 'node:http';
 import { extname, dirname, resolve } from 'node:path';
@@ -33,17 +38,21 @@ function serveStatic(req: IncomingMessage, res: ServerResponse, distFolder: stri
   const mime = MIME[extname(filePath)];
   if (!mime || !existsSync(filePath)) return false;
   const { size } = statSync(filePath);
-  res.writeHead(200, { 'Content-Type': mime, 'Content-Length': size, 'Cache-Control': 'public, max-age=31536000, immutable' });
+  res.writeHead(200, {
+    'Content-Type': mime,
+    'Content-Length': size,
+    'Cache-Control': 'public, max-age=31536000, immutable',
+  });
   createReadStream(filePath).pipe(res);
   return true;
 }
 
-function proxyToApi(req: IncomingMessage, res: ServerResponse) {
+function proxyToApi(req: IncomingMessage, res: ServerResponse, overridePath?: string) {
   const target = new URL(API_TARGET);
   const options = {
     hostname: target.hostname,
     port: Number(target.port) || (target.protocol === 'https:' ? 443 : 80),
-    path: req.url,
+    path: overridePath ?? req.url,
     method: req.method,
     headers: { ...req.headers, host: target.host },
   };
@@ -74,8 +83,12 @@ if (isMainModule(import.meta.url)) {
   const port = parseInt(process.env['PORT'] || '4321', 10);
 
   createServer((req, res) => {
-    if (req.url?.startsWith('/api') || req.url === '/sitemap.xml') {
+    if (req.url?.startsWith('/api')) {
       proxyToApi(req, res);
+      return;
+    }
+    if (req.url === '/sitemap.xml') {
+      proxyToApi(req, res, '/api/content/sitemap.xml');
       return;
     }
 
