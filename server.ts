@@ -91,6 +91,16 @@ if (isMainModule(import.meta.url)) {
       proxyToApi(req, res, '/api/content/sitemap.xml');
       return;
     }
+    if (req.url === '/robots.txt') {
+      const body = 'User-agent: *\nAllow: /\n\nSitemap: https://api.laschubys.com/api/content/sitemap.xml\n';
+      res.writeHead(200, {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Content-Length': Buffer.byteLength(body),
+        'Cache-Control': 'public, max-age=3600',
+      });
+      res.end(body);
+      return;
+    }
 
     if (serveStatic(req, res, browserDistFolder)) return;
 
