@@ -1,0 +1,60 @@
+// SVG sizing helpers
+.nav-hamburger,
+.header-action-btn,
+.nav-mobile__close,
+.nav-mobile__link,
+.nav-mobile__action,
+.nav-mobile__signin {
+  svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+  }
+}
+
+.header-action-btn,
+.nav-mobile__action,
+.nav-mobile__signin {
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.nav-mobile__link,
+.nav-mobile__action,
+.nav-mobile__signin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.nav-mobile__action {
+  justify-content: flex-start;
+}
+
+// Home page hides topbar
+.nav-shell.is-home .topbar {
+  display: none;
+}
+
+// Category nav
+.cat-nav__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+  }
+}
+
+// Search button SVG
+.main-header__search button svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}

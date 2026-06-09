@@ -39,7 +39,9 @@ import { ContentService } from '../../../core/services/content.service';
         @if (!auth.isLoggedIn()) {
           <p class="comments__auth-copy">
             Necesitas sesión para comentar.
-            <a [routerLink]="['/auth/login']" [queryParams]="{ redirect: '/blog/' + slug() }">Inicia aquí</a>.
+            <a [routerLink]="['/auth/login']" [queryParams]="{ redirect: '/blog/' + slug() }"
+              >Inicia aquí</a
+            >.
           </p>
         } @else {
           <textarea
@@ -56,81 +58,88 @@ import { ContentService } from '../../../core/services/content.service';
             <p class="comments__success">{{ success() }}</p>
           }
 
-          <button class="button-primary" type="button" [disabled]="pending() || !hasDraft()" (click)="submit()">
+          <button
+            class="button-primary"
+            type="button"
+            [disabled]="pending() || !hasDraft()"
+            (click)="submit()"
+          >
             {{ pending() ? 'Enviando...' : 'Publicar comentario' }}
           </button>
         }
       </div>
     </section>
   `,
-  styles: [`
-    .comments {
-      display: grid;
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
+  styles: [
+    `
+      .comments {
+        display: grid;
+        gap: 1.5rem;
+        margin-top: 3rem;
+      }
 
-    .comments__head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
+      .comments__head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
 
-    .comments__head h2,
-    .comments__composer h3 {
-      margin: 0;
-    }
+      .comments__head h2,
+      .comments__composer h3 {
+        margin: 0;
+      }
 
-    .comments__list,
-    .comments__composer {
-      display: grid;
-      gap: 1rem;
-    }
+      .comments__list,
+      .comments__composer {
+        display: grid;
+        gap: 1rem;
+      }
 
-    .comment-card {
-      padding: 1rem 1.1rem;
-      border-radius: 20px;
-      background: #fffdfb;
-      border: 1px solid rgba(29, 22, 19, 0.08);
-    }
+      .comment-card {
+        padding: 1rem 1.1rem;
+        border-radius: 20px;
+        background: var(--gray-50);
+        border: 1px solid var(--border);
+      }
 
-    .comment-card__meta {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 0.6rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
+      .comment-card__meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.6rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+      }
 
-    .comment-card p,
-    .comments__empty,
-    .comments__auth-copy,
-    .comments__error,
-    .comments__success {
-      margin: 0;
-      line-height: 1.6;
-    }
+      .comment-card p,
+      .comments__empty,
+      .comments__auth-copy,
+      .comments__error,
+      .comments__success {
+        margin: 0;
+        line-height: 1.6;
+      }
 
-    textarea {
-      width: 100%;
-      padding: 1rem;
-      border-radius: 18px;
-      border: 1px solid rgba(29, 22, 19, 0.12);
-      resize: vertical;
-      min-height: 132px;
-      background: #fffdfb;
-    }
+      textarea {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        resize: vertical;
+        min-height: 132px;
+        background: var(--gray-50);
+      }
 
-    .comments__error {
-      color: #a33212;
-    }
+      .comments__error {
+        color: #a33212;
+      }
 
-    .comments__success {
-      color: #216d3d;
-    }
-  `],
+      .comments__success {
+        color: #216d3d;
+      }
+    `,
+  ],
 })
 export class CommentsComponent {
   readonly auth = inject(AuthService);
