@@ -102,127 +102,129 @@ interface CheckoutPayload {
                 <div class="checkout-item">
                   <div>
                     <strong>{{ item.name }}</strong>
-                    <p>{{ item.qty }} x {{ item.price | currency:'USD':'symbol':'1.0-0' }}</p>
+                    <p>{{ item.qty }} x {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</p>
                   </div>
-                  <span>{{ item.qty * item.price | currency:'USD':'symbol':'1.0-0' }}</span>
+                  <span>{{ item.qty * item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
                 </div>
               }
             </div>
             <div class="checkout-total">
               <span>Total</span>
-              <strong>{{ total() | currency:'USD':'symbol':'1.0-0' }}</strong>
+              <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
             </div>
           </aside>
         </div>
       }
     </section>
   `,
-  styles: [`
-    .page-hero,
-    .page-section {
-      padding-bottom: 2rem;
-    }
-
-    .page-hero {
-      padding-top: 3rem;
-      display: grid;
-      gap: 0.8rem;
-    }
-
-    .breadcrumb,
-    .page-copy {
-      color: var(--text-muted);
-    }
-
-    h1,
-    h2,
-    p {
-      margin: 0;
-    }
-
-    h1 {
-      line-height: 1;
-      font-size: clamp(2.4rem, 5vw, 4.6rem);
-    }
-
-    .checkout-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.8fr);
-      gap: 1.25rem;
-      align-items: start;
-    }
-
-    .checkout-form,
-    .checkout-summary,
-    .empty-panel {
-      display: grid;
-      gap: 1rem;
-      padding: 1.2rem;
-      border-radius: 28px;
-      background: #fffdfb;
-      border: 1px solid rgba(29, 22, 19, 0.08);
-    }
-
-    .checkout-form label {
-      display: grid;
-      gap: 0.45rem;
-    }
-
-    .checkout-form span,
-    .checkout-item p {
-      color: var(--text-muted);
-      font-size: 0.92rem;
-    }
-
-    .checkout-form input,
-    .checkout-form select,
-    .checkout-form textarea {
-      min-height: 48px;
-      padding: 0.85rem 1rem;
-      border-radius: 16px;
-      border: 1px solid rgba(29, 22, 19, 0.12);
-      background: #ffffff;
-      font: inherit;
-    }
-
-    .checkout-form textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .checkout-items {
-      display: grid;
-      gap: 0.9rem;
-    }
-
-    .checkout-item,
-    .checkout-total {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      align-items: start;
-    }
-
-    .checkout-total {
-      padding-top: 1rem;
-      border-top: 1px solid rgba(29, 22, 19, 0.08);
-      color: var(--text);
-    }
-
-    .checkout-message--error {
-      color: #a33212;
-    }
-
-    .checkout-message--success {
-      color: #216d3d;
-    }
-
-    @media (max-width: 960px) {
-      .checkout-layout {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .page-hero,
+      .page-section {
+        padding-bottom: 2rem;
       }
-    }
-  `],
+
+      .page-hero {
+        padding-top: 3rem;
+        display: grid;
+        gap: 0.8rem;
+      }
+
+      .breadcrumb,
+      .page-copy {
+        color: var(--text-muted);
+      }
+
+      h1,
+      h2,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        line-height: 1;
+        font-size: clamp(2.4rem, 5vw, 4.6rem);
+      }
+
+      .checkout-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.8fr);
+        gap: 1.25rem;
+        align-items: start;
+      }
+
+      .checkout-form,
+      .checkout-summary,
+      .empty-panel {
+        display: grid;
+        gap: 1rem;
+        padding: 1.2rem;
+        border-radius: 28px;
+        background: var(--gray-50);
+        border: 1px solid var(--border);
+      }
+
+      .checkout-form label {
+        display: grid;
+        gap: 0.45rem;
+      }
+
+      .checkout-form span,
+      .checkout-item p {
+        color: var(--text-muted);
+        font-size: 0.92rem;
+      }
+
+      .checkout-form input,
+      .checkout-form select,
+      .checkout-form textarea {
+        min-height: 48px;
+        padding: 0.85rem 1rem;
+        border-radius: 16px;
+        border: 1px solid var(--border);
+        background: #ffffff;
+        font: inherit;
+      }
+
+      .checkout-form textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
+
+      .checkout-items {
+        display: grid;
+        gap: 0.9rem;
+      }
+
+      .checkout-item,
+      .checkout-total {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: start;
+      }
+
+      .checkout-total {
+        padding-top: 1rem;
+        border-top: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .checkout-message--error {
+        color: #a33212;
+      }
+
+      .checkout-message--success {
+        color: #216d3d;
+      }
+
+      @media (max-width: 960px) {
+        .checkout-layout {
+          grid-template-columns: 1fr;
+        }
+      }
+    `,
+  ],
 })
 export class CheckoutComponent {
   private readonly api = inject(ApiService);
@@ -240,7 +242,7 @@ export class CheckoutComponent {
       !!this.form.phone.trim() &&
       !!this.form.email.trim() &&
       !!this.form.province.trim() &&
-      !!this.form.address.trim()
+      !!this.form.address.trim(),
   );
 
   protected readonly form = {
@@ -252,7 +254,12 @@ export class CheckoutComponent {
   };
 
   constructor() {
-    this.seo.setPage('Checkout | Las Chubys', 'Completa tu compra en Las Chubys.', '/images/cats/iris4.jpeg', '/checkout');
+    this.seo.setPage(
+      'Checkout | Las Chubys',
+      'Completa tu compra en Las Chubys.',
+      '/images/cats/iris4.jpeg',
+      '/checkout',
+    );
   }
 
   protected async submit() {

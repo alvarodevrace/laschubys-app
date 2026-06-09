@@ -9,7 +9,7 @@ import { CartService } from '../../../core/services/cart.service';
   standalone: true,
   imports: [CurrencyPipe, RouterLink],
   templateUrl: './cart-drawer.component.html',
-  styleUrl: './cart-drawer.component.css',
+  styleUrl: './cart-drawer.component.scss',
 })
 export class CartDrawerComponent {
   private readonly cart = inject(CartService);

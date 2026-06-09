@@ -14,30 +14,28 @@
   box-shadow: 0 20px 45px rgba(37, 211, 102, 0.32);
   z-index: 2000;
   transition: transform 180ms ease, box-shadow 180ms ease;
-}
 
-.whatsapp-float:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 24px 48px rgba(37, 211, 102, 0.38);
-}
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 24px 48px rgba(37, 211, 102, 0.38);
+  }
 
-.whatsapp-float svg {
-  width: 26px;
-  height: 26px;
-  display: block;
-  fill: currentColor;
-}
+  svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+    fill: currentColor;
+  }
 
-@media (max-width: 768px) {
-  .whatsapp-float {
+  @media (max-width: 768px) {
     right: 0.85rem;
     bottom: 0.85rem;
     width: 52px;
     height: 52px;
-  }
 
-  .whatsapp-float svg {
-    width: 24px;
-    height: 24px;
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 }

@@ -12,7 +12,7 @@ import { CartService } from '../../../core/services/cart.service';
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css',
+  styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
   private readonly auth = inject(AuthService);

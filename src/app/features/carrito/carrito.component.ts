@@ -29,7 +29,11 @@ import { CartItemRowComponent } from './cart-item-row.component';
         <div class="cart-layout">
           <div class="cart-list">
             @for (item of items(); track item.id) {
-              <app-cart-item-row [item]="item" (qtyChange)="updateQty(item.id, $event)" (remove)="remove(item.id)" />
+              <app-cart-item-row
+                [item]="item"
+                (qtyChange)="updateQty(item.id, $event)"
+                (remove)="remove(item.id)"
+              />
             }
           </div>
 
@@ -41,7 +45,7 @@ import { CartItemRowComponent } from './cart-item-row.component';
             </div>
             <div class="cart-summary__row">
               <span>Subtotal</span>
-              <strong>{{ total() | currency:'USD':'symbol':'1.0-0' }}</strong>
+              <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
             </div>
             <div class="cart-summary__row">
               <span>Envío</span>
@@ -60,74 +64,76 @@ import { CartItemRowComponent } from './cart-item-row.component';
       }
     </section>
   `,
-  styles: [`
-    .page-hero,
-    .page-section {
-      padding-bottom: 2rem;
-    }
+  styles: [
+    `
+      .page-hero,
+      .page-section {
+        padding-bottom: 2rem;
+      }
 
-    .page-hero {
-      padding-top: 3rem;
-      display: grid;
-      gap: 0.8rem;
-    }
+      .page-hero {
+        padding-top: 3rem;
+        display: grid;
+        gap: 0.8rem;
+      }
 
-    .breadcrumb,
-    .page-copy {
-      color: var(--text-muted);
-    }
+      .breadcrumb,
+      .page-copy {
+        color: var(--text-muted);
+      }
 
-    h1,
-    h2 {
-      margin: 0;
-      line-height: 1;
-    }
+      h1,
+      h2 {
+        margin: 0;
+        line-height: 1;
+      }
 
-    h1 {
-      font-size: clamp(2.4rem, 5vw, 4.6rem);
-    }
+      h1 {
+        font-size: clamp(2.4rem, 5vw, 4.6rem);
+      }
 
-    .cart-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.8fr);
-      gap: 1.25rem;
-      align-items: start;
-    }
-
-    .cart-list,
-    .cart-summary,
-    .empty-panel {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .cart-summary,
-    .empty-panel {
-      padding: 1.2rem;
-      border-radius: 28px;
-      background: #fffdfb;
-      border: 1px solid rgba(29, 22, 19, 0.08);
-      position: sticky;
-      top: 1rem;
-    }
-
-    .cart-summary__row {
-      display: flex;
-      justify-content: space-between;
-      gap: 1rem;
-      color: var(--text-muted);
-    }
-
-    @media (max-width: 960px) {
       .cart-layout {
-        grid-template-columns: 1fr;
+        display: grid;
+        grid-template-columns: minmax(0, 1.6fr) minmax(280px, 0.8fr);
+        gap: 1.25rem;
+        align-items: start;
       }
 
-      .cart-summary {
-        position: static;
+      .cart-list,
+      .cart-summary,
+      .empty-panel {
+        display: grid;
+        gap: 1rem;
       }
-    }
-  `],
+
+      .cart-summary,
+      .empty-panel {
+        padding: 1.2rem;
+        border-radius: 28px;
+        background: var(--gray-50);
+        border: 1px solid var(--border);
+        position: sticky;
+        top: 1rem;
+      }
+
+      .cart-summary__row {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var(--text-muted);
+      }
+
+      @media (max-width: 960px) {
+        .cart-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .cart-summary {
+          position: static;
+        }
+      }
+    `,
+  ],
 })
 export class CarritoComponent {
   private readonly cart = inject(CartService);
@@ -138,7 +144,12 @@ export class CarritoComponent {
   protected readonly count = this.cart.count;
 
   constructor() {
-    this.seo.setPage('Carrito | Las Chubys', 'Tu selección actual de productos felinos.', '/images/cats/rubi4.jpeg', '/carrito');
+    this.seo.setPage(
+      'Carrito | Las Chubys',
+      'Tu selección actual de productos felinos.',
+      '/images/cats/rubi4.jpeg',
+      '/carrito',
+    );
   }
 
   protected updateQty(id: string, qty: number) {

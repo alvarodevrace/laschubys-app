@@ -3,18 +3,31 @@ import * as Sentry from '@sentry/angular';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
 
+const isLocalhost =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
 Sentry.init({
   dsn: 'https://782c6ea9772b815593821fbefb852c77@o4511020887638016.ingest.us.sentry.io/4511434539073536',
-  integrations: [
-    Sentry.browserTracingIntegration(),
-    Sentry.replayIntegration(),
+  environment: isLocalhost ? 'development' : 'production',
+  integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
+  tracesSampleRate: isLocalhost ? 0 : 0.1,
+  tracePropagationTargets: [
+    'localhost',
+    /^https:\/\/laschubys\.com/,
+    /^https:\/\/www\.laschubys\.com/,
   ],
-  environment: 'production',
-  tracesSampleRate: 1.0,
-  tracePropagationTargets: ['localhost', /^https:\/\/laschubys\.com/, /^https:\/\/www\.laschubys\.com/],
-  replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
+  replaysSessionSampleRate: isLocalhost ? 0 : 0.1,
+  replaysOnErrorSampleRate: isLocalhost ? 0 : 1.0,
+  sendClientReports: !isLocalhost,
+  beforeSend(event) {
+    // Silenciosamente descartar errores de red bloqueados por ad blockers
+    const error = event.exception?.values?.[0];
+    if (error?.type === 'Error' && error?.value?.includes('ERR_BLOCKED_BY_CLIENT')) {
+      return null;
+    }
+    return event;
+  },
 });
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(App, appConfig).catch((err) => console.error(err));
