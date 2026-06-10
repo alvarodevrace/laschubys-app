@@ -1,0 +1,35 @@
+name: SSR Guard — Ensure static_image=none
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check and fix SSR mode
+        run: |
+          TOKEN="${{ secrets.COOLIFY_API_TOKEN }}"
+          UUID="${{ secrets.COOLIFY_UUID }}"
+          API="https://coolify.alvarodevrace.tech/api/v1"
+
+          echo "Checking static_image for $UUID..."
+          CURRENT=$(curl -sf -H "Authorization: Bearer $TOKEN" "$API/applications/$UUID" | python3 -c "import sys,json; print(json.load(sys.stdin).get('static_image',''))")
+          echo "Current static_image: $CURRENT"
+
+          if [ "$CURRENT" != "none" ]; then
+            echo "⚠️  static_image is '$CURRENT' — forcing to 'none'..."
+            curl -sf -X PATCH \
+              -H "Authorization: Bearer $TOKEN" \
+              -H "Content-Type: application/json" \
+              -d '{"static_image": "none"}' \
+              "$API/applications/$UUID"
+            echo "✅ Fixed. Triggering redeploy..."
+            curl -sf -X POST \
+              -H "Authorization: Bearer $TOKEN" \
+              "$API/deploy?uuid=$UUID&force=false"
+          else
+            echo "✅ SSR mode OK (static_image=none)"
+          fi

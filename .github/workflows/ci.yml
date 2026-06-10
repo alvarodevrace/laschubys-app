@@ -33,8 +33,16 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - name: Ensure SSR mode (static_image=none)
+        run: |
+          curl -sf -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"static_image": "none"}' \
+            "https://coolify.alvarodevrace.tech/api/v1/applications/${{ secrets.COOLIFY_UUID }}"
+
       - name: Trigger Coolify deploy — laschubys-app
         run: |
-          curl -sf -X GET \
+          curl -sf -X POST \
             -H "Authorization: Bearer ${{ secrets.COOLIFY_API_TOKEN }}" \
             "https://coolify.alvarodevrace.tech/api/v1/deploy?uuid=${{ secrets.COOLIFY_UUID }}&force=false"

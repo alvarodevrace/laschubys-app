@@ -9,7 +9,7 @@ const serverRoutes: ServerRoute[] = [
   { path: 'auth/callback', renderMode: RenderMode.Client },
   { path: 'checkout', renderMode: RenderMode.Client },
   { path: 'carrito', renderMode: RenderMode.Client },
-  { path: '**', renderMode: RenderMode.Prerender },
+  { path: '**', renderMode: RenderMode.Server },
 ];
 
 const serverConfig: ApplicationConfig = {
