@@ -103,7 +103,8 @@ if (isMainModule(import.meta.url)) {
       return;
     }
     if (req.url === '/robots.txt') {
-      const body = 'User-agent: *\nAllow: /\n\nSitemap: https://api.laschubys.com/api/content/sitemap.xml\n';
+      const body =
+        'User-agent: *\nAllow: /\n\nSitemap: https://api.laschubys.com/api/content/sitemap.xml\n';
       res.writeHead(200, {
         'Content-Type': 'text/plain; charset=utf-8',
         'Content-Length': Buffer.byteLength(body),
@@ -113,11 +114,11 @@ if (isMainModule(import.meta.url)) {
       return;
     }
 
-    // 1. Try SSR first (Angular renders the page server-side)
-    reqHandler(req, res, () => {
-      // 2. Fallback to static assets (JS, CSS, images) if SSR returns nothing
-      if (serveStatic(req, res, browserDistFolder)) return;
+    // 1. Serve static assets (JS, CSS, images) first — Angular SSR must NOT touch these
+    if (serveStatic(req, res, browserDistFolder)) return;
 
+    // 2. SSR for page routes only
+    reqHandler(req, res, () => {
       // 3. True 404
       res.statusCode = 404;
       res.end('Not found');
