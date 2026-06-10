@@ -14,7 +14,13 @@ export class CartService {
   readonly items = this._items.asReadonly();
   readonly isOpen = this._isOpen.asReadonly();
   readonly count = computed(() => this._items().reduce((acc, item) => acc + item.qty, 0));
-  readonly total = computed(() => this._items().reduce((acc, item) => acc + item.qty * item.price, 0));
+  readonly total = computed(() =>
+    this._items().reduce((acc, item) => {
+      const price = Number(item.price) || 0;
+      const qty = Number(item.qty) || 0;
+      return acc + qty * price;
+    }, 0),
+  );
 
   addItem(product: ProductPick) {
     const items = [...this._items()];
@@ -45,9 +51,7 @@ export class CartService {
       return;
     }
 
-    this._items.update((items) =>
-      items.map((item) => (item.id === id ? { ...item, qty } : item))
-    );
+    this._items.update((items) => items.map((item) => (item.id === id ? { ...item, qty } : item)));
     this.persist();
   }
 
@@ -80,7 +84,13 @@ export class CartService {
 
     try {
       const raw = localStorage.getItem(this.storageKey);
-      return raw ? (JSON.parse(raw) as CartItem[]) : [];
+      if (!raw) return [];
+      const parsed = JSON.parse(raw) as CartItem[];
+      return parsed.map((item) => ({
+        ...item,
+        price: Number(item.price) || 0,
+        qty: Number(item.qty) || 0,
+      }));
     } catch {
       return [];
     }
