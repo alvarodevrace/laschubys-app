@@ -17,7 +17,10 @@ import { SeoService } from '../../core/services/seo.service';
           <span>Nosotras</span>
         </nav>
         <h1 class="page-hero__title">Dos gatas. Una mamá. Una marca.</h1>
-        <p class="page-hero__sub">Las Chubys mezcla blog, tienda y presencia social en una experiencia clara, cálida y muy felina.</p>
+        <p class="page-hero__sub">
+          Las Chubys mezcla blog, tienda y presencia social en una experiencia clara, cálida y muy
+          felina.
+        </p>
       </div>
     </section>
 
@@ -46,8 +49,8 @@ import { SeoService } from '../../core/services/seo.service';
         <p class="section-eyebrow">La Historia</p>
         <h2 class="split__title">Una casa editorial felina, con actitud y sin filtros.</h2>
         <p class="split__body">
-          Nacimos para compartir historias del día a día con dos gatas de carácter único.
-          Iris pone el drama. Rubi pone el caos. Nosotras lo convertimos en contenido que vale la pena leer.
+          Nacimos para compartir historias del día a día con dos gatas de carácter único. Iris pone
+          el drama. Rubi pone el caos. Nosotras lo convertimos en contenido que vale la pena leer.
         </p>
         <a class="button-primary" routerLink="/contact">Escríbenos</a>
       </div>
@@ -61,18 +64,17 @@ import { SeoService } from '../../core/services/seo.service';
       </div>
     </section>
   `,
-  styles: [`
-    .cats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-  `],
 })
 export class AboutComponent {
   private readonly seo = inject(SeoService);
   protected readonly personas = personas;
 
   constructor() {
-    this.seo.setPage('Nosotras | Las Chubys', 'Conoce a Iris, Rubi y el universo de Las Chubys.', '/images/cats/iris.jpeg', '/about');
+    this.seo.setPage(
+      'Nosotras | Las Chubys',
+      'Conoce a Iris, Rubi y el universo de Las Chubys.',
+      '/images/cats/iris.jpeg',
+      '/about',
+    );
   }
 }

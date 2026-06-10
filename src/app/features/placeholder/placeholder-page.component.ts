@@ -11,33 +11,6 @@ import { ActivatedRoute } from '@angular/router';
       <p>{{ copy }}</p>
     </section>
   `,
-  styles: [`
-    .placeholder-page {
-      padding: 4rem 0 5rem;
-      display: grid;
-      gap: 1rem;
-    }
-
-    .placeholder-page__eyebrow {
-      margin: 0;
-      color: var(--orange);
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2rem, 5vw, 3.6rem);
-      color: var(--text);
-    }
-
-    p {
-      max-width: 56ch;
-      margin: 0;
-      color: var(--text-muted);
-    }
-  `],
 })
 export class PlaceholderPageComponent {
   protected eyebrow = 'Las Chubys';

@@ -17,7 +17,10 @@ import { ContentService } from '../../core/services/content.service';
           <span>Blog</span>
         </nav>
         <h1 class="page-hero__title">Historias reales. Sin filtros.</h1>
-        <p class="page-hero__sub">Vida cotidiana con Iris y Rubi. Tips, reseñas y momentos que toda amante de gatas entiende.</p>
+        <p class="page-hero__sub">
+          Vida cotidiana con Iris y Rubi. Tips, reseñas y momentos que toda amante de gatas
+          entiende.
+        </p>
       </div>
     </section>
 
@@ -30,12 +33,20 @@ import { ContentService } from '../../core/services/content.service';
             @for (post of postsResource.value() ?? []; track post.slug) {
               <a class="card-blog" [routerLink]="['/blog', post.slug]">
                 <div class="card-blog__photo">
-                  <img [src]="post.coverImage || fallbackImage($index)" [alt]="post.title" loading="lazy" />
+                  <img
+                    [src]="post.coverImage || fallbackImage($index)"
+                    [alt]="post.title"
+                    loading="lazy"
+                  />
                 </div>
                 <p class="card-blog__cat">{{ post.category }}</p>
                 <h3 class="card-blog__title">{{ post.title }}</h3>
                 @if (post.excerpt) {
-                  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:0.75rem;font-weight:300;line-height:1.6;">{{ post.excerpt }}</p>
+                  <p
+                    style="font-size:0.85rem;color:var(--muted);margin-bottom:0.75rem;font-weight:300;line-height:1.6;"
+                  >
+                    {{ post.excerpt }}
+                  </p>
                 }
                 <span class="card-blog__read">Leer artículo</span>
               </a>
@@ -44,18 +55,19 @@ import { ContentService } from '../../core/services/content.service';
         } @else {
           <div style="text-align:center;padding:4rem 0;">
             <p class="section-eyebrow">Próximamente</p>
-            <h2 style="font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;">Las historias están en camino.</h2>
-            <p style="color:var(--muted);font-weight:300;">Iris y Rubi todavía están ordenando el caos editorial.</p>
+            <h2
+              style="font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;"
+            >
+              Las historias están en camino.
+            </h2>
+            <p style="color:var(--muted);font-weight:300;">
+              Iris y Rubi todavía están ordenando el caos editorial.
+            </p>
           </div>
         }
       </div>
     </section>
   `,
-  styles: [`
-    .cards-section {
-      padding: 0 0 4rem;
-    }
-  `],
 })
 export class BlogListComponent {
   private readonly content = inject(ContentService);
@@ -78,6 +90,11 @@ export class BlogListComponent {
   }
 
   constructor() {
-    this.seo.setPage('Blog | Las Chubys', 'Historias, tips y caos felino editorial.', '/images/cats/iris2.jpeg', '/blog');
+    this.seo.setPage(
+      'Blog | Las Chubys',
+      'Historias, tips y caos felino editorial.',
+      '/images/cats/iris2.jpeg',
+      '/blog',
+    );
   }
 }

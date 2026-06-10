@@ -29,64 +29,6 @@ import { CartItem } from '../../core/models/cart.model';
       </div>
     </article>
   `,
-  styles: [
-    `
-      .cart-item {
-        display: grid;
-        grid-template-columns: 112px minmax(0, 1fr);
-        gap: 1rem;
-        padding: 1rem;
-        border-radius: 24px;
-        background: var(--gray-50);
-        border: 1px solid var(--border);
-      }
-
-      .cart-item img {
-        width: 112px;
-        height: 112px;
-        object-fit: cover;
-        border-radius: 18px;
-      }
-
-      .cart-item__body,
-      .cart-item__footer {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-      }
-
-      .cart-item__body {
-        flex-direction: column;
-      }
-
-      h3,
-      p {
-        margin: 0;
-      }
-
-      p {
-        color: var(--text-muted);
-        margin-top: 0.35rem;
-      }
-
-      .qty-stepper {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.35rem 0.5rem;
-        border-radius: 999px;
-        border: 1px solid var(--border);
-      }
-
-      .qty-stepper button,
-      .cart-item__remove {
-        border: 0;
-        background: none;
-        font: inherit;
-        cursor: pointer;
-      }
-    `,
-  ],
 })
 export class CartItemRowComponent {
   readonly item = input.required<CartItem>();
