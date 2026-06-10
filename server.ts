@@ -118,6 +118,20 @@ if (isMainModule(import.meta.url)) {
     if (serveStatic(req, res, browserDistFolder)) return;
 
     // 2. SSR for page routes only
+    // Wrap response to add anti-cache headers to HTML (prevents stale chunk references)
+    const origWriteHead = res.writeHead.bind(res);
+    res.writeHead = (statusCode: number, ...args: any[]) => {
+      const headers = args[0] as Record<string, string | string[]> | undefined;
+      if (headers && typeof headers === 'object' && !Array.isArray(headers)) {
+        const ct = headers['content-type'] || headers['Content-Type'];
+        if (typeof ct === 'string' && ct.includes('text/html')) {
+          headers['cache-control'] = 'no-cache, no-store, must-revalidate';
+          headers['pragma'] = 'no-cache';
+          headers['expires'] = '0';
+        }
+      }
+      return origWriteHead(statusCode, ...args);
+    };
     reqHandler(req, res, () => {
       // 3. True 404
       res.statusCode = 404;
