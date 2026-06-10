@@ -6,6 +6,7 @@ import {
 } from '@angular/ssr/node';
 import { createReadStream, existsSync, statSync } from 'node:fs';
 import { createServer, request as httpRequest, IncomingMessage, ServerResponse } from 'node:http';
+import { request as httpsRequest } from 'node:https';
 import { extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -28,15 +29,22 @@ const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 const engine = new AngularNodeAppEngine();
 
-// In production, laschubys-api runs in the same Docker network at this URL.
-const API_TARGET = process.env['API_URL'] || 'http://localhost:3000';
+// In production, proxy to the public backend API.
+const API_TARGET = process.env['API_URL'] || 'https://api.laschubys.com';
 
 function serveStatic(req: IncomingMessage, res: ServerResponse, distFolder: string): boolean {
   const url = new URL(req.url || '/', 'http://localhost');
   const filePath = resolve(distFolder, url.pathname.slice(1));
+
+  // Security: prevent path traversal
   if (!filePath.startsWith(distFolder)) return false;
+
+  // NEVER serve index.html as static — let SSR handle routes
+  if (url.pathname === '/' || url.pathname === '/index.html') return false;
+
   const mime = MIME[extname(filePath)];
   if (!mime || !existsSync(filePath)) return false;
+
   const { size } = statSync(filePath);
   res.writeHead(200, {
     'Content-Type': mime,
@@ -49,20 +57,23 @@ function serveStatic(req: IncomingMessage, res: ServerResponse, distFolder: stri
 
 function proxyToApi(req: IncomingMessage, res: ServerResponse, overridePath?: string) {
   const target = new URL(API_TARGET);
+  const isHttps = target.protocol === 'https:';
   const options = {
     hostname: target.hostname,
-    port: Number(target.port) || (target.protocol === 'https:' ? 443 : 80),
+    port: Number(target.port) || (isHttps ? 443 : 80),
     path: overridePath ?? req.url,
     method: req.method,
     headers: { ...req.headers, host: target.host },
   };
 
-  const proxy = httpRequest(options, (proxyRes) => {
+  const requestFn = isHttps ? httpsRequest : httpRequest;
+  const proxy = requestFn(options, (proxyRes) => {
     res.writeHead(proxyRes.statusCode ?? 502, proxyRes.headers);
     proxyRes.pipe(res);
   });
 
-  proxy.on('error', () => {
+  proxy.on('error', (err) => {
+    console.error('Proxy error:', err.message);
     res.statusCode = 502;
     res.end(JSON.stringify({ message: 'API no disponible' }));
   });
@@ -102,9 +113,12 @@ if (isMainModule(import.meta.url)) {
       return;
     }
 
-    if (serveStatic(req, res, browserDistFolder)) return;
-
+    // 1. Try SSR first (Angular renders the page server-side)
     reqHandler(req, res, () => {
+      // 2. Fallback to static assets (JS, CSS, images) if SSR returns nothing
+      if (serveStatic(req, res, browserDistFolder)) return;
+
+      // 3. True 404
       res.statusCode = 404;
       res.end('Not found');
     });
