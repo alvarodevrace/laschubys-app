@@ -1,8 +1,6 @@
 name: SSR Guard — Ensure static_image=none
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,8 +14,13 @@ jobs:
           API="https://coolify.alvarodevrace.tech/api/v1"
 
           echo "Checking static_image for $UUID..."
-          CURRENT=$(curl -sf -H "Authorization: Bearer $TOKEN" "$API/applications/$UUID" | python3 -c "import sys,json; print(json.load(sys.stdin).get('static_image',''))")
+          CURRENT=$(curl -sf -H "Authorization: Bearer $TOKEN" "$API/applications/$UUID" | python3 -c "import sys,json; print(json.load(sys.stdin).get('static_image',''))" || echo "APP_NOT_FOUND")
           echo "Current static_image: $CURRENT"
+
+          if [ "$CURRENT" = "APP_NOT_FOUND" ]; then
+            echo "⚠️  App not found in Coolify. Skipping."
+            exit 0
+          fi
 
           if [ "$CURRENT" != "none" ]; then
             echo "⚠️  static_image is '$CURRENT' — forcing to 'none'..."
