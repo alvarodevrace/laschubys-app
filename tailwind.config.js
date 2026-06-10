@@ -1,33 +1,38 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-  ],
+  content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
       colors: {
-        leaf: {
-          DEFAULT: '#1fa634',
-          dark:    '#167828',
-          soft:    '#6ede7a',
+        orange: {
+          DEFAULT: '#ff7a1a',
+          dark: '#e06300',
+          light: '#fff1e5',
         },
-        fire: {
-          DEFAULT: '#f2600c',
-          dark:    '#d94f0a',
+        surface: '#fff4e8',
+        text: {
+          DEFAULT: '#333333',
+          muted: '#6b7280',
         },
-        canvas: '#f5f4f0',
+        border: '#e0e0e0',
+        dark: '#141313',
       },
       fontFamily: {
-        sans:    ['"Satoshi"', 'system-ui', 'sans-serif'],
-        display: ['"Clash Display"', 'system-ui', 'sans-serif'],
-      },
-      keyframes: {
-        fadeIn:  { from: { opacity: '0' },                                 to: { opacity: '1' } },
-        scaleIn: { from: { opacity: '0', transform: 'scale(0.93)' },       to: { opacity: '1', transform: 'scale(1)' } },
+        sans: ["'Open Sans'", 'sans-serif'],
       },
       animation: {
-        'fade-in':  'fadeIn 0.22s ease',
-        'scale-in': 'scaleIn 0.28s ease',
+        marquee: 'marquee 20s linear infinite',
+        'auth-pulse': 'authPulse 1.2s ease-in-out infinite',
+      },
+      keyframes: {
+        marquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
+        authPulse: {
+          '0%, 80%, 100%': { opacity: '0.2', transform: 'scale(0.8)' },
+          '40%': { opacity: '1', transform: 'scale(1)' },
+        },
       },
     },
   },

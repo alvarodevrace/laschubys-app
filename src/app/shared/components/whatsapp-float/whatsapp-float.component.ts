@@ -18,6 +18,5 @@ import { Component } from '@angular/core';
       </svg>
     </a>
   `,
-  styleUrl: './whatsapp-float.component.scss',
 })
 export class WhatsappFloatComponent {}

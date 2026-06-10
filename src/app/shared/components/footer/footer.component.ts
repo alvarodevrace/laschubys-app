@@ -8,7 +8,6 @@ import { socialChannels } from '../../../core/content/site-content';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.scss',
 })
 export class FooterComponent {
   protected readonly socialChannels = socialChannels;

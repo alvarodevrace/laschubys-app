@@ -15,7 +15,9 @@ import { SeoService } from '../../core/services/seo.service';
       <div class="page-hero__inner">
         <p class="page-hero__eyebrow">Panel editorial</p>
         <h1 class="page-hero__title">Hola, {{ firstName() }}.</h1>
-        <p class="page-hero__sub">Estado de contenido, catálogo y acceso administrativo en la nueva shell Angular.</p>
+        <p class="page-hero__sub">
+          Estado de contenido, catálogo y acceso administrativo en la nueva shell Angular.
+        </p>
       </div>
     </section>
 
@@ -86,13 +88,15 @@ import { SeoService } from '../../core/services/seo.service';
                 @for (product of dashboard.products; track product.id) {
                   <article class="admin-item">
                     <div>
-                      <p class="admin-item__tag">{{ product.source === 'owned' ? 'Propio' : 'Afiliado' }}</p>
+                      <p class="admin-item__tag">
+                        {{ product.source === 'owned' ? 'Propio' : 'Afiliado' }}
+                      </p>
                       <p class="admin-item__title">{{ product.name }}</p>
                       <p class="admin-item__sub">{{ product.copy || product.description }}</p>
                     </div>
                     <div class="admin-item__meta">
                       <span class="admin-item__status admin-item__status--published">
-                        {{ product.priceValue | currency:'USD':'symbol':'1.0-0' }}
+                        {{ product.priceValue | currency: 'USD' : 'symbol' : '1.0-0' }}
                       </span>
                     </div>
                   </article>
@@ -106,27 +110,6 @@ import { SeoService } from '../../core/services/seo.service';
       </div>
     </section>
   `,
-  styles: [`
-    .admin-loading,
-    .admin-empty {
-      margin: 0;
-      color: var(--text-muted);
-    }
-
-    .admin-stat__value--small {
-      font-size: 1.1rem;
-    }
-
-    .admin-stat__value--ok {
-      color: #2e8a50;
-    }
-
-    .admin-item__meta {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-    }
-  `],
 })
 export class AdminDashboardComponent {
   protected readonly auth = inject(AuthService);
@@ -146,6 +129,11 @@ export class AdminDashboardComponent {
   });
 
   constructor() {
-    this.seo.setPage('Panel | Las Chubys', 'Panel editorial de Las Chubys.', '/brand/logo.png', '/admin');
+    this.seo.setPage(
+      'Panel | Las Chubys',
+      'Panel editorial de Las Chubys.',
+      '/brand/logo.png',
+      '/admin',
+    );
   }
 }
