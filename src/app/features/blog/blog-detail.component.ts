@@ -1,4 +1,4 @@
-import { Component, computed, inject, resource } from '@angular/core';
+import { Component, computed, inject, resource, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { SeoService } from '../../core/services/seo.service';
@@ -6,15 +6,16 @@ import { ContentService } from '../../core/services/content.service';
 import { CommentsComponent } from './components/comments.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-detail',
   standalone: true,
   imports: [RouterLink, CommentsComponent],
   template: `
     @if (postResource.value(); as post) {
       <article>
-        <section class="page-hero post-article-hero" data-reveal>
-          <div class="page-hero__inner">
-            <nav class="breadcrumb" aria-label="Breadcrumb">
+        <section class="py-10 pb-6" data-reveal>
+          <div class="max-w-6xl mx-auto px-4">
+            <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
               <a routerLink="/">Inicio</a>
               <span>›</span>
               <a routerLink="/blog">Blog</a>
@@ -22,11 +23,17 @@ import { CommentsComponent } from './components/comments.component';
               <span>{{ post.title }}</span>
             </nav>
 
-            <p class="page-hero__eyebrow">{{ post.category }}</p>
-            <h1 class="page-hero__title">{{ post.title }}</h1>
-            <p class="page-hero__sub">{{ post.excerpt }}</p>
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
+              {{ post.category }}
+            </p>
+            <h1
+              class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+            >
+              {{ post.title }}
+            </h1>
+            <p class="text-gray-500 max-w-2xl">{{ post.excerpt }}</p>
 
-            <div class="post-meta">
+            <div class="flex flex-wrap gap-2 text-sm text-gray-500 mt-4">
               <span>{{ post.publishedAt }}</span>
               <span>·</span>
               <span>{{ post.author }}</span>
@@ -36,26 +43,34 @@ import { CommentsComponent } from './components/comments.component';
           </div>
         </section>
 
-        <div class="post-cover" data-reveal>
-          <img [src]="post.coverImage || '/images/cats/iris3.jpeg'" [alt]="post.title" />
+        <div class="max-w-6xl mx-auto px-4 mb-8" data-reveal>
+          <img
+            [src]="post.coverImage || '/images/cats/iris3.jpeg'"
+            [alt]="post.title"
+            class="w-full rounded-3xl object-cover aspect-video"
+          />
         </div>
 
-        <section class="post-body" data-reveal>
+        <section class="max-w-3xl mx-auto px-4 grid gap-6 py-8" data-reveal>
           @for (paragraph of post.content; track $index) {
-            <p>{{ paragraph }}</p>
+            <p class="text-gray-700 leading-relaxed">{{ paragraph }}</p>
           }
         </section>
 
-        <section class="post-comments" data-reveal>
-          <div class="post-comments__inner">
-            <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
+        <section class="max-w-3xl mx-auto px-4 py-8" data-reveal>
+          <div>
+            @defer (on viewport) {
+              <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
+            } @placeholder {
+              <div class="h-96"></div>
+            }
           </div>
         </section>
       </article>
     } @else if (postResource.isLoading()) {
-      <section class="page-wrap post-article-hero"><p>Cargando post...</p></section>
+      <section class="max-w-6xl mx-auto px-4 pb-6"><p>Cargando post...</p></section>
     } @else {
-      <section class="page-wrap post-article-hero">
+      <section class="max-w-6xl mx-auto px-4 pb-6">
         <h1>Post no encontrado</h1>
         <p class="post__excerpt">No encontramos este artículo en la migración actual.</p>
       </section>
@@ -80,7 +95,7 @@ export class BlogDetailComponent {
           `${post.title} | Las Chubys`,
           post.excerpt || 'Historia felina de Las Chubys.',
           post.coverImage || '/images/cats/iris3.jpeg',
-          `/blog/${post.slug}`
+          `/blog/${post.slug}`,
         );
         this.seo.setJsonLd({
           '@context': 'https://schema.org',

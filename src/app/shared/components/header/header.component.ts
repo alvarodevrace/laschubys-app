@@ -1,4 +1,12 @@
-import { Component, DestroyRef, HostListener, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  HostListener,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,6 +16,7 @@ import { socialChannels } from '../../../core/content/site-content';
 import { CartService } from '../../../core/services/cart.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-header',
   standalone: true,
   imports: [RouterLink, RouterLinkActive],

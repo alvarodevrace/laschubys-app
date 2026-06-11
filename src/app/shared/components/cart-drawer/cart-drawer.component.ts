@@ -1,13 +1,15 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { CartService } from '../../../core/services/cart.service';
+import { ButtonComponent } from '../../ui/button/button.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-cart-drawer',
   standalone: true,
-  imports: [CurrencyPipe, RouterLink],
+  imports: [CurrencyPipe, RouterLink, ButtonComponent],
   templateUrl: './cart-drawer.component.html',
 })
 export class CartDrawerComponent {
