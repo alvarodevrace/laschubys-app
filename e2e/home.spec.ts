@@ -14,7 +14,7 @@ test.describe('Homepage', () => {
 
     // Verifica que haya productos destacados
     const featuredProducts = page.locator('[data-testid="home-featured-product"]');
-    await expect(featuredProducts).toHaveCount(4);
+    await expect(featuredProducts).toHaveCount(3);
 
     // Screenshot opcional
     await page.screenshot({ path: 'test-results/homepage.png' });

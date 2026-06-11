@@ -148,7 +148,6 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
                   <article
                     class="group rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
                     [attr.data-product-id]="product.id"
-                    data-testid="tienda-product-card"
                   >
                     <div
                       class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
@@ -174,7 +173,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
                         variant="secondary"
                         type="button"
                         (click)="openPreview(product)"
-                        data-testid="tienda-product-ver-btn"
+                        data-testid="tienda-preview-btn"
                       >
                         Ver
                       </app-button>
@@ -225,29 +224,9 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         data-testid="tienda-modal-backdrop"
       >
         <article
-          class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-[32px] bg-white relative"
+          class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-[32px] bg-white"
           (click)="$event.stopPropagation()"
         >
-          <button
-            type="button"
-            class="absolute top-3 right-3 p-2 text-gray-500 hover:text-orange transition-colors z-10"
-            (click)="closePreview()"
-            data-testid="tienda-modal-close-btn"
-            aria-label="Cerrar modal"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.9"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="w-5 h-5"
-            >
-              <path d="M18 6 6 18"></path>
-              <path d="M6 6 18 18"></path>
-            </svg>
-          </button>
           <img
             class="w-full min-h-80 object-cover rounded-3xl"
             [src]="product.images[0] || '/images/cats/rubi4.jpeg'"

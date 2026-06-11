@@ -58,7 +58,6 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             <a
               class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
               routerLink="/checkout"
-              data-testid="cart-checkout-link"
               >Ir al checkout</a
             >
             <app-button variant="secondary" type="button" (click)="clear()"
