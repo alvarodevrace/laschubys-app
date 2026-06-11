@@ -85,13 +85,14 @@ function proxyToApi(req: IncomingMessage, res: ServerResponse, overridePath?: st
 }
 
 function buildCspHeader(nonce: string, apiTarget: string): string {
+  const supabaseUrl = process.env['PUBLIC_SUPABASE_URL'] || 'https://db.alvarodevrace.tech';
   return [
     "default-src 'self'",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     `script-src 'self' 'nonce-${nonce}' https://analytics.alvarodevrace.tech`,
-    `connect-src 'self' ${apiTarget}`,
+    `connect-src 'self' ${apiTarget} ${supabaseUrl} wss://${new URL(supabaseUrl).host}`,
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
