@@ -8,6 +8,7 @@ import { Component, input, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './input.component.html',
 })
 export class InputComponent {
+  readonly id = input<string>(`lch-input-${Math.random().toString(36).slice(2, 9)}`);
   readonly label = input<string>('');
   readonly type = input<'text' | 'email' | 'tel' | 'textarea' | 'select'>('text');
   readonly placeholder = input<string>('');

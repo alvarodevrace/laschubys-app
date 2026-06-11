@@ -20,6 +20,7 @@ test.describe('Checkout', () => {
     await page.locator('[data-testid="checkout-input-name"]').fill('Test User');
     await page.locator('[data-testid="checkout-input-email"]').fill('test@example.com');
     await page.locator('[data-testid="checkout-input-phone"]').fill('123456789');
+    await page.locator('[data-testid="checkout-input-province"]').selectOption('Pichincha');
     await page.locator('[data-testid="checkout-input-address"]').fill('Calle Falsa 123');
 
     // Verifica que el botón de submit se habilite

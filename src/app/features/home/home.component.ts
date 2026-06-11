@@ -255,11 +255,18 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
     @if (selectedProduct(); as product) {
       <div
         class="fixed inset-0 grid place-items-center p-4 z-[5000] bg-black/50"
+        role="button"
+        tabindex="0"
+        aria-label="Cerrar vista previa"
         (click)="closePreview()"
+        (keydown.escape)="closePreview()"
       >
         <article
           class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-[32px] bg-white"
+          role="presentation"
+          tabindex="-1"
           (click)="$event.stopPropagation()"
+          (keydown)="$event.stopPropagation()"
         >
           <img [src]="product.images[0] || '/images/cats/iris4.jpeg'" [alt]="product.name" />
           <div class="grid content-start gap-3">

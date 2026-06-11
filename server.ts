@@ -9,6 +9,7 @@ import { createServer, request as httpRequest, IncomingMessage, ServerResponse }
 import { request as httpsRequest } from 'node:https';
 import { extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { randomBytes } from 'node:crypto';
 
 const MIME: Record<string, string> = {
   '.js': 'application/javascript',
@@ -83,14 +84,52 @@ function proxyToApi(req: IncomingMessage, res: ServerResponse, overridePath?: st
   req.pipe(proxy);
 }
 
-export const reqHandler = createNodeRequestHandler(async (req, res, next) => {
+function buildCspHeader(nonce: string, apiTarget: string): string {
+  return [
+    "default-src 'self'",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    `script-src 'self' 'nonce-${nonce}' https://analytics.alvarodevrace.tech`,
+    `connect-src 'self' ${apiTarget}`,
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join('; ');
+}
+
+function injectNonceIntoHtml(html: string, nonce: string): string {
+  // Add nonce to every <script> tag that does not already have one.
+  return html.replace(/<script(?![^>]*\snonce=)([^>]*)>/gi, `<script nonce="${nonce}"$1>`);
+}
+
+async function renderWithCsp(
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: () => void,
+): Promise<void> {
   const response = await engine.handle(req, { server: { browserDistFolder } });
-  if (response) {
-    writeResponseToNodeResponse(response, res);
-  } else {
+  if (!response) {
     next();
+    return;
   }
-});
+
+  const nonce = randomBytes(16).toString('base64');
+  const html = injectNonceIntoHtml(await response.text(), nonce);
+
+  const headers = new Headers(response.headers);
+  headers.set('Content-Security-Policy', buildCspHeader(nonce, API_TARGET));
+
+  const cspResponse = new Response(html, {
+    status: response.status,
+    statusText: response.statusText,
+    headers,
+  });
+
+  writeResponseToNodeResponse(cspResponse, res);
+}
+
+export const reqHandler = createNodeRequestHandler(renderWithCsp);
 
 function setSecurityHeaders(res: ServerResponse) {
   res.setHeader('X-Frame-Options', 'DENY');
