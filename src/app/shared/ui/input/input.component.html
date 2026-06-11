@@ -1,11 +1,12 @@
 <div class="flex flex-col gap-1" data-testid="input">
   @if (label()) {
-    <label class="text-gray-500 text-sm">{{ label() }}</label>
+    <label [attr.for]="id()" class="text-gray-500 text-sm">{{ label() }}</label>
   }
 
   @switch (type()) {
     @case ('textarea') {
       <textarea
+        [id]="id()"
         [placeholder]="placeholder()"
         [required]="required()"
         class="rounded-2xl border border-gray-200 bg-white min-h-24 px-4 py-3 focus:ring-2 focus:ring-orange/20 focus:border-orange outline-none transition-all resize-none"
@@ -13,6 +14,7 @@
     }
     @case ('select') {
       <select
+        [id]="id()"
         [required]="required()"
         class="rounded-2xl border border-gray-200 bg-white min-h-12 px-4 focus:ring-2 focus:ring-orange/20 focus:border-orange outline-none transition-all appearance-none"
       >
@@ -26,6 +28,7 @@
     }
     @default {
       <input
+        [id]="id()"
         [type]="type()"
         [placeholder]="placeholder()"
         [required]="required()"

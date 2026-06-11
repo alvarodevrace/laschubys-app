@@ -59,7 +59,9 @@ export class AuthService {
   async logout() {
     try {
       await this.api.get(`${environment.apiUrl}/auth/logout`);
-    } catch {}
+    } catch {
+      // Session already cleared on the backend; ensure local state is reset.
+    }
 
     this._user.set(null);
     this._loading.set(false);

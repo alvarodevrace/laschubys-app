@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 export interface ProductSchema {
@@ -22,7 +22,7 @@ export interface BlogPostSchema {
 
 @Injectable({ providedIn: 'root' })
 export class JsonLdService {
-  constructor(@Inject(DOCUMENT) private doc: Document) {}
+  private readonly doc = inject(DOCUMENT);
 
   private injectScript(json: unknown): void {
     const id = 'json-ld-schema';
