@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4321",
-    "build": "CI=1 ng build --configuration production --no-progress",
+    "build": "NG_BUILD_PARTIAL_SSR=1 CI=1 ng build --configuration production --no-progress",
     "typecheck": "npx tsc --noEmit",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
