@@ -1,0 +1,665 @@
+[20:10:18.684] [INFO] Running automigrations
+[20:10:18.685] [DEBUG] Extracting storybook data...
+[20:10:18.686] [DEBUG] Getting Storybook info...
+[20:10:18.691] [DEBUG] Loading main config...
+[20:10:18.691] [DEBUG] Getting stories paths...
+[20:10:18.737] [DEBUG] Getting package manager...
+[20:10:19.533] [DEBUG] Getting package.json info for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:19.533] [DEBUG] Getting Storybook version...
+[20:10:19.534] [DEBUG] Detecting CSF factory usage...
+[20:10:19.547] [INFO] Checking possible migrations..
+[20:10:19.548] [DEBUG] Running eslintPlugin migration checks
+[20:10:19.548] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:19.548] [DEBUG] End of eslintPlugin migration checks
+[20:10:19.548] [INFO] 🔎 found a 'eslintPlugin' migration:
+[20:10:19.549] [INFO] We'll install and configure the Storybook ESLint plugin for you.
+[20:10:19.550] [DEBUG] Adding dependencies: eslint-plugin-storybook@8.6.18
+[20:10:19.550] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:19.551] [DEBUG] Getting CLI versions from NPM for eslint-plugin-storybook...
+[20:10:19.551] [DEBUG] Executing command: npm info eslint-plugin-storybook version
+[20:10:20.279] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:20.279] [DEBUG] Detected flat config at /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/eslint.config.js
+[20:10:20.289] [INFO] ✅ ran eslintPlugin migration
+[20:10:20.290] [INFO] Ran eslintPlugin migration
+[20:10:20.290] [DEBUG] Running addon-mdx-gfm-remove migration checks
+[20:10:20.290] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:20.290] [DEBUG] End of addon-mdx-gfm-remove migration checks
+[20:10:20.290] [DEBUG] Running addon-storysource-code-panel migration checks
+[20:10:20.290] [DEBUG] End of addon-storysource-code-panel migration checks
+[20:10:20.290] [DEBUG] Running initial-globals migration checks
+[20:10:20.291] [DEBUG] End of initial-globals migration checks
+[20:10:20.291] [DEBUG] Running addon-globals-api migration checks
+[20:10:20.292] [DEBUG] End of addon-globals-api migration checks
+[20:10:20.292] [DEBUG] Running addon-a11y-addon-test migration checks
+[20:10:20.293] [DEBUG] End of addon-a11y-addon-test migration checks
+[20:10:20.293] [DEBUG] Running consolidated-imports migration checks
+[20:10:20.293] [DEBUG] End of consolidated-imports migration checks
+[20:10:20.293] [INFO] 🔎 found a 'consolidated-imports' migration:
+[20:10:20.293] [INFO] We've detected Storybook packages that have been renamed or consolidated. We'll update these packages by scanning your codebase and updating any imports from these packages.
+[20:10:20.304] [INFO] ✅ ran consolidated-imports migration
+[20:10:20.304] [INFO] Ran consolidated-imports migration
+[20:10:20.304] [DEBUG] Running addon-experimental-test migration checks
+[20:10:20.304] [DEBUG] Getting installed version for @storybook/experimental-addon-test...
+[20:10:20.305] [DEBUG] Executing command: npm ls --json --depth=99
+[20:10:21.243] [DEBUG] Executing command: npm ls --json --depth=0
+[20:10:22.193] [DEBUG] An issue occurred while trying to find dependencies metadata using npm: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0'
+
+{
+  "version": "0.0.0",
+  "name": "laschubys-ng",
+  "problems": [
+    "extraneous: @angular-devkit/schematics@21.2.14 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@angular-devkit/schematics",
+    "extraneous: @babel/plugin-transform-explicit-resource-management@7.29.7 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@babel/plugin-transform-explicit-resource-management",
+    "extraneous: @oxc-parser/binding-darwin-arm64@0.127.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@oxc-parser/binding-darwin-arm64",
+    "extraneous: @oxc-resolver/binding-darwin-arm64@11.20.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@oxc-resolver/binding-darwin-arm64",
+    "extraneous: @peculiar/asn1-cms@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-cms",
+    "extraneous: @peculiar/asn1-csr@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-csr",
+    "extraneous: @peculiar/asn1-ecc@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-ecc",
+    "extraneous: @peculiar/asn1-pfx@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pfx",
+    "extraneous: @peculiar/asn1-pkcs8@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pkcs8",
+    "extraneous: @peculiar/asn1-pkcs9@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pkcs9",
+    "extraneous: @peculiar/asn1-rsa@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-rsa",
+    "extraneous: @peculiar/asn1-schema@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-schema",
+    "extraneous: @peculiar/asn1-x509-attr@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-x509-attr",
+    "extraneous: @peculiar/asn1-x509@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-x509",
+    "extraneous: @peculiar/utils@2.0.3 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/utils",
+    "extraneous: @peculiar/x509@1.14.3 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/x509",
+    "extraneous: @storybook/test@8.6.15 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@storybook/test",
+    "extraneous: @webcontainer/env@1.1.1 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@webcontainer/env",
+    "extraneous: asn1js@3.0.10 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/asn1js",
+    "extraneous: bytestreamjs@2.0.1 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/bytestreamjs",
+    "missing: eslint-plugin-storybook@8.6.18, required by laschubys-ng@0.0.0",
+    "extraneous: ignore@5.3.2 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/ignore",
+    "extraneous: is-in-ssh@1.0.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/is-in-ssh",
+    "extraneous: ora@9.3.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/ora",
+    "extraneous: oxc-parser@0.127.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/oxc-parser",
+    "extraneous: oxc-resolver@11.20.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/oxc-resolver",
+    "extraneous: pkijs@3.4.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pkijs",
+    "extraneous: powershell-utils@0.1.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/powershell-utils",
+    "extraneous: pvtsutils@1.3.6 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pvtsutils",
+    "extraneous: pvutils@1.1.5 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pvutils",
+    "extraneous: semver@7.7.4 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/semver",
+    "extraneous: tsyringe@4.10.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/tsyringe",
+    "extraneous: use-sync-external-store@1.6.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/use-sync-external-store",
+    "extraneous: wsl-utils@0.1.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/wsl-utils"
+  ],
+  "dependencies": {
+    "@angular-devkit/schematics": {
+      "version": "21.2.14",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @angular-devkit/schematics@21.2.14 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@angular-devkit/schematics"
+      ]
+    },
+    "@angular-eslint/builder": {
+      "version": "22.0.0",
+      "overridden": false
+    },
+    "@angular/build": {
+      "version": "21.2.14",
+      "overridden": false
+    },
+    "@angular/cli": {
+      "version": "21.2.14",
+      "overridden": false
+    },
+    "@angular/common": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/compiler-cli": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/compiler": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/core": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/forms": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/platform-browser": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/platform-server": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/router": {
+      "version": "21.2.17",
+      "overridden": false
+    },
+    "@angular/ssr": {
+      "version": "21.2.14",
+      "overridden": false
+    },
+    "@babel/plugin-transform-explicit-resource-management": {
+      "version": "7.29.7",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @babel/plugin-transform-explicit-resource-management@7.29.7 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@babel/plugin-transform-explicit-resource-management"
+      ]
+    },
+    "@eslint/js": {
+      "version": "10.0.1",
+      "overridden": false
+    },
+    "@oxc-parser/binding-darwin-arm64": {
+      "version": "0.127.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @oxc-parser/binding-darwin-arm64@0.127.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@oxc-parser/binding-darwin-arm64"
+      ]
+    },
+    "@oxc-resolver/binding-darwin-arm64": {
+      "version": "11.20.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @oxc-resolver/binding-darwin-arm64@11.20.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@oxc-resolver/binding-darwin-arm64"
+      ]
+    },
+    "@peculiar/asn1-cms": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-cms@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-cms"
+      ]
+    },
+    "@peculiar/asn1-csr": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-csr@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-csr"
+      ]
+    },
+    "@peculiar/asn1-ecc": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-ecc@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-ecc"
+      ]
+    },
+    "@peculiar/asn1-pfx": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-pfx@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pfx"
+      ]
+    },
+    "@peculiar/asn1-pkcs8": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-pkcs8@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pkcs8"
+      ]
+    },
+    "@peculiar/asn1-pkcs9": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-pkcs9@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pkcs9"
+      ]
+    },
+    "@peculiar/asn1-rsa": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-rsa@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-rsa"
+      ]
+    },
+    "@peculiar/asn1-schema": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-schema@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-schema"
+      ]
+    },
+    "@peculiar/asn1-x509-attr": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-x509-attr@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-x509-attr"
+      ]
+    },
+    "@peculiar/asn1-x509": {
+      "version": "2.7.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/asn1-x509@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-x509"
+      ]
+    },
+    "@peculiar/utils": {
+      "version": "2.0.3",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/utils@2.0.3 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/utils"
+      ]
+    },
+    "@peculiar/x509": {
+      "version": "1.14.3",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @peculiar/x509@1.14.3 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/x509"
+      ]
+    },
+    "@sentry/angular": {
+      "version": "10.57.0",
+      "overridden": false
+    },
+    "@storybook/addon-a11y": {
+      "version": "8.6.18",
+      "overridden": false
+    },
+    "@storybook/addon-essentials": {
+      "version": "8.6.14",
+      "overridden": false
+    },
+    "@storybook/addon-interactions": {
+      "version": "8.6.14",
+      "overridden": false
+    },
+    "@storybook/angular": {
+      "version": "8.6.18",
+      "overridden": false
+    },
+    "@storybook/test": {
+      "version": "8.6.15",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @storybook/test@8.6.15 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@storybook/test"
+      ]
+    },
+    "@supabase/supabase-js": {
+      "version": "2.108.1",
+      "overridden": false
+    },
+    "@types/node": {
+      "version": "25.9.3",
+      "overridden": false
+    },
+    "@types/ws": {
+      "version": "8.18.1",
+      "overridden": false
+    },
+    "@webcontainer/env": {
+      "version": "1.1.1",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: @webcontainer/env@1.1.1 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@webcontainer/env"
+      ]
+    },
+    "angular-eslint": {
+      "version": "22.0.0",
+      "overridden": false
+    },
+    "asn1js": {
+      "version": "3.0.10",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: asn1js@3.0.10 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/asn1js"
+      ]
+    },
+    "autoprefixer": {
+      "version": "10.5.0",
+      "overridden": false
+    },
+    "bytestreamjs": {
+      "version": "2.0.1",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: bytestreamjs@2.0.1 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/bytestreamjs"
+      ]
+    },
+    "class-variance-authority": {
+      "version": "0.7.1",
+      "overridden": false
+    },
+    "clsx": {
+      "version": "2.1.1",
+      "overridden": false
+    },
+    "eslint-plugin-storybook": {
+      "required": "8.6.18",
+      "missing": true,
+      "problems": [
+        "missing: eslint-plugin-storybook@8.6.18, required by laschubys-ng@0.0.0"
+      ]
+    },
+    "eslint": {
+      "version": "10.4.1",
+      "overridden": false
+    },
+    "husky": {
+      "version": "9.1.7",
+      "overridden": false
+    },
+    "ignore": {
+      "version": "5.3.2",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: ignore@5.3.2 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/ignore"
+      ]
+    },
+    "is-in-ssh": {
+      "version": "1.0.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: is-in-ssh@1.0.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/is-in-ssh"
+      ]
+    },
+    "jsdom": {
+      "version": "28.1.0",
+      "overridden": false
+    },
+    "lint-staged": {
+      "version": "16.4.0",
+      "overridden": false
+    },
+    "lucide-angular": {
+      "version": "1.0.0",
+      "overridden": false
+    },
+    "motion": {
+      "version": "12.40.0",
+      "overridden": false
+    },
+    "ora": {
+      "version": "9.3.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: ora@9.3.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/ora"
+      ]
+    },
+    "oxc-parser": {
+      "version": "0.127.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: oxc-parser@0.127.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/oxc-parser"
+      ]
+    },
+    "oxc-resolver": {
+      "version": "11.20.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: oxc-resolver@11.20.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/oxc-resolver"
+      ]
+    },
+    "pkijs": {
+      "version": "3.4.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: pkijs@3.4.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pkijs"
+      ]
+    },
+    "playwright": {
+      "version": "1.60.0",
+      "overridden": false
+    },
+    "postcss": {
+      "version": "8.5.15",
+      "overridden": false
+    },
+    "powershell-utils": {
+      "version": "0.1.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: powershell-utils@0.1.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/powershell-utils"
+      ]
+    },
+    "prettier": {
+      "version": "3.8.4",
+      "overridden": false
+    },
+    "pvtsutils": {
+      "version": "1.3.6",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: pvtsutils@1.3.6 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pvtsutils"
+      ]
+    },
+    "pvutils": {
+      "version": "1.1.5",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: pvutils@1.1.5 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pvutils"
+      ]
+    },
+    "rxjs": {
+      "version": "7.8.2",
+      "overridden": false
+    },
+    "semver": {
+      "version": "7.7.4",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: semver@7.7.4 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/semver"
+      ]
+    },
+    "storybook": {
+      "version": "8.6.18",
+      "overridden": false
+    },
+    "tailwind-merge": {
+      "version": "3.6.0",
+      "overridden": false
+    },
+    "tailwindcss": {
+      "version": "3.4.19",
+      "overridden": false
+    },
+    "tslib": {
+      "version": "2.8.1",
+      "overridden": false
+    },
+    "tsyringe": {
+      "version": "4.10.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: tsyringe@4.10.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/tsyringe"
+      ]
+    },
+    "typescript-eslint": {
+      "version": "8.60.1",
+      "overridden": false
+    },
+    "typescript": {
+      "version": "5.9.3",
+      "overridden": false
+    },
+    "use-sync-external-store": {
+      "version": "1.6.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: use-sync-external-store@1.6.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/use-sync-external-store"
+      ]
+    },
+    "vitest": {
+      "version": "4.1.8",
+      "overridden": false
+    },
+    "ws": {
+      "version": "8.21.0",
+      "overridden": false
+    },
+    "wsl-utils": {
+      "version": "0.1.0",
+      "overridden": false,
+      "extraneous": true,
+      "problems": [
+        "extraneous: wsl-utils@0.1.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/wsl-utils"
+      ]
+    }
+  },
+  "error": {
+    "code": "ELSPROBLEMS",
+    "summary": "extraneous: @angular-devkit/schematics@21.2.14 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@angular-devkit/schematics\nextraneous: @babel/plugin-transform-explicit-resource-management@7.29.7 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@babel/plugin-transform-explicit-resource-management\nextraneous: @oxc-parser/binding-darwin-arm64@0.127.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@oxc-parser/binding-darwin-arm64\nextraneous: @oxc-resolver/binding-darwin-arm64@11.20.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@oxc-resolver/binding-darwin-arm64\nextraneous: @peculiar/asn1-cms@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-cms\nextraneous: @peculiar/asn1-csr@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-csr\nextraneous: @peculiar/asn1-ecc@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-ecc\nextraneous: @peculiar/asn1-pfx@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pfx\nextraneous: @peculiar/asn1-pkcs8@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pkcs8\nextraneous: @peculiar/asn1-pkcs9@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-pkcs9\nextraneous: @peculiar/asn1-rsa@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-rsa\nextraneous: @peculiar/asn1-schema@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-schema\nextraneous: @peculiar/asn1-x509-attr@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-x509-attr\nextraneous: @peculiar/asn1-x509@2.7.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/asn1-x509\nextraneous: @peculiar/utils@2.0.3 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/utils\nextraneous: @peculiar/x509@1.14.3 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@peculiar/x509\nextraneous: @storybook/test@8.6.15 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@storybook/test\nextraneous: @webcontainer/env@1.1.1 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/@webcontainer/env\nextraneous: asn1js@3.0.10 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/asn1js\nextraneous: bytestreamjs@2.0.1 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/bytestreamjs\nmissing: eslint-plugin-storybook@8.6.18, required by laschubys-ng@0.0.0\nextraneous: ignore@5.3.2 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/ignore\nextraneous: is-in-ssh@1.0.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/is-in-ssh\nextraneous: ora@9.3.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/ora\nextraneous: oxc-parser@0.127.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/oxc-parser\nextraneous: oxc-resolver@11.20.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/oxc-resolver\nextraneous: pkijs@3.4.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pkijs\nextraneous: powershell-utils@0.1.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/powershell-utils\nextraneous: pvtsutils@1.3.6 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pvtsutils\nextraneous: pvutils@1.1.5 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/pvutils\nextraneous: semver@7.7.4 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/semver\nextraneous: tsyringe@4.10.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/tsyringe\nextraneous: use-sync-external-store@1.6.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/use-sync-external-store\nextraneous: wsl-utils@0.1.0 /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/node_modules/wsl-utils",
+    "detail": ""
+  }
+}
+[20:10:22.193] [DEBUG] No installations found for @storybook/experimental-addon-test
+[20:10:22.193] [DEBUG] End of addon-experimental-test migration checks
+[20:10:22.193] [DEBUG] Running rnstorybook-config migration checks
+[20:10:22.193] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.193] [DEBUG] End of rnstorybook-config migration checks
+[20:10:22.193] [DEBUG] Running rn-ondevice-addons-to-device-addons migration checks
+[20:10:22.193] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.193] [DEBUG] End of rn-ondevice-addons-to-device-addons migration checks
+[20:10:22.193] [DEBUG] Running migrate-addon-console migration checks
+[20:10:22.193] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.193] [DEBUG] End of migrate-addon-console migration checks
+[20:10:22.193] [DEBUG] Running nextjs-to-nextjs-vite migration checks
+[20:10:22.193] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.193] [DEBUG] End of nextjs-to-nextjs-vite migration checks
+[20:10:22.193] [DEBUG] Running react-vite-to-tanstack-react migration checks
+[20:10:22.193] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.193] [DEBUG] End of react-vite-to-tanstack-react migration checks
+[20:10:22.193] [DEBUG] Running remove-addon-interactions migration checks
+[20:10:22.193] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.193] [DEBUG] End of remove-addon-interactions migration checks
+[20:10:22.193] [INFO] 🔎 found a 'remove-addon-interactions' migration:
+[20:10:22.193] [INFO] @storybook/addon-interactions has been moved to Storybook core and will be removed from your configuration.
+[20:10:22.195] [DEBUG] Uninstalling @storybook/addon-interactions
+[20:10:22.195] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.195] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.195] [DEBUG] Removing '@storybook/addon-interactions' from main.js addons field.
+[20:10:22.196] [INFO] ✅ ran remove-addon-interactions migration
+[20:10:22.196] [INFO] Ran remove-addon-interactions migration
+[20:10:22.196] [DEBUG] Running renderer-to-framework migration checks
+[20:10:22.197] [DEBUG] End of renderer-to-framework migration checks
+[20:10:22.197] [DEBUG] Running remove-essential-addons migration checks
+[20:10:22.197] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.197] [DEBUG] End of remove-essential-addons migration checks
+[20:10:22.197] [INFO] 🔎 found a 'remove-essential-addons' migration:
+[20:10:22.197] [INFO] In Storybook 9.0, several addons have been moved into Storybook's core and are no longer needed as separate packages. We'll remove the unnecessary addons from your configuration and dependencies, and update your code to use the new core features.
+[20:10:22.198] [DEBUG] Uninstalling @storybook/addon-essentials
+[20:10:22.198] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.198] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.198] [DEBUG] Removing '@storybook/addon-essentials' from main.js addons field.
+[20:10:22.200] [DEBUG] Getting Storybook info...
+[20:10:22.202] [DEBUG] Loading main config...
+[20:10:22.202] [DEBUG] Getting stories paths...
+[20:10:22.202] [DEBUG] Getting package manager...
+[20:10:22.205] [DEBUG] Getting package.json info for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.205] [DEBUG] Getting Storybook version...
+[20:10:22.206] [DEBUG] Detecting CSF factory usage...
+[20:10:22.208] [INFO] Verifying @storybook/addon-docs
+[20:10:22.208] [DEBUG] Getting dependency version for storybook...
+[20:10:22.208] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.208] [INFO] Installing @storybook/addon-docs@^10.4.3
+[20:10:22.208] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:22.208] [DEBUG] Getting CLI versions from NPM for @storybook/addon-docs...
+[20:10:22.208] [DEBUG] Executing command: npm info @storybook/addon-docs version
+[20:10:23.534] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:23.534] [INFO] Adding '@storybook/addon-docs' to the "addons" field in .storybook/main.ts
+[20:10:23.543] [INFO] ✅ ran remove-essential-addons migration
+[20:10:23.543] [INFO] Ran remove-essential-addons migration
+[20:10:23.543] [DEBUG] Running addon-a11y-parameters migration checks
+[20:10:23.544] [DEBUG] End of addon-a11y-parameters migration checks
+[20:10:23.544] [DEBUG] Running remove-docs-autodocs migration checks
+[20:10:23.545] [DEBUG] End of remove-docs-autodocs migration checks
+[20:10:23.545] [DEBUG] Running wrap-getAbsolutePath migration checks
+[20:10:23.546] [DEBUG] End of wrap-getAbsolutePath migration checks
+[20:10:23.546] [DEBUG] Running fix-faux-esm-require migration checks
+[20:10:23.547] [DEBUG] End of fix-faux-esm-require migration checks
+[20:10:23.547] [DEBUG] Running storybookPackageNameConflict migration checks
+[20:10:23.547] [DEBUG] Using cached package.json for /Users/alvarocarreramontalvo/Documents/Proyectos/Alvaro/Las Chubys/LasChubys-Front/package.json...
+[20:10:23.547] [DEBUG] End of storybookPackageNameConflict migration checks
+[20:10:23.547] [INFO] Migration check ran successfully
+[20:10:23.547] [INFO] Successful migrations:
+
+eslintPlugin, consolidated-imports, remove-addon-interactions, remove-essential-addons
+
+─────────────────────────────────────────────────
+
+If you'd like to run the migrations again, you can do so by running 
+npx storybook automigrate
+
+The automigrations try to migrate common patterns in your project, but might not contain everything needed to migrate to the latest version of Storybook.
+
+Please check the changelog and migration guide for manual migrations and more information: 
+https://storybook.js.org/docs/releases/migration-guide?ref=upgrade
+And reach out on Discord if you need help: https://discord.gg/storybook
+[20:10:23.551] [INFO] Installing dependencies...
+[20:10:23.551] [INFO] Installing dependencies...
+[20:10:23.551] [DEBUG] Executing command: bun install
+[20:10:23.709] [INFO] Installing dependencies...: bun install v1.3.14 (0d9b296a)
+
+[20:10:23.710] [INFO] Installing dependencies...: bun install v1.3.14 (0d9b
+[20:10:24.087] [ERROR] Installation of dependencies failed! {"error":"ExecaError: Command failed with exit code 1: bun install\n\nResolving dependencies\nResolved, downloaded and extracted [11]\nwarn: incorrect peer dependency \"storybook@8.6.18\"\n\nwarn: incorrect peer dependency \"storybook@8.6.18\"\n\nwarn: incorrect peer dependency \"storybook@8.6.18\"\n\nerror: No version matching \"8.6.18\" found for specifier \"eslint-plugin-storybook\" (but package exists)\nerror: eslint-plugin-storybook@8.6.18 failed to resolve\n\nbun install v1.3.14 (0d9b296a)\n    at getFinalError (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:11550:10)\n    at makeError (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:13086:15)\n    at getAsyncResult (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:15732:158)\n    at handlePromise (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:15718:162)\n    at async Object.executeTaskWithSpinner (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-6GLEZUPS.js:3683:11)\n    at async BUNProxy.installDependencies (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:9700:5)\n    at async BUNProxy.installDependencies (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:16106:7)\n    at async doAutomigrate (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/@storybook/cli/dist/_node-chunks/run-LBK7OPAR.js:8223:32)\n    at async file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/@storybook/cli/dist/_node-chunks/run-LBK7OPAR.js:10614:90\n    at async withTelemetry (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-ZQ5NLTS2.js:655:12)"}
+[20:10:24.087] [ERROR] Installation of dependencies failed!
+[20:10:24.087] [ERROR] [38;2;241;97;97mExecaError: Command failed with exit code 1: bun install
+
+Resolving dependencies
+Resolved, downloaded and extracted [11]
+warn: incorrect peer dependency "storybook@8.6.18"
+
+warn: incorrect peer dependency "storybook@8.6.18"
+
+warn: incorrect peer dependency "storybook@8.6.18"
+
+error: No version matching "8.6.18" found for specifier "eslint-plugin-storybook" (but package exists)
+error: eslint-plugin-storybook@8.6.18 failed to resolve
+
+bun install v1.3.14 (0d9b296a)[39m
+    at getFinalError (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:11550:10)
+    at makeError (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:13086:15)
+    at getAsyncResult (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:15732:158)
+    at handlePromise (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:15718:162)
+    at async Object.executeTaskWithSpinner (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-6GLEZUPS.js:3683:11)
+    at async BUNProxy.installDependencies (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:9700:5)
+    at async BUNProxy.installDependencies (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-QTJ23TAE.js:16106:7)
+    at async doAutomigrate (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/@storybook/cli/dist/_node-chunks/run-LBK7OPAR.js:8223:32)
+    at async file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/@storybook/cli/dist/_node-chunks/run-LBK7OPAR.js:10614:90
+    at async withTelemetry (file:///Users/alvarocarreramontalvo/.npm/_npx/c8d51691e20e7756/node_modules/storybook/dist/_node-chunks/chunk-ZQ5NLTS2.js:655:12)
+[20:10:25.061] [ERROR] ExecaError: Command failed with exit code 1: bun install
+
+Resolving dependencies
+Resolved, downloaded and extracted [11]
+warn: incorrect peer dependency "storybook@8.6.18"
+
+warn: incorrect peer dependency "storybook@8.6.18"
+
+warn: incorrect peer dependency "storybook@8.6.18"
+
+error: No version matching "8.6.18" found for specifier "eslint-plugin-storybook" (but package exists)
+error: eslint-plugin-storybook@8.6.18 failed to resolve
+
+bun install v1.3.14 (0d9b296a)

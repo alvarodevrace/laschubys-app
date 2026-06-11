@@ -66,6 +66,11 @@ export const routes: Routes = [
             (m) => m.AdminDashboardComponent,
           ),
       },
+      {
+        path: 'ui',
+        loadComponent: () =>
+          import('./features/admin/ui-playground.component').then((m) => m.UiPlaygroundComponent),
+      },
     ],
   },
   { path: '**', redirectTo: '' },
