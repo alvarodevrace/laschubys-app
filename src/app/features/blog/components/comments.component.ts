@@ -5,40 +5,41 @@ import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 import { BlogComment } from '../../../core/models/content.model';
 import { ContentService } from '../../../core/services/content.service';
+import { ButtonComponent } from '../../../shared/ui/button/button.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-comments',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, ButtonComponent],
   template: `
-    <section class="comments">
-      <div class="comments__head">
-        <h2>Comentarios</h2>
+    <section class="grid gap-6 mt-12">
+      <div class="flex justify-between items-center gap-4">
+        <h2 class="m-0">Comentarios</h2>
         <span>{{ comments().length }}</span>
       </div>
 
-      <div class="comments__list">
+      <div class="grid gap-4">
         @if (comments().length === 0) {
-          <p class="comments__empty">Todavía no hay comentarios públicos en este post.</p>
+          <p class="m-0 leading-relaxed">Todavía no hay comentarios públicos en este post.</p>
         } @else {
           @for (comment of comments(); track comment.id ?? comment.date) {
-            <article class="comment-card">
-              <div class="comment-card__meta">
+            <article class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
+              <div class="flex justify-between gap-4 mb-1.5 text-gray-500 text-sm">
                 <strong>{{ comment.author }}</strong>
                 <span>{{ comment.date }}</span>
               </div>
-              <p>{{ comment.body }}</p>
+              <p class="m-0 leading-relaxed">{{ comment.body }}</p>
             </article>
           }
         }
       </div>
 
-      <div class="comments__composer">
-        <h3>Deja tu comentario</h3>
+      <div class="grid gap-4">
+        <h3 class="m-0">Deja tu comentario</h3>
 
         @if (!auth.isLoggedIn()) {
-          <p class="comments__auth-copy">
+          <p class="m-0 leading-relaxed">
             Necesitas sesión para comentar.
             <a [routerLink]="['/auth/login']" [queryParams]="{ redirect: '/blog/' + slug() }"
               >Inicia aquí</a
@@ -49,24 +50,25 @@ import { ContentService } from '../../../core/services/content.service';
             [(ngModel)]="draft"
             rows="4"
             placeholder="Escribe algo digno de Iris y Rubi..."
+            class="w-full p-4 rounded-2xl border border-gray-200 resize-y min-h-[132px] bg-gray-50"
           ></textarea>
 
           @if (error()) {
-            <p class="comments__error">{{ error() }}</p>
+            <p class="m-0 leading-relaxed text-red-700">{{ error() }}</p>
           }
 
           @if (success()) {
-            <p class="comments__success">{{ success() }}</p>
+            <p class="m-0 leading-relaxed text-green-700">{{ success() }}</p>
           }
 
-          <button
-            class="button-primary"
+          <app-button
             type="button"
+            size="md"
             [disabled]="pending() || !hasDraft()"
             (click)="submit()"
           >
             {{ pending() ? 'Enviando...' : 'Publicar comentario' }}
-          </button>
+          </app-button>
         }
       </div>
     </section>

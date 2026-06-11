@@ -4,47 +4,62 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { siteMeta } from '../../core/content/site-content';
 import { SeoService } from '../../core/services/seo.service';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-auth-login',
   standalone: true,
+  imports: [ButtonComponent],
   template: `
-    <section class="page-hero page-hero--glow auth-hero">
-      <div class="page-hero__inner">
-        <p class="page-hero__eyebrow">Acceso</p>
-        <h1 class="page-hero__title">Entra a Las Chubys.</h1>
-        <p class="page-hero__sub">
+    <section class="py-10 pb-8 text-center">
+      <div class="max-w-6xl mx-auto px-4">
+        <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">Acceso</p>
+        <h1
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+        >
+          Entra a Las Chubys.
+        </h1>
+        <p class="text-gray-500 max-w-2xl">
           Comenta artículos, guarda tu carrito y sigue el universo de Iris y Rubi desde una sola
           sesión.
         </p>
 
         @if (mode() === 'admin-only') {
-          <p class="auth-note">Esa ruta está reservada para la mamá de Las Chubys.</p>
+          <p class="text-gray-500 text-sm mb-3">
+            Esa ruta está reservada para la mamá de Las Chubys.
+          </p>
         } @else if (mode() === 'shop') {
-          <p class="auth-note">Para comprar, entra antes de continuar con tu carrito.</p>
+          <p class="text-gray-500 text-sm mb-3">
+            Para comprar, entra antes de continuar con tu carrito.
+          </p>
         }
 
-        <div class="auth-btns">
-          <button
-            class="button-primary"
-            type="button"
+        <div class="flex justify-center gap-3 my-5">
+          <app-button
+            variant="primary"
             [disabled]="busy()"
             (click)="login()"
             data-testid="auth-login-google-btn"
           >
             {{ busy() ? 'Redirigiendo...' : 'Entrar con Google' }}
-          </button>
+          </app-button>
         </div>
 
         @if (message()) {
-          <p class="auth-status">{{ message() }}</p>
+          <p class="text-orange text-sm font-bold my-2">{{ message() }}</p>
         }
 
-        <ul class="auth-perks">
-          <li>Comentarios con identidad real y control anti-spam.</li>
-          <li>Carrito persistente para retomar compras sin perder selección.</li>
-          <li>Acceso admin separado cuando tu perfil tenga role=admin.</li>
+        <ul class="grid gap-2 max-w-xs mx-auto mt-4 p-0 list-none text-sm text-gray-500">
+          <li class="before:content-['✦_'] before:text-orange">
+            Comentarios con identidad real y control anti-spam.
+          </li>
+          <li class="before:content-['✦_'] before:text-orange">
+            Carrito persistente para retomar compras sin perder selección.
+          </li>
+          <li class="before:content-['✦_'] before:text-orange">
+            Acceso admin separado cuando tu perfil tenga role=admin.
+          </li>
         </ul>
       </div>
     </section>

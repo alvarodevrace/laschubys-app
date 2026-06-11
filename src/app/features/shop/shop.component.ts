@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import {
   Component,
   computed,
@@ -15,33 +15,48 @@ import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
 import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-shop',
   standalone: true,
-  imports: [FormsModule, RouterLink, CurrencyPipe],
+  imports: [FormsModule, RouterLink, CurrencyPipe, NgClass, ButtonComponent],
   template: `
-    <section class="page-hero" data-reveal>
-      <div class="page-hero__inner">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
+    <section class="py-10 pb-8" data-reveal>
+      <div class="max-w-6xl mx-auto px-4">
+        <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
           <a routerLink="/">Inicio</a>
           <span>›</span>
           <span>Tienda</span>
         </nav>
-        <h1 class="page-hero__title">{{ pageTitle() }}</h1>
-        <p class="page-hero__sub">{{ pageSub() }}</p>
+        <h1
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+        >
+          {{ pageTitle() }}
+        </h1>
+        <p class="text-gray-500 max-w-2xl">{{ pageSub() }}</p>
       </div>
     </section>
 
-    <section class="shop-section" style="padding-top:1.5rem;padding-bottom:0;">
-      <div class="page-wrap">
-        <div class="filter-bar">
-          <div class="filter-bar__pills">
+    <section class="py-10 pb-12" style="padding-top:1.5rem;padding-bottom:0;">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex items-center gap-4 flex-wrap py-4 mb-6 border-b border-gray-200">
+          <div class="flex gap-2 flex-wrap">
             <button
               type="button"
-              class="filter-pill"
-              [class.is-active]="audience() === 'all'"
+              class="min-h-[42px] px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-900 text-xs font-extrabold tracking-wide cursor-pointer transition-all duration-200"
+              [ngClass]="
+                audience() === 'all'
+                  ? [
+                      'text-white',
+                      'bg-orange',
+                      'border-orange',
+                      'shadow-[0_16px_28px_rgba(255,122,26,0.22)]',
+                      'hover:-translate-y-px',
+                    ]
+                  : []
+              "
               (click)="audience.set('all')"
               data-testid="tienda-filter-all"
             >
@@ -49,8 +64,18 @@ import { SeoService } from '../../core/services/seo.service';
             </button>
             <button
               type="button"
-              class="filter-pill"
-              [class.is-active]="audience() === 'michis'"
+              class="min-h-[42px] px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-900 text-xs font-extrabold tracking-wide cursor-pointer transition-all duration-200"
+              [ngClass]="
+                audience() === 'michis'
+                  ? [
+                      'text-white',
+                      'bg-orange',
+                      'border-orange',
+                      'shadow-[0_16px_28px_rgba(255,122,26,0.22)]',
+                      'hover:-translate-y-px',
+                    ]
+                  : []
+              "
               (click)="audience.set('michis')"
               data-testid="tienda-filter-michis"
             >
@@ -58,16 +83,30 @@ import { SeoService } from '../../core/services/seo.service';
             </button>
             <button
               type="button"
-              class="filter-pill"
-              [class.is-active]="audience() === 'michi-lovers'"
+              class="min-h-[42px] px-4 py-2 rounded-full border border-gray-200 bg-white text-gray-900 text-xs font-extrabold tracking-wide cursor-pointer transition-all duration-200"
+              [ngClass]="
+                audience() === 'michi-lovers'
+                  ? [
+                      'text-white',
+                      'bg-orange',
+                      'border-orange',
+                      'shadow-[0_16px_28px_rgba(255,122,26,0.22)]',
+                      'hover:-translate-y-px',
+                    ]
+                  : []
+              "
               (click)="audience.set('michi-lovers')"
               data-testid="tienda-filter-michi-lovers"
             >
               Michi Lovers
             </button>
           </div>
-          <label class="filter-search" aria-label="Buscar productos">
+          <label
+            class="ml-auto flex items-center min-h-[50px] gap-3 px-4 rounded-2xl border border-gray-200 bg-white flex-1 max-w-md shadow-[0_18px_34px_rgba(0,0,0,0.05)]"
+            aria-label="Buscar productos"
+          >
             <svg
+              class="w-[18px] h-[18px] text-orange flex-shrink-0"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -80,6 +119,7 @@ import { SeoService } from '../../core/services/seo.service';
               <path d="M16.2 16.2 21 21"></path>
             </svg>
             <input
+              class="w-full border-0 outline-none bg-transparent text-sm placeholder:text-gray-400"
               [ngModel]="query()"
               (ngModelChange)="query.set($event)"
               type="search"
@@ -91,53 +131,63 @@ import { SeoService } from '../../core/services/seo.service';
       </div>
     </section>
 
-    <section class="cards-section" data-reveal>
-      <div class="page-wrap">
+    <section class="pb-16" data-reveal>
+      <div class="max-w-6xl mx-auto px-4">
         @if (productsResource.isLoading()) {
           <p>Cargando productos...</p>
         } @else if (visibleProducts().length) {
-          <h2 class="section-heading" style="margin-bottom: 2rem;">Productos Las Chubys</h2>
+          <h2
+            class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900"
+            style="margin-bottom: 2rem;"
+          >
+            Productos Las Chubys
+          </h2>
           <div class="shop-grid" style="margin-bottom: 3rem;">
             @for (product of visibleProducts(); track product.id) {
-              <article class="shop-card" [attr.data-product-id]="product.id">
-                <div class="shop-card__badge">
+              <article
+                class="group rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                [attr.data-product-id]="product.id"
+              >
+                <div
+                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
+                >
                   {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
                 </div>
-                <div class="shop-card__photo">
+                <div class="relative aspect-square overflow-hidden bg-gray-100">
                   <img
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                     [src]="product.images[0] || '/images/cats/iris4.jpeg'"
                     [alt]="product.name"
                     loading="lazy"
                   />
                 </div>
-                <div class="shop-card__info">
-                  <p class="shop-card__name">{{ product.name }}</p>
-                  <p class="shop-card__price">{{ product.price }}</p>
+                <div class="p-3.5 pb-2">
+                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                    {{ product.name }}
+                  </p>
+                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
                 </div>
-                <div
-                  class="shop-card__actions"
-                  style="display:flex;gap:0.5rem;padding:0 0.85rem 0.85rem;"
-                >
-                  <button
-                    class="button-secondary"
+                <div class="flex gap-2 px-3.5 pb-3.5">
+                  <app-button
+                    variant="secondary"
                     type="button"
                     (click)="openPreview(product)"
                     data-testid="tienda-preview-btn"
                   >
                     Ver
-                  </button>
+                  </app-button>
                   @if (product.source === 'owned') {
-                    <button
-                      class="button-primary"
+                    <app-button
+                      variant="primary"
                       type="button"
                       (click)="addToCart(product)"
                       data-testid="tienda-add-to-cart-btn"
                     >
                       Agregar
-                    </button>
+                    </app-button>
                   } @else {
                     <a
-                      class="button-primary"
+                      class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
                       [href]="product.affiliateUrl"
                       target="_blank"
                       rel="noreferrer"
@@ -150,35 +200,50 @@ import { SeoService } from '../../core/services/seo.service';
             }
           </div>
         } @else {
-          <div class="empty-panel">
-            <h2>No encontramos productos con ese filtro.</h2>
-            <p>Prueba otra audiencia o limpia la búsqueda.</p>
+          <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center">
+            <h2 class="text-xl font-extrabold text-gray-900 mb-2">
+              No encontramos productos con ese filtro.
+            </h2>
+            <p class="text-gray-500 text-sm mb-5">Prueba otra audiencia o limpia la búsqueda.</p>
           </div>
         }
       </div>
     </section>
 
     @if (selectedProduct(); as product) {
-      <div class="modal-shell" (click)="closePreview()" data-testid="tienda-modal-backdrop">
-        <article class="modal-card" (click)="$event.stopPropagation()">
-          <img [src]="product.images[0] || '/images/cats/rubi4.jpeg'" [alt]="product.name" />
-          <div class="modal-card__body">
-            <p class="section-eyebrow">{{ product.tag }}</p>
+      <div
+        class="fixed inset-0 grid place-items-center p-4 z-[5000] bg-black/50"
+        (click)="closePreview()"
+        data-testid="tienda-modal-backdrop"
+      >
+        <article
+          class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-[32px] bg-white"
+          (click)="$event.stopPropagation()"
+        >
+          <img
+            class="w-full min-h-80 object-cover rounded-3xl"
+            [src]="product.images[0] || '/images/cats/rubi4.jpeg'"
+            [alt]="product.name"
+          />
+          <div class="grid content-start gap-3">
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
+              {{ product.tag }}
+            </p>
             <h2>{{ product.name }}</h2>
             <p>{{ product.description || product.copy }}</p>
             <strong>{{ product.priceValue | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
-            <div class="modal-card__actions">
-              <button
-                class="button-primary"
+            <div class="flex gap-3 flex-wrap">
+              <app-button
+                variant="primary"
                 type="button"
                 (click)="addToCart(product)"
                 data-testid="tienda-modal-add-cart"
               >
                 Agregar al carrito
-              </button>
+              </app-button>
               @if (product.affiliateUrl) {
                 <a
-                  class="button-secondary"
+                  class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border cursor-pointer transition-all duration-200 bg-orange-50/10 border-orange/15 text-orange-dark hover:bg-orange-50/20 hover:border-orange/25"
                   [href]="product.affiliateUrl"
                   target="_blank"
                   rel="noreferrer"

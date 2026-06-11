@@ -6,12 +6,13 @@ import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 import { CartService } from '../../core/services/cart.service';
 import { ProductPick } from '../../core/models/content.model';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ButtonComponent],
   template: `
     <section class="banner-slider">
       <div class="banner-container">
@@ -20,29 +21,49 @@ import { ProductPick } from '../../core/models/content.model';
           <img src="/images/banner1.PNG" alt="Las Chubys" class="banner-img" />
         </picture>
         <div class="banner-overlay">
-          <a routerLink="/auth/login" class="button-primary">Crear mi cuenta</a>
-          <a routerLink="/tienda" class="button-primary">Ver productos</a>
-          <a routerLink="/about" class="button-primary">Descubrir más</a>
+          <a
+            routerLink="/auth/login"
+            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+            >Crear mi cuenta</a
+          >
+          <a
+            routerLink="/tienda"
+            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+            >Ver productos</a
+          >
+          <a
+            routerLink="/about"
+            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+            >Descubrir más</a
+          >
         </div>
       </div>
     </section>
 
-    <section class="promo-strip">
-      <div class="promo-strip__track">
+    <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
+      <div class="flex gap-10 w-max animate-marquee">
         @for (item of promoLoop; track item + $index) {
-          <span>{{ item }}</span>
+          <span class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{{
+            item
+          }}</span>
         }
       </div>
     </section>
 
     <section class="shop-section">
-      <div class="page-wrap">
+      <div class="max-w-6xl mx-auto px-4">
         <div class="section-header">
           <div>
-            <p class="section-eyebrow">Tienda</p>
-            <h2 class="section-heading">Nuestros productos</h2>
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Tienda</p>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+              Nuestros productos
+            </h2>
           </div>
-          <a class="section-link" routerLink="/tienda">Ver todo →</a>
+          <a
+            class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
+            routerLink="/tienda"
+            >Ver todo →</a
+          >
         </div>
 
         <div class="shop-grid">
@@ -63,11 +84,16 @@ import { ProductPick } from '../../core/models/content.model';
                 <p class="shop-card__price">{{ product.price }}</p>
               </div>
               <div class="shop-card__actions">
-                <button class="button-secondary" type="button" (click)="openPreview(product)">
+                <app-button
+                  variant="secondary"
+                  size="md"
+                  type="button"
+                  (click)="openPreview(product)"
+                >
                   Ver
-                </button>
+                </app-button>
                 <a
-                  class="button-primary"
+                  class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
                   [routerLink]="['/tienda']"
                   [queryParams]="{ product: product.id }"
                   >Comprar</a
@@ -80,27 +106,41 @@ import { ProductPick } from '../../core/models/content.model';
     </section>
 
     <section class="shop-section shop-section--gray">
-      <div class="page-wrap">
+      <div class="max-w-6xl mx-auto px-4">
         <div class="section-header">
           <div>
-            <p class="section-eyebrow">Blog</p>
-            <h2 class="section-heading">Historias y consejos</h2>
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Blog</p>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+              Historias y consejos
+            </h2>
           </div>
-          <a class="section-link" routerLink="/blog">Ver más →</a>
+          <a
+            class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
+            routerLink="/blog"
+            >Ver más →</a
+          >
         </div>
 
         <div class="cards-grid">
           @for (post of postsResource.value() ?? []; track post.slug) {
-            <a class="card-blog" [routerLink]="['/blog', post.slug]">
-              <div class="card-blog__photo">
+            <a
+              class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+              [routerLink]="['/blog', post.slug]"
+            >
+              <div class="aspect-video overflow-hidden bg-gray-100">
                 <img
                   [src]="post.coverImage || '/images/cats/iris2.jpeg'"
                   [alt]="post.title"
                   loading="lazy"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
-              <p class="card-blog__cat">{{ post.category }}</p>
-              <h3 class="card-blog__title">{{ post.title }}</h3>
+              <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
+                {{ post.category }}
+              </p>
+              <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
+                {{ post.title }}
+              </h3>
               <p class="card-blog__excerpt">{{ post.excerpt }}</p>
             </a>
           }
@@ -109,30 +149,48 @@ import { ProductPick } from '../../core/models/content.model';
     </section>
 
     <section class="shop-section shop-section--gray">
-      <div class="page-wrap">
-        <div class="dual-banner">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <a
             [routerLink]="['/tienda']"
             [queryParams]="{ audience: 'michis' }"
-            class="dual-banner-item"
+            class="relative rounded-2xl overflow-hidden aspect-video"
           >
-            <img src="/images/cats/iris2.jpeg" alt="Para Michis" loading="lazy" />
-            <div class="dual-banner-item__content">
-              <p class="dual-banner-item__label">Categoría base</p>
-              <h3 class="dual-banner-item__title">Para Michis</h3>
-              <span class="dual-banner-item__cta">Explorar picks y tienda →</span>
+            <img
+              src="/images/cats/iris2.jpeg"
+              alt="Para Michis"
+              loading="lazy"
+              class="w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 flex flex-col justify-end p-6 text-white bg-gradient-to-t from-black/55 via-black/10 to-transparent"
+            >
+              <p class="text-xs font-extrabold uppercase tracking-widest opacity-90 mb-1">
+                Categoría base
+              </p>
+              <h3 class="text-xl md:text-2xl font-extrabold leading-tight mb-2">Para Michis</h3>
+              <span class="text-sm font-bold opacity-90">Explorar picks y tienda →</span>
             </div>
           </a>
           <a
             [routerLink]="['/tienda']"
             [queryParams]="{ audience: 'michi-lovers' }"
-            class="dual-banner-item"
+            class="relative rounded-2xl overflow-hidden aspect-video"
           >
-            <img src="/images/cats/iris2.jpeg" alt="Michi Lovers" loading="lazy" />
-            <div class="dual-banner-item__content">
-              <p class="dual-banner-item__label">Categoría base</p>
-              <h3 class="dual-banner-item__title">Michi Lovers</h3>
-              <span class="dual-banner-item__cta">Ver regalos y picks →</span>
+            <img
+              src="/images/cats/iris2.jpeg"
+              alt="Michi Lovers"
+              loading="lazy"
+              class="w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 flex flex-col justify-end p-6 text-white bg-gradient-to-t from-black/55 via-black/10 to-transparent"
+            >
+              <p class="text-xs font-extrabold uppercase tracking-widest opacity-90 mb-1">
+                Categoría base
+              </p>
+              <h3 class="text-xl md:text-2xl font-extrabold leading-tight mb-2">Michi Lovers</h3>
+              <span class="text-sm font-bold opacity-90">Ver regalos y picks →</span>
             </div>
           </a>
         </div>
@@ -140,22 +198,35 @@ import { ProductPick } from '../../core/models/content.model';
     </section>
 
     <section class="shop-section">
-      <div class="page-wrap">
+      <div class="max-w-6xl mx-auto px-4">
         <div class="section-header">
           <div>
-            <p class="section-eyebrow">Persona Spotlight</p>
-            <h2 class="section-heading">Iris y Rubi al frente</h2>
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
+              Persona Spotlight
+            </p>
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+              Iris y Rubi al frente
+            </h2>
           </div>
         </div>
 
-        <div class="persona-grid">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           @for (persona of personas; track persona.name) {
-            <article class="persona-card">
-              <img [src]="persona.image" [alt]="persona.name" loading="lazy" />
+            <article
+              class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-5 items-center p-5 rounded-2xl bg-white border border-gray-200"
+            >
+              <img
+                [src]="persona.image"
+                [alt]="persona.name"
+                loading="lazy"
+                class="w-full h-36 object-cover rounded-2xl"
+              />
               <div>
-                <p class="persona-card__role">{{ persona.role }}</p>
-                <h3 class="persona-card__name">{{ persona.name }}</h3>
-                <p class="persona-card__accent">{{ persona.accent }}</p>
+                <p class="text-xs font-extrabold uppercase tracking-wide text-orange mb-1">
+                  {{ persona.role }}
+                </p>
+                <h3 class="text-lg font-extrabold text-gray-900 mb-1">{{ persona.name }}</h3>
+                <p class="text-sm text-gray-500 leading-relaxed">{{ persona.accent }}</p>
               </div>
             </article>
           }
@@ -168,14 +239,20 @@ import { ProductPick } from '../../core/models/content.model';
         <article class="modal-card" (click)="$event.stopPropagation()">
           <img [src]="product.images[0] || '/images/cats/iris4.jpeg'" [alt]="product.name" />
           <div class="modal-card__body">
-            <p class="section-eyebrow">{{ product.tag }}</p>
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
+              {{ product.tag }}
+            </p>
             <h2>{{ product.name }}</h2>
             <p>{{ product.description || product.copy }}</p>
             <div class="modal-card__actions">
-              <button class="button-primary" type="button" (click)="addToCart(product)">
+              <app-button type="button" size="md" (click)="addToCart(product)">
                 Agregar
-              </button>
-              <a class="button-secondary" routerLink="/tienda">Ver catálogo</a>
+              </app-button>
+              <a
+                class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border cursor-pointer transition-all duration-200 bg-orange/[0.08] border-orange/[0.16] text-[#e06300] hover:bg-orange/[0.14] hover:border-orange/[0.28]"
+                routerLink="/tienda"
+                >Ver catálogo</a
+              >
             </div>
           </div>
         </article>

@@ -1,17 +1,27 @@
-<aside class="cart-drawer" [attr.aria-hidden]="!isOpen()">
+<aside
+  class="fixed inset-0 pointer-events-none"
+  [class.pointer-events-auto]="isOpen()"
+  [class.z-[4000]]="isOpen()"
+  [attr.aria-hidden]="!isOpen()"
+>
   <button
-    class="cart-drawer__backdrop"
+    class="absolute inset-0 border-0 bg-[rgba(14,11,10,0.52)] opacity-0 transition-opacity duration-200"
+    [class.opacity-100]="isOpen()"
     type="button"
     (click)="close()"
     aria-label="Cerrar carrito"
     data-testid="cart-drawer-backdrop"
   ></button>
 
-  <div class="cart-drawer__panel">
-    <div class="cart-drawer__header">
+  <div
+    class="absolute top-0 right-0 bottom-0 w-full max-w-sm p-4 flex flex-col bg-white transition-transform duration-200"
+    [class.translate-x-full]="!isOpen()"
+    [class.translate-x-0]="isOpen()"
+  >
+    <div class="flex items-center justify-between pb-4 border-b border-black/5">
       <h2>Tu selección</h2>
       <button
-        class="cart-drawer__close"
+        class="border-0 bg-transparent text-gray-500 cursor-pointer"
         type="button"
         (click)="close()"
         data-testid="cart-drawer-close"
@@ -20,26 +30,35 @@
       </button>
     </div>
 
-    <div class="cart-drawer__content">
+    <div class="flex-1 overflow-auto flex flex-col pt-4">
       @if (items().length === 0) {
-        <div class="cart-empty">
+        <div class="grid place-items-center gap-3 min-h-full text-center">
           <p>Tu carrito está vacío.</p>
-          <a routerLink="/tienda" (click)="close()" data-testid="cart-empty-shop-link"
+          <a
+            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+            routerLink="/tienda"
+            (click)="close()"
+            data-testid="cart-empty-shop-link"
             >Ir a la tienda</a
           >
         </div>
       } @else {
-        <div class="cdd-items">
+        <div class="flex flex-col gap-3.5">
           @for (item of items(); track item.id) {
-            <article class="cdd-item">
-              <img [src]="item.image" [alt]="item.name" loading="lazy" />
-              <div class="cdd-item__body">
-                <p class="cdd-item__name">{{ item.name }}</p>
-                <p class="cdd-item__meta">
+            <article class="grid grid-cols-[72px_1fr] gap-3.5">
+              <img
+                [src]="item.image"
+                [alt]="item.name"
+                loading="lazy"
+                class="w-[72px] h-[72px] object-cover rounded-2xl"
+              />
+              <div class="flex flex-col justify-center gap-1">
+                <p class="font-bold text-sm">{{ item.name }}</p>
+                <p class="text-gray-500 text-sm my-1">
                   {{ item.qty }} x {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
                 </p>
                 <button
-                  class="cdd-item__remove"
+                  class="border-0 bg-transparent text-gray-500 cursor-pointer text-sm"
                   type="button"
                   (click)="remove(item.id)"
                   data-testid="cart-remove-item"
@@ -51,27 +70,28 @@
           }
         </div>
 
-        <div class="cdd-footer">
-          <div class="cdd-footer__row">
+        <div class="mt-auto pt-4 flex flex-col gap-3 border-t border-black/5">
+          <div class="flex items-center justify-between">
             <span>Total</span>
             <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
           </div>
 
           <a
-            class="button-primary"
+            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
             routerLink="/carrito"
             (click)="close()"
             data-testid="cart-view-cart-link"
             >Ver carrito</a
           >
-          <button
-            class="button-secondary"
+          <app-button
+            variant="secondary"
+            className="w-full"
             type="button"
             (click)="clear()"
             data-testid="cart-clear-btn"
           >
             Vaciar carrito
-          </button>
+          </app-button>
         </div>
       }
     </div>

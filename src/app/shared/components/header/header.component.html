@@ -1,16 +1,32 @@
-<div class="nav-shell" [class.is-pinned]="isPinned()" [class.is-home]="isHome()" id="nav-shell">
-  <div class="topbar">
-    <div class="topbar__inner">
-      <div class="topbar__left">
+<div
+  class="sticky top-0 z-[1000] bg-white/90 backdrop-blur-md border-b border-gray-100 transition-shadow duration-200"
+  [class.shadow-sm]="isPinned()"
+  id="nav-shell"
+>
+  <div
+    class="border-b border-gray-100 bg-[#fff4e8]"
+    [class.hidden]="isHome()"
+    [class.lg:block]="!isHome()"
+  >
+    <div
+      class="max-w-6xl mx-auto px-4 flex items-center justify-between py-1.5 text-xs text-gray-500"
+    >
+      <div class="flex items-center gap-4">
         <span>Las Chubys · Tienda, blog y caos felino.</span>
-        <a class="topbar__link" href="https://wa.me/593960463743" rel="noreferrer" target="_blank"
+        <a
+          class="hover:text-orange transition-colors"
+          href="https://wa.me/593960463743"
+          rel="noreferrer"
+          target="_blank"
           >WhatsApp</a
         >
       </div>
-      <div class="topbar__right">
-        <a class="topbar__link" href="mailto:laschubys.oficial@gmail.com">Correo</a>
+      <div class="flex items-center gap-4">
+        <a class="hover:text-orange transition-colors" href="mailto:laschubys.oficial@gmail.com"
+          >Correo</a
+        >
         <a
-          class="topbar__link"
+          class="hover:text-orange transition-colors"
           href="https://www.instagram.com/laschubys.oficial/"
           rel="noreferrer"
           target="_blank"
@@ -20,10 +36,10 @@
     </div>
   </div>
 
-  <header class="main-header">
-    <div class="main-header__inner">
+  <header class="py-3">
+    <div class="max-w-6xl mx-auto px-4 flex items-center gap-4">
       <button
-        class="nav-hamburger"
+        class="lg:hidden p-2 -ml-2 text-gray-700 hover:text-orange transition-colors"
         type="button"
         (click)="toggleMobileMenu()"
         aria-label="Abrir menú"
@@ -38,6 +54,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path d="M4 6h16"></path>
           <path d="M4 12h16"></path>
@@ -45,12 +62,12 @@
         </svg>
       </button>
 
-      <a class="main-header__brand" routerLink="/" aria-label="Inicio Las Chubys">
-        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" />
+      <a class="flex-shrink-0" routerLink="/" aria-label="Inicio Las Chubys">
+        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" class="h-10 w-auto" />
       </a>
 
       <form
-        class="main-header__search"
+        class="hidden md:flex flex-1 items-center max-w-md mx-4 gap-2 px-4 py-2 rounded-2xl border border-gray-200 bg-gray-50"
         role="search"
         (ngSubmit)="submitSearch()"
         data-testid="header-search-form"
@@ -64,9 +81,15 @@
           aria-label="Buscar productos"
           [value]="searchQuery()"
           (input)="searchQuery.set(searchInput.value)"
+          class="flex-1 bg-transparent border-0 outline-none text-sm placeholder:text-gray-400"
           data-testid="header-search-input"
         />
-        <button type="submit" aria-label="Buscar" data-testid="header-search-submit">
+        <button
+          type="submit"
+          aria-label="Buscar"
+          class="p-1 text-gray-500 hover:text-orange transition-colors"
+          data-testid="header-search-submit"
+        >
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -75,6 +98,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
+            class="w-[18px] h-[18px]"
           >
             <circle cx="11" cy="11" r="6.5"></circle>
             <path d="M16.2 16.2 21 21"></path>
@@ -82,11 +106,11 @@
         </button>
       </form>
 
-      <div class="main-header__actions">
+      <div class="flex items-center gap-1 ml-auto">
         @if (user(); as currentUser) {
-          <div class="nav-user">
+          <div class="relative">
             <button
-              class="header-action-btn"
+              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
               type="button"
               (click)="toggleUserMenu()"
               data-testid="header-user-menu-toggle"
@@ -99,6 +123,7 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 aria-hidden="true"
+                class="w-[18px] h-[18px]"
               >
                 <path d="M20 20a8 8 0 1 0-16 0"></path>
                 <circle cx="12" cy="8" r="3.5"></circle>
@@ -107,20 +132,37 @@
             </button>
 
             @if (isUserMenuOpen()) {
-              <div class="nav-user__menu is-open">
+              <div
+                class="absolute right-0 top-full mt-2 w-40 bg-white rounded-2xl border border-gray-200 shadow-lg py-2"
+                [class.hidden]="!isUserMenuOpen()"
+                [class.block]="isUserMenuOpen()"
+              >
                 @if (currentUser.role === 'admin') {
-                  <a routerLink="/admin" (click)="toggleUserMenu()" data-testid="header-admin-link"
+                  <a
+                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
+                    routerLink="/admin"
+                    (click)="toggleUserMenu()"
+                    data-testid="header-admin-link"
                     >Panel</a
                   >
                 }
-                <button type="button" (click)="logout()" data-testid="header-logout-btn">
+                <button
+                  class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
+                  type="button"
+                  (click)="logout()"
+                  data-testid="header-logout-btn"
+                >
                   Salir
                 </button>
               </div>
             }
           </div>
         } @else {
-          <a class="header-action-btn" routerLink="/auth/login" data-testid="header-login-link">
+          <a
+            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
+            routerLink="/auth/login"
+            data-testid="header-login-link"
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -129,6 +171,7 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               aria-hidden="true"
+              class="w-[18px] h-[18px]"
             >
               <path d="M20 20a8 8 0 1 0-16 0"></path>
               <circle cx="12" cy="8" r="3.5"></circle>
@@ -138,7 +181,7 @@
         }
 
         <button
-          class="header-action-btn header-cart-btn"
+          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors relative"
           type="button"
           (click)="openCart()"
           aria-label="Carrito de compras"
@@ -152,6 +195,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
+            class="w-[18px] h-[18px]"
           >
             <circle cx="9" cy="19" r="1.4"></circle>
             <circle cx="17" cy="19" r="1.4"></circle>
@@ -162,21 +206,30 @@
           </svg>
           <span>Carrito</span>
           @if (count() > 0) {
-            <span class="cart-badge" data-cart-count>{{ count() }}</span>
+            <span
+              class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-orange text-white text-[10px] font-extrabold"
+              data-cart-count
+              >{{ count() }}</span
+            >
           } @else {
-            <span class="cart-badge" data-cart-count hidden>0</span>
+            <span
+              class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-orange text-white text-[10px] font-extrabold"
+              data-cart-count
+              hidden
+              >0</span
+            >
           }
         </button>
       </div>
     </div>
   </header>
 
-  <nav class="cat-nav" aria-label="Categorías">
-    <div class="cat-nav__grid">
+  <nav class="hidden lg:block border-t border-gray-100" aria-label="Categorías">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-center gap-1">
       <a
         routerLink="/tienda"
         routerLinkActive="is-active"
-        class="cat-nav__item"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors"
         data-testid="header-nav-tienda"
       >
         <svg
@@ -185,6 +238,7 @@
           stroke="currentColor"
           stroke-width="2"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <path d="M3 6h18"></path>
@@ -195,7 +249,7 @@
       <a
         routerLink="/servicios"
         routerLinkActive="is-active"
-        class="cat-nav__item"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors"
         data-testid="header-nav-servicios"
       >
         <svg
@@ -204,6 +258,7 @@
           stroke="currentColor"
           stroke-width="2"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -216,7 +271,7 @@
       <a
         routerLink="/about"
         routerLinkActive="is-active"
-        class="cat-nav__item"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors"
         data-testid="header-nav-about"
       >
         <svg
@@ -225,6 +280,7 @@
           stroke="currentColor"
           stroke-width="2"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path
             d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
@@ -235,7 +291,7 @@
       <a
         routerLink="/blog"
         routerLinkActive="is-active"
-        class="cat-nav__item"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors"
         data-testid="header-nav-blog"
       >
         <svg
@@ -244,6 +300,7 @@
           stroke="currentColor"
           stroke-width="2"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
         </svg>
@@ -252,7 +309,7 @@
       <a
         routerLink="/contact"
         routerLinkActive="is-active"
-        class="cat-nav__item"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors"
         data-testid="header-nav-contact"
       >
         <svg
@@ -261,6 +318,7 @@
           stroke="currentColor"
           stroke-width="2"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path
             d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -273,21 +331,31 @@
   </nav>
 </div>
 
-<div class="nav-mobile" [attr.aria-hidden]="!isMenuOpen()">
+<div
+  class="fixed inset-0 z-[3000] lg:hidden transition-[opacity,visibility] duration-200"
+  [class.pointer-events-none]="!isMenuOpen()"
+  [class.opacity-0]="!isMenuOpen()"
+  [class.invisible]="!isMenuOpen()"
+  [attr.aria-hidden]="!isMenuOpen()"
+>
   <button
-    class="nav-mobile__backdrop"
+    class="absolute inset-0 border-0 bg-[rgba(14,11,10,0.52)]"
     type="button"
     (click)="closeMobileMenu()"
     aria-label="Cerrar menú"
     data-testid="mobile-menu-backdrop"
   ></button>
-  <div class="nav-mobile__panel">
-    <div class="nav-mobile__head">
-      <a class="nav-mobile__brand" routerLink="/" (click)="closeMobileMenu()">
-        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" />
+  <div
+    class="absolute top-0 left-0 bottom-0 w-full max-w-sm bg-white flex flex-col transition-transform duration-200 ease-out"
+    [class.-translate-x-full]="!isMenuOpen()"
+    [class.translate-x-0]="isMenuOpen()"
+  >
+    <div class="flex items-center justify-between p-4 border-b border-gray-100">
+      <a class="block" routerLink="/" (click)="closeMobileMenu()">
+        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" class="h-10 w-auto" />
       </a>
       <button
-        class="nav-mobile__close"
+        class="p-2 text-gray-500 hover:text-orange transition-colors"
         type="button"
         (click)="closeMobileMenu()"
         aria-label="Cerrar menú"
@@ -301,6 +369,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5"
         >
           <path d="M18 6 6 18"></path>
           <path d="M6 6 18 18"></path>
@@ -308,9 +377,9 @@
       </button>
     </div>
 
-    <nav class="nav-mobile__links">
+    <nav class="flex flex-col p-2">
       <a
-        class="nav-mobile__link"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
         routerLink="/tienda"
         (click)="closeMobileMenu()"
         data-testid="mobile-nav-tienda"
@@ -323,6 +392,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5 flex-shrink-0"
         >
           <path d="M4 6h16l-1.5 12h-13z"></path>
           <path d="M8 6V4.5A4 4 0 0 1 12 1a4 4 0 0 1 4 3.5V6"></path>
@@ -330,7 +400,7 @@
         <span>Tienda</span>
       </a>
       <a
-        class="nav-mobile__link"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
         routerLink="/blog"
         (click)="closeMobileMenu()"
         data-testid="mobile-nav-blog"
@@ -343,6 +413,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5 flex-shrink-0"
         >
           <path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"></path>
           <path d="M8 8h7"></path>
@@ -351,7 +422,7 @@
         <span>Blog</span>
       </a>
       <a
-        class="nav-mobile__link"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
         routerLink="/about"
         (click)="closeMobileMenu()"
         data-testid="mobile-nav-about"
@@ -364,6 +435,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5 flex-shrink-0"
         >
           <path
             d="M12 21s7-4.7 7-11.2A4.8 4.8 0 0 0 12 5a4.8 4.8 0 0 0-7 4.8C5 16.3 12 21 12 21z"
@@ -372,7 +444,7 @@
         <span>Nosotras</span>
       </a>
       <a
-        class="nav-mobile__link"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
         routerLink="/servicios"
         (click)="closeMobileMenu()"
         data-testid="mobile-nav-servicios"
@@ -385,6 +457,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5 flex-shrink-0"
         >
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -395,7 +468,7 @@
         <span>Servicios</span>
       </a>
       <a
-        class="nav-mobile__link"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
         routerLink="/contact"
         (click)="closeMobileMenu()"
         data-testid="mobile-nav-contact"
@@ -408,6 +481,7 @@
           stroke-linecap="round"
           stroke-linejoin="round"
           aria-hidden="true"
+          class="w-5 h-5 flex-shrink-0"
         >
           <path
             d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -418,13 +492,13 @@
       </a>
     </nav>
 
-    <div class="nav-mobile__footer">
+    <div class="mt-auto p-4 border-t border-gray-100">
       @if (user(); as currentUser) {
-        <div class="nav-mobile__user">
-          <span class="nav-mobile__user-name">{{ currentUser.name }}</span>
+        <div class="flex flex-col gap-2">
+          <span class="text-sm font-bold text-gray-900 px-4 py-2">{{ currentUser.name }}</span>
           @if (currentUser.role === 'admin') {
             <a
-              class="nav-mobile__action"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
               routerLink="/admin"
               (click)="closeMobileMenu()"
               data-testid="mobile-admin-link"
@@ -437,6 +511,7 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 aria-hidden="true"
+                class="w-5 h-5 flex-shrink-0"
               >
                 <rect x="4" y="4" width="6.5" height="6.5" rx="1.2"></rect>
                 <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"></rect>
@@ -447,7 +522,7 @@
             </a>
           }
           <button
-            class="nav-mobile__action"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
             type="button"
             (click)="logout()"
             data-testid="mobile-logout-btn"
@@ -460,6 +535,7 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               aria-hidden="true"
+              class="w-5 h-5 flex-shrink-0"
             >
               <path d="M10 17l5-5-5-5"></path>
               <path d="M15 12H4"></path>
@@ -470,7 +546,7 @@
         </div>
       } @else {
         <a
-          class="nav-mobile__signin"
+          class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
           routerLink="/auth/login"
           (click)="closeMobileMenu()"
           data-testid="mobile-login-link"
@@ -483,6 +559,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             aria-hidden="true"
+            class="w-5 h-5 flex-shrink-0"
           >
             <path d="M10 17l5-5-5-5"></path>
             <path d="M15 12H4"></path>
@@ -492,11 +569,15 @@
         </a>
       }
 
-      <div class="nav-mobile__socials">
+      <div class="flex gap-3 mt-4 px-4">
         @for (channel of socialChannels.slice(0, 2); track channel.name) {
-          <a [href]="channel.href" class="nav-mobile__social" rel="noreferrer" target="_blank">{{
-            channel.name
-          }}</a>
+          <a
+            [href]="channel.href"
+            class="text-xs text-gray-500 hover:text-orange transition-colors"
+            rel="noreferrer"
+            target="_blank"
+            >{{ channel.name }}</a
+          >
         }
       </div>
     </div>

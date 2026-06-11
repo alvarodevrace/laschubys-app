@@ -6,10 +6,10 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-placeholder-page',
   standalone: true,
   template: `
-    <section class="page-wrap placeholder-page">
-      <p class="placeholder-page__eyebrow">{{ eyebrow }}</p>
-      <h1>{{ title }}</h1>
-      <p>{{ copy }}</p>
+    <section class="max-w-6xl mx-auto px-4 py-16 pb-20 grid gap-4">
+      <p class="text-orange font-extrabold uppercase tracking-wide">{{ eyebrow }}</p>
+      <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900">{{ title }}</h1>
+      <p class="max-w-xl text-gray-500">{{ copy }}</p>
     </section>
   `,
 })

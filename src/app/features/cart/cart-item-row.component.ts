@@ -9,9 +9,16 @@ import { CartItem } from '../../core/models/cart.model';
   standalone: true,
   imports: [CurrencyPipe],
   template: `
-    <article class="cart-item">
-      <img [src]="item().image" [alt]="item().name" loading="lazy" />
-      <div class="cart-item__body">
+    <article
+      class="grid grid-cols-[112px_1fr] gap-4 p-4 rounded-3xl bg-gray-50 border border-gray-200"
+    >
+      <img
+        class="w-28 h-28 object-cover rounded-2xl"
+        [src]="item().image"
+        [alt]="item().name"
+        loading="lazy"
+      />
+      <div class="flex flex-col justify-between gap-4">
         <div>
           <h3>{{ item().name }}</h3>
           <p>
@@ -19,13 +26,31 @@ import { CartItem } from '../../core/models/cart.model';
             {{ item().source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
           </p>
         </div>
-        <div class="cart-item__footer">
-          <div class="qty-stepper">
-            <button type="button" (click)="qtyChange.emit(item().qty - 1)">-</button>
+        <div class="flex justify-between gap-4">
+          <div class="inline-flex items-center gap-3 px-2 py-1 rounded-full border border-gray-200">
+            <button
+              class="border-0 bg-transparent cursor-pointer text-gray-700"
+              type="button"
+              (click)="qtyChange.emit(item().qty - 1)"
+            >
+              -
+            </button>
             <span>{{ item().qty }}</span>
-            <button type="button" (click)="qtyChange.emit(item().qty + 1)">+</button>
+            <button
+              class="border-0 bg-transparent cursor-pointer text-gray-700"
+              type="button"
+              (click)="qtyChange.emit(item().qty + 1)"
+            >
+              +
+            </button>
           </div>
-          <button class="cart-item__remove" type="button" (click)="remove.emit()">Eliminar</button>
+          <button
+            class="border-0 bg-transparent cursor-pointer text-gray-700"
+            type="button"
+            (click)="remove.emit()"
+          >
+            Eliminar
+          </button>
         </div>
       </div>
     </article>
