@@ -1,8 +1,9 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { CheckoutForm } from '../../core/models/checkout.model';
 import { ApiService } from '../../core/services/api.service';
 import { CartService } from '../../core/services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
@@ -29,7 +30,7 @@ interface CheckoutPayload {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-checkout',
   standalone: true,
-  imports: [RouterLink, FormsModule, CurrencyPipe],
+  imports: [RouterLink, ReactiveFormsModule, CurrencyPipe],
   template: `
     <section class="page-wrap page-hero">
       <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -55,43 +56,36 @@ interface CheckoutPayload {
         </div>
       } @else {
         <div class="checkout-layout">
-          <form class="checkout-form" (ngSubmit)="submit()" data-testid="checkout-form">
+          <form
+            class="checkout-form"
+            [formGroup]="checkoutForm"
+            (ngSubmit)="submit()"
+            data-testid="checkout-form"
+          >
             <label>
               <span>Nombre completo</span>
-              <input
-                [(ngModel)]="form.name"
-                name="name"
-                required
-                data-testid="checkout-input-name"
-              />
+              <input formControlName="name" data-testid="checkout-input-name" />
+              @if (checkoutForm.get('name')?.touched && checkoutForm.get('name')?.invalid) {
+                <span class="checkout-error">Este campo es requerido</span>
+              }
             </label>
             <label>
               <span>Telefono</span>
-              <input
-                [(ngModel)]="form.phone"
-                name="phone"
-                required
-                data-testid="checkout-input-phone"
-              />
+              <input formControlName="phone" data-testid="checkout-input-phone" />
+              @if (checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) {
+                <span class="checkout-error">Este campo es requerido</span>
+              }
             </label>
             <label>
               <span>Correo</span>
-              <input
-                [(ngModel)]="form.email"
-                name="email"
-                type="email"
-                required
-                data-testid="checkout-input-email"
-              />
+              <input formControlName="email" type="email" data-testid="checkout-input-email" />
+              @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
+                <span class="checkout-error">Correo inválido</span>
+              }
             </label>
             <label>
               <span>Provincia</span>
-              <select
-                [(ngModel)]="form.province"
-                name="province"
-                required
-                data-testid="checkout-input-province"
-              >
+              <select formControlName="province" data-testid="checkout-input-province">
                 <option value="">Selecciona</option>
                 <option>Pichincha</option>
                 <option>Guayas</option>
@@ -100,16 +94,20 @@ interface CheckoutPayload {
                 <option>El Oro</option>
                 <option>Otra</option>
               </select>
+              @if (checkoutForm.get('province')?.touched && checkoutForm.get('province')?.invalid) {
+                <span class="checkout-error">Este campo es requerido</span>
+              }
             </label>
             <label>
               <span>Direccion completa</span>
               <textarea
-                [(ngModel)]="form.address"
-                name="address"
+                formControlName="address"
                 rows="4"
-                required
                 data-testid="checkout-input-address"
               ></textarea>
+              @if (checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) {
+                <span class="checkout-error">Este campo es requerido</span>
+              }
             </label>
 
             @if (error()) {
@@ -123,7 +121,7 @@ interface CheckoutPayload {
             <button
               class="button-primary"
               type="submit"
-              [disabled]="pending() || !isValid()"
+              [disabled]="checkoutForm.invalid || pending()"
               data-testid="checkout-submit-btn"
             >
               {{ pending() ? 'Procesando...' : 'Confirmar pedido' }}
@@ -137,9 +135,14 @@ interface CheckoutPayload {
                 <div class="checkout-item">
                   <div>
                     <strong>{{ item.name }}</strong>
-                    <p>{{ item.qty }} x {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</p>
+                    <p>
+                      {{ item.qty }}
+                      x {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
+                    </p>
                   </div>
-                  <span>{{ item.qty * item.price | currency: 'USD' : 'symbol' : '1.0-0' }}</span>
+                  <span>
+                    {{ item.qty * item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
+                  </span>
                 </div>
               }
             </div>
@@ -157,28 +160,24 @@ export class CheckoutComponent {
   private readonly api = inject(ApiService);
   private readonly cart = inject(CartService);
   private readonly seo = inject(SeoService);
+  private readonly fb = inject(FormBuilder);
 
   protected readonly items = this.cart.items;
   protected readonly total = this.cart.total;
   protected readonly pending = signal(false);
   protected readonly error = signal('');
   protected readonly success = signal('');
-  protected readonly isValid = computed(
-    () =>
-      !!this.form.name.trim() &&
-      !!this.form.phone.trim() &&
-      !!this.form.email.trim() &&
-      !!this.form.province.trim() &&
-      !!this.form.address.trim(),
-  );
 
-  protected readonly form = {
-    name: '',
-    phone: '',
-    email: '',
-    province: '',
-    address: '',
-  };
+  protected readonly checkoutForm = this.fb.group<CheckoutForm>({
+    name: this.fb.control('', { nonNullable: true, validators: Validators.required }),
+    phone: this.fb.control('', { nonNullable: true, validators: Validators.required }),
+    email: this.fb.control('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    province: this.fb.control('', { nonNullable: true, validators: Validators.required }),
+    address: this.fb.control('', { nonNullable: true, validators: Validators.required }),
+  });
 
   constructor() {
     this.seo.setPage(
@@ -190,7 +189,8 @@ export class CheckoutComponent {
   }
 
   protected async submit() {
-    if (!this.isValid() || !this.items().length) {
+    if (this.checkoutForm.invalid || !this.items().length) {
+      this.checkoutForm.markAllAsTouched();
       return;
     }
 
@@ -198,8 +198,16 @@ export class CheckoutComponent {
     this.error.set('');
     this.success.set('');
 
+    const value = this.checkoutForm.value;
+
     const payload: CheckoutPayload = {
-      customer: { ...this.form },
+      customer: {
+        name: value.name ?? '',
+        phone: value.phone ?? '',
+        email: value.email ?? '',
+        province: value.province ?? '',
+        address: value.address ?? '',
+      },
       items: this.items().map((item) => ({
         id: item.id,
         name: item.name,
@@ -214,6 +222,7 @@ export class CheckoutComponent {
       await this.api.post('/api/checkout', payload);
       this.success.set('Pedido recibido. Revisa WhatsApp o correo para el siguiente paso.');
       this.cart.clearCart();
+      this.checkoutForm.reset();
     } catch (error) {
       this.error.set(error instanceof Error ? error.message : 'No se pudo enviar el pedido.');
     } finally {
