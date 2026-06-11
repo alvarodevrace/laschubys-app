@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { CartService } from '../../core/services/cart.service';
@@ -7,7 +7,8 @@ import { SeoService } from '../../core/services/seo.service';
 import { CartItemRowComponent } from './cart-item-row.component';
 
 @Component({
-  selector: 'app-carrito',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-cart',
   standalone: true,
   imports: [RouterLink, CurrencyPipe, CartItemRowComponent],
   template: `
@@ -65,7 +66,7 @@ import { CartItemRowComponent } from './cart-item-row.component';
     </section>
   `,
 })
-export class CarritoComponent {
+export class CartComponent {
   private readonly cart = inject(CartService);
   private readonly seo = inject(SeoService);
 

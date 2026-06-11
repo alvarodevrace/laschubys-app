@@ -1,5 +1,12 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { afterNextRender, Component, DestroyRef, inject, PLATFORM_ID } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  DestroyRef,
+  inject,
+  PLATFORM_ID,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -10,9 +17,16 @@ import { HeaderComponent } from '../components/header/header.component';
 import { WhatsappFloatComponent } from '../components/whatsapp-float/whatsapp-float.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, CartDrawerComponent, WhatsappFloatComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    FooterComponent,
+    CartDrawerComponent,
+    WhatsappFloatComponent,
+  ],
   template: `
     <app-header />
     <main class="shell-main">

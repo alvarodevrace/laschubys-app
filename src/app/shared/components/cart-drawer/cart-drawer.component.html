@@ -1,17 +1,32 @@
 <aside class="cart-drawer" [attr.aria-hidden]="!isOpen()">
-  <button class="cart-drawer__backdrop" type="button" (click)="close()" aria-label="Cerrar carrito"></button>
+  <button
+    class="cart-drawer__backdrop"
+    type="button"
+    (click)="close()"
+    aria-label="Cerrar carrito"
+    data-testid="cart-drawer-backdrop"
+  ></button>
 
   <div class="cart-drawer__panel">
     <div class="cart-drawer__header">
       <h2>Tu selección</h2>
-      <button class="cart-drawer__close" type="button" (click)="close()">Cerrar</button>
+      <button
+        class="cart-drawer__close"
+        type="button"
+        (click)="close()"
+        data-testid="cart-drawer-close"
+      >
+        Cerrar
+      </button>
     </div>
 
     <div class="cart-drawer__content">
       @if (items().length === 0) {
         <div class="cart-empty">
           <p>Tu carrito está vacío.</p>
-          <a routerLink="/tienda" (click)="close()">Ir a la tienda</a>
+          <a routerLink="/tienda" (click)="close()" data-testid="cart-empty-shop-link"
+            >Ir a la tienda</a
+          >
         </div>
       } @else {
         <div class="cdd-items">
@@ -20,8 +35,17 @@
               <img [src]="item.image" [alt]="item.name" loading="lazy" />
               <div class="cdd-item__body">
                 <p class="cdd-item__name">{{ item.name }}</p>
-                <p class="cdd-item__meta">{{ item.qty }} x {{ item.price | currency:'USD':'symbol':'1.0-0' }}</p>
-                <button class="cdd-item__remove" type="button" (click)="remove(item.id)">Eliminar</button>
+                <p class="cdd-item__meta">
+                  {{ item.qty }} x {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
+                </p>
+                <button
+                  class="cdd-item__remove"
+                  type="button"
+                  (click)="remove(item.id)"
+                  data-testid="cart-remove-item"
+                >
+                  Eliminar
+                </button>
               </div>
             </article>
           }
@@ -30,11 +54,24 @@
         <div class="cdd-footer">
           <div class="cdd-footer__row">
             <span>Total</span>
-            <strong>{{ total() | currency:'USD':'symbol':'1.0-0' }}</strong>
+            <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
           </div>
 
-          <a class="button-primary" routerLink="/carrito" (click)="close()">Ver carrito</a>
-          <button class="button-secondary" type="button" (click)="clear()">Vaciar carrito</button>
+          <a
+            class="button-primary"
+            routerLink="/carrito"
+            (click)="close()"
+            data-testid="cart-view-cart-link"
+            >Ver carrito</a
+          >
+          <button
+            class="button-secondary"
+            type="button"
+            (click)="clear()"
+            data-testid="cart-clear-btn"
+          >
+            Vaciar carrito
+          </button>
         </div>
       }
     </div>

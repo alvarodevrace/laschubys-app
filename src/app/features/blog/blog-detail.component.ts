@@ -1,4 +1,4 @@
-import { Component, computed, inject, resource } from '@angular/core';
+import { Component, computed, inject, resource, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { SeoService } from '../../core/services/seo.service';
@@ -6,6 +6,7 @@ import { ContentService } from '../../core/services/content.service';
 import { CommentsComponent } from './components/comments.component';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-detail',
   standalone: true,
   imports: [RouterLink, CommentsComponent],
@@ -80,7 +81,7 @@ export class BlogDetailComponent {
           `${post.title} | Las Chubys`,
           post.excerpt || 'Historia felina de Las Chubys.',
           post.coverImage || '/images/cats/iris3.jpeg',
-          `/blog/${post.slug}`
+          `/blog/${post.slug}`,
         );
         this.seo.setJsonLd({
           '@context': 'https://schema.org',

@@ -1,9 +1,10 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 
 import { CartItem } from '../../core/models/cart.model';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-cart-item-row',
   standalone: true,
   imports: [CurrencyPipe],

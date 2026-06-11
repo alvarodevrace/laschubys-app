@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -26,6 +26,7 @@ interface CheckoutPayload {
 }
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-checkout',
   standalone: true,
   imports: [RouterLink, FormsModule, CurrencyPipe],
@@ -48,26 +49,49 @@ interface CheckoutPayload {
         <div class="empty-panel">
           <h2>No hay productos para procesar.</h2>
           <p>Vuelve a la tienda y agrega al menos un item al carrito.</p>
-          <a class="button-primary" routerLink="/tienda">Ir a tienda</a>
+          <a class="button-primary" routerLink="/tienda" data-testid="checkout-empty-shop-link"
+            >Ir a tienda</a
+          >
         </div>
       } @else {
         <div class="checkout-layout">
-          <form class="checkout-form" (ngSubmit)="submit()">
+          <form class="checkout-form" (ngSubmit)="submit()" data-testid="checkout-form">
             <label>
               <span>Nombre completo</span>
-              <input [(ngModel)]="form.name" name="name" required />
+              <input
+                [(ngModel)]="form.name"
+                name="name"
+                required
+                data-testid="checkout-input-name"
+              />
             </label>
             <label>
               <span>Telefono</span>
-              <input [(ngModel)]="form.phone" name="phone" required />
+              <input
+                [(ngModel)]="form.phone"
+                name="phone"
+                required
+                data-testid="checkout-input-phone"
+              />
             </label>
             <label>
               <span>Correo</span>
-              <input [(ngModel)]="form.email" name="email" type="email" required />
+              <input
+                [(ngModel)]="form.email"
+                name="email"
+                type="email"
+                required
+                data-testid="checkout-input-email"
+              />
             </label>
             <label>
               <span>Provincia</span>
-              <select [(ngModel)]="form.province" name="province" required>
+              <select
+                [(ngModel)]="form.province"
+                name="province"
+                required
+                data-testid="checkout-input-province"
+              >
                 <option value="">Selecciona</option>
                 <option>Pichincha</option>
                 <option>Guayas</option>
@@ -79,7 +103,13 @@ interface CheckoutPayload {
             </label>
             <label>
               <span>Direccion completa</span>
-              <textarea [(ngModel)]="form.address" name="address" rows="4" required></textarea>
+              <textarea
+                [(ngModel)]="form.address"
+                name="address"
+                rows="4"
+                required
+                data-testid="checkout-input-address"
+              ></textarea>
             </label>
 
             @if (error()) {
@@ -90,7 +120,12 @@ interface CheckoutPayload {
               <p class="checkout-message checkout-message--success">{{ success() }}</p>
             }
 
-            <button class="button-primary" type="submit" [disabled]="pending() || !isValid()">
+            <button
+              class="button-primary"
+              type="submit"
+              [disabled]="pending() || !isValid()"
+              data-testid="checkout-submit-btn"
+            >
               {{ pending() ? 'Procesando...' : 'Confirmar pedido' }}
             </button>
           </form>

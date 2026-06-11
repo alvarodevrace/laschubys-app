@@ -1,4 +1,4 @@
-import { Component, inject, input, model, signal } from '@angular/core';
+import { Component, inject, input, model, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { BlogComment } from '../../../core/models/content.model';
 import { ContentService } from '../../../core/services/content.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-comments',
   standalone: true,
   imports: [FormsModule, RouterLink],

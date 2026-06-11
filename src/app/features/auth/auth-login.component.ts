@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AuthService } from '../../core/auth/auth.service';
@@ -6,6 +6,7 @@ import { siteMeta } from '../../core/content/site-content';
 import { SeoService } from '../../core/services/seo.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-auth-login',
   standalone: true,
   template: `
@@ -14,7 +15,8 @@ import { SeoService } from '../../core/services/seo.service';
         <p class="page-hero__eyebrow">Acceso</p>
         <h1 class="page-hero__title">Entra a Las Chubys.</h1>
         <p class="page-hero__sub">
-          Comenta artículos, guarda tu carrito y sigue el universo de Iris y Rubi desde una sola sesión.
+          Comenta artículos, guarda tu carrito y sigue el universo de Iris y Rubi desde una sola
+          sesión.
         </p>
 
         @if (mode() === 'admin-only') {
@@ -24,7 +26,13 @@ import { SeoService } from '../../core/services/seo.service';
         }
 
         <div class="auth-btns">
-          <button class="button-primary" type="button" [disabled]="busy()" (click)="login()">
+          <button
+            class="button-primary"
+            type="button"
+            [disabled]="busy()"
+            (click)="login()"
+            data-testid="auth-login-google-btn"
+          >
             {{ busy() ? 'Redirigiendo...' : 'Entrar con Google' }}
           </button>
         </div>
@@ -57,10 +65,17 @@ export class AuthLoginComponent {
     return this.route.snapshot.queryParamMap.get('logged_out') ? 'Sesión cerrada.' : '';
   });
   protected readonly mode = computed(() => this.route.snapshot.queryParamMap.get('mode') ?? '');
-  private readonly redirect = computed(() => this.route.snapshot.queryParamMap.get('redirect') ?? '/blog');
+  private readonly redirect = computed(
+    () => this.route.snapshot.queryParamMap.get('redirect') ?? '/blog',
+  );
 
   constructor() {
-    this.seo.setPage('Entrar | Las Chubys', `Entrada a la comunidad de ${siteMeta.name}.`, '/brand/logo.png', '/auth/login');
+    this.seo.setPage(
+      'Entrar | Las Chubys',
+      `Entrada a la comunidad de ${siteMeta.name}.`,
+      '/brand/logo.png',
+      '/auth/login',
+    );
 
     if (this.auth.isLoggedIn()) {
       void this.router.navigateByUrl(this.redirect());

@@ -1,4 +1,4 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, resource, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { marqueeItems, personas } from '../../core/content/site-content';
@@ -8,6 +8,7 @@ import { CartService } from '../../core/services/cart.service';
 import { ProductPick } from '../../core/models/content.model';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
   imports: [RouterLink],

@@ -2,19 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────
+   Design tokens — consumed by legacy @layer components.
+   TODO: Remove once all components use Tailwind utility classes.
+   ───────────────────────────────────────── */
 @layer base {
   :root {
     --orange: #ff7a1a;
     --orange-dark: #e06300;
-    --orange-light: #fff1e5;
-    --white: #ffffff;
     --surface: #fff4e8;
     --text: #333333;
-    --text-muted: #6b7280;
-    --border: #e0e0e0;
-    --gray-50: #f9fafb;
-    --gray-100: #f3f4f6;
-    --dark: #141313;
+    --white: #ffffff;
     color-scheme: light;
   }
 
@@ -25,8 +23,8 @@
 
   body {
     margin: 0;
-    background: var(--white);
-    color: var(--text);
+    background: #ffffff;
+    color: #333333;
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     line-height: 1.6;
@@ -45,6 +43,12 @@
   }
 }
 
+/* ─────────────────────────────────────────
+   ⚠️  LEGACY COMPONENT STYLES  ⚠️
+   All rules below use @apply and custom class names.
+   These MUST be migrated to Tailwind utility classes
+   directly in component templates (Fase 2).
+   ───────────────────────────────────────── */
 @layer components {
   /* Layout */
   .page-wrap {
@@ -496,7 +500,7 @@
     @apply flex items-center justify-between pb-4 border-b border-black/5;
   }
   .cart-drawer__close {
-    @apply border-0 bg-transparent text-gray-500 cursor-pointer font-inherit;
+    @apply border-0 bg-transparent text-gray-500 cursor-pointer;
   }
   .cart-drawer__content {
     @apply flex-1 overflow-auto flex flex-col pt-4;
@@ -519,7 +523,7 @@
     @apply text-gray-500 text-sm my-1;
   }
   .cdd-item__remove {
-    @apply border-0 bg-transparent text-gray-500 cursor-pointer font-inherit text-sm;
+    @apply border-0 bg-transparent text-gray-500 cursor-pointer text-sm;
   }
   .cdd-footer {
     @apply mt-auto pt-4 flex flex-col gap-3 border-t border-black/5;
@@ -561,7 +565,7 @@
   .checkout-form input,
   .checkout-form select,
   .checkout-form textarea {
-    @apply min-h-12 px-4 rounded-2xl border border-gray-200 bg-white font-inherit;
+    @apply min-h-12 px-4 rounded-2xl border border-gray-200 bg-white;
   }
   .checkout-form textarea {
     @apply min-h-[120px] resize-y;
@@ -609,7 +613,7 @@
   }
   .qty-stepper button,
   .cart-item__remove {
-    @apply border-0 bg-transparent font-inherit cursor-pointer text-gray-700;
+    @apply border-0 bg-transparent cursor-pointer text-gray-700;
   }
 
   /* Comments */
@@ -998,149 +1002,71 @@
   .cat-nav__item {
     @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors;
   }
-  .cat-nav__item.is-active {
-    @apply text-orange bg-orange/5;
-  }
-  .cat-nav__item svg {
-    @apply w-[18px] h-[18px];
-  }
 
   /* Mobile nav */
   .nav-mobile {
     @apply fixed inset-0 z-[3000] lg:hidden;
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 200ms ease,
+      visibility 200ms ease;
   }
-  .nav-mobile[aria-hidden='true'] {
-    @apply pointer-events-none opacity-0;
-  }
-  .nav-mobile[aria-hidden='false'] {
-    @apply pointer-events-auto opacity-100;
+  .nav-mobile:not([aria-hidden='true']) {
+    pointer-events: auto;
+    visibility: visible;
+    opacity: 1;
   }
   .nav-mobile__backdrop {
-    @apply absolute inset-0 bg-black/50;
+    @apply absolute inset-0 border-0;
+    background: rgba(14, 11, 10, 0.52);
   }
   .nav-mobile__panel {
-    @apply absolute top-0 left-0 bottom-0 w-4/5 max-w-xs bg-white shadow-2xl flex flex-col;
+    @apply absolute top-0 left-0 bottom-0 w-full max-w-sm bg-white flex flex-col;
+    transform: translateX(-100%);
+    transition: transform 200ms ease;
+  }
+  .nav-mobile:not([aria-hidden='true']) .nav-mobile__panel {
+    transform: translateX(0);
   }
   .nav-mobile__head {
     @apply flex items-center justify-between p-4 border-b border-gray-100;
   }
   .nav-mobile__brand img {
-    @apply h-8 w-auto;
+    @apply h-10 w-auto;
   }
   .nav-mobile__close {
     @apply p-2 text-gray-500 hover:text-orange transition-colors;
   }
-  .nav-mobile__close svg {
-    @apply w-5 h-5;
-  }
   .nav-mobile__links {
-    @apply flex-1 overflow-auto py-4;
+    @apply flex flex-col p-2;
   }
   .nav-mobile__link {
-    @apply flex items-center gap-3 px-4 py-3 mx-2 rounded-xl text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors;
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors;
   }
   .nav-mobile__link svg {
     @apply w-5 h-5 flex-shrink-0;
   }
   .nav-mobile__footer {
-    @apply p-4 border-t border-gray-100;
+    @apply mt-auto p-4 border-t border-gray-100;
   }
   .nav-mobile__user {
-    @apply grid gap-2 mb-4;
+    @apply flex flex-col gap-2;
   }
   .nav-mobile__user-name {
-    @apply text-sm font-bold text-gray-900 px-2;
+    @apply text-sm font-bold text-gray-900 px-4 py-2;
   }
-  .nav-mobile__action,
+  .nav-mobile__action {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors;
+  }
   .nav-mobile__signin {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors;
-  }
-  .nav-mobile__action svg,
-  .nav-mobile__signin svg {
-    @apply w-5 h-5 flex-shrink-0;
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors;
   }
   .nav-mobile__socials {
-    @apply flex gap-3 pt-3 border-t border-gray-100;
+    @apply flex gap-3 mt-4 px-4;
   }
   .nav-mobile__social {
-    @apply text-xs font-bold text-gray-500 hover:text-orange transition-colors;
-  }
-
-  /* Footer */
-  .ps-footer {
-    @apply pt-12 pb-8 border-t border-gray-100 bg-gray-50;
-  }
-  .ps-footer__top {
-    @apply max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8;
-  }
-  .ps-footer__brand img {
-    @apply h-8 w-auto mb-2;
-  }
-  .ps-footer__tagline {
-    @apply text-sm text-gray-500;
-  }
-  .ps-footer__socials {
-    @apply flex gap-3;
-  }
-  .ps-footer__social-link {
-    @apply w-10 h-10 inline-flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-600 hover:text-orange hover:border-orange/30 transition-colors;
-  }
-  .ps-footer__social-link svg {
-    @apply w-5 h-5;
-  }
-  .ps-footer__cols {
-    @apply max-w-6xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 mb-8;
-  }
-  .ps-footer__col-title {
-    @apply text-sm font-extrabold text-gray-900 mb-3;
-  }
-  .ps-footer__col-links {
-    @apply grid gap-2;
-  }
-  .ps-footer__col-links a {
-    @apply text-sm text-gray-500 hover:text-orange transition-colors;
-  }
-  .ps-footer__payments {
-    @apply max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-6 mb-8;
-  }
-  .ps-footer__payments-label {
-    @apply text-xs font-extrabold uppercase tracking-wide text-gray-500 mb-2;
-  }
-  .payment-strip {
-    @apply flex flex-wrap items-center gap-3;
-  }
-  .payment-strip__image {
-    @apply h-8 w-auto object-contain;
-  }
-  .ps-footer__copy {
-    @apply max-w-6xl mx-auto px-4 text-center text-xs text-gray-400 pt-6 border-t border-gray-200;
-  }
-}
-
-@layer utilities {
-  .font-inherit {
-    font: inherit;
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes authPulse {
-  0%,
-  80%,
-  100% {
-    opacity: 0.2;
-    transform: scale(0.8);
-  }
-  40% {
-    opacity: 1;
-    transform: scale(1);
+    @apply text-xs text-gray-500 hover:text-orange transition-colors;
   }
 }

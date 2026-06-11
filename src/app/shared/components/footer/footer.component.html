@@ -1,7 +1,12 @@
 <footer class="ps-footer">
   <div class="ps-footer__top">
     <div>
-      <a class="ps-footer__brand" routerLink="/" aria-label="Inicio Las Chubys">
+      <a
+        class="ps-footer__brand"
+        routerLink="/"
+        aria-label="Inicio Las Chubys"
+        data-testid="footer-brand"
+      >
         <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" loading="lazy" />
       </a>
       <p class="ps-footer__tagline">Curado por Iris &amp; Rubi · Cat moms de Ecuador</p>
@@ -9,16 +14,32 @@
 
     <div class="ps-footer__socials">
       @for (channel of socialChannels.slice(0, 2); track channel.name) {
-        <a [href]="channel.href" [attr.aria-label]="channel.name" class="ps-footer__social-link" rel="noreferrer" target="_blank">
+        <a
+          [href]="channel.href"
+          [attr.aria-label]="channel.name"
+          class="ps-footer__social-link"
+          rel="noreferrer"
+          target="_blank"
+          [attr.data-testid]="'footer-social-' + channel.name.toLowerCase()"
+        >
           @if (channel.name === 'Instagram') {
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
               <rect x="3" y="3" width="18" height="18" rx="5"></rect>
               <circle cx="12" cy="12" r="4"></circle>
               <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"></circle>
             </svg>
           } @else {
             <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M14 3c1 2.2 2.5 3.7 5 4v3.1c-1.8-.1-3.3-.7-4.8-1.8v6.5a5.2 5.2 0 1 1-5.2-5.2c.4 0 .8 0 1.2.1v3.2a2.6 2.6 0 1 0 1.4 2.3V3H14z" fill="currentColor"></path>
+              <path
+                d="M14 3c1 2.2 2.5 3.7 5 4v3.1c-1.8-.1-3.3-.7-4.8-1.8v6.5a5.2 5.2 0 1 1-5.2-5.2c.4 0 .8 0 1.2.1v3.2a2.6 2.6 0 1 0 1.4 2.3V3H14z"
+                fill="currentColor"
+              ></path>
             </svg>
           }
         </a>
@@ -30,34 +51,40 @@
     <div>
       <p class="ps-footer__col-title">Las Chubys</p>
       <nav class="ps-footer__col-links">
-        <a routerLink="/about">¿Quiénes somos?</a>
-        <a routerLink="/blog">Blog felino</a>
-        <a routerLink="/contact">Contáctanos</a>
+        <a routerLink="/about" data-testid="footer-link-about">¿Quiénes somos?</a>
+        <a routerLink="/blog" data-testid="footer-link-blog">Blog felino</a>
+        <a routerLink="/contact" data-testid="footer-link-contact">Contáctanos</a>
       </nav>
     </div>
     <div>
       <p class="ps-footer__col-title">Servicio al cliente</p>
       <nav class="ps-footer__col-links">
-        <a routerLink="/contact">Contáctanos</a>
-        <a href="https://wa.me/593960463743" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a routerLink="/contact" data-testid="footer-link-contact">Contáctanos</a>
+        <a
+          href="https://wa.me/593960463743"
+          target="_blank"
+          rel="noreferrer"
+          data-testid="footer-link-whatsapp"
+          >WhatsApp</a
+        >
         <a routerLink="/contact">Garantía, cambios y devoluciones</a>
       </nav>
     </div>
     <div>
       <p class="ps-footer__col-title">Compras y pagos</p>
       <nav class="ps-footer__col-links">
-        <a routerLink="/auth/login">Mi cuenta</a>
-        <a routerLink="/carrito">Mis pedidos</a>
-        <a routerLink="/tienda">Ir a la tienda</a>
+        <a routerLink="/auth/login" data-testid="footer-link-login">Mi cuenta</a>
+        <a routerLink="/carrito" data-testid="footer-link-cart">Mis pedidos</a>
+        <a routerLink="/tienda" data-testid="footer-link-shop">Ir a la tienda</a>
       </nav>
     </div>
     <div>
       <p class="ps-footer__col-title">Información</p>
       <nav class="ps-footer__col-links">
-        <a routerLink="/contact">Términos y condiciones</a>
-        <a routerLink="/contact">Política de privacidad</a>
-        <a routerLink="/contact">Compra con tarjeta de crédito</a>
-        <a routerLink="/contact">Compra con tarjeta de débito</a>
+        <a routerLink="/contact" data-testid="footer-link-terms">Términos y condiciones</a>
+        <a routerLink="/contact" data-testid="footer-link-privacy">Política de privacidad</a>
+        <a routerLink="/contact" data-testid="footer-link-credit">Compra con tarjeta de crédito</a>
+        <a routerLink="/contact" data-testid="footer-link-debit">Compra con tarjeta de débito</a>
       </nav>
     </div>
   </div>
@@ -78,12 +105,42 @@
     <div class="payment-group">
       <p class="ps-footer__payments-label">Transferencia bancaria</p>
       <div class="payment-strip">
-        <img class="payment-strip__image payment-strip__image--bank" src="/brand/payments/logo-pichincha.svg" alt="Banco Pichincha" loading="lazy" />
-        <img class="payment-strip__image payment-strip__image--bank" src="/brand/payments/logo-guayaquil.svg" alt="Banco Guayaquil" loading="lazy" />
-        <img class="payment-strip__image payment-strip__image--bank" src="/brand/payments/logo-bolivariano.svg" alt="Banco Bolivariano" loading="lazy" />
-        <img class="payment-strip__image payment-strip__image--bank" src="/brand/payments/logo-produbanco.svg" alt="Produbanco" loading="lazy" />
-        <img class="payment-strip__image payment-strip__image--bank" src="/brand/payments/logo-banco-austro.svg" alt="Banco del Austro" loading="lazy" />
-        <img class="payment-strip__image payment-strip__image--bank" src="/brand/payments/logo-internacional.svg" alt="Banco Internacional" loading="lazy" />
+        <img
+          class="payment-strip__image payment-strip__image--bank"
+          src="/brand/payments/logo-pichincha.svg"
+          alt="Banco Pichincha"
+          loading="lazy"
+        />
+        <img
+          class="payment-strip__image payment-strip__image--bank"
+          src="/brand/payments/logo-guayaquil.svg"
+          alt="Banco Guayaquil"
+          loading="lazy"
+        />
+        <img
+          class="payment-strip__image payment-strip__image--bank"
+          src="/brand/payments/logo-bolivariano.svg"
+          alt="Banco Bolivariano"
+          loading="lazy"
+        />
+        <img
+          class="payment-strip__image payment-strip__image--bank"
+          src="/brand/payments/logo-produbanco.svg"
+          alt="Produbanco"
+          loading="lazy"
+        />
+        <img
+          class="payment-strip__image payment-strip__image--bank"
+          src="/brand/payments/logo-banco-austro.svg"
+          alt="Banco del Austro"
+          loading="lazy"
+        />
+        <img
+          class="payment-strip__image payment-strip__image--bank"
+          src="/brand/payments/logo-internacional.svg"
+          alt="Banco Internacional"
+          loading="lazy"
+        />
       </div>
     </div>
   </div>

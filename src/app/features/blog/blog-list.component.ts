@@ -1,10 +1,11 @@
-import { Component, inject, resource } from '@angular/core';
+import { Component, inject, resource, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { SeoService } from '../../core/services/seo.service';
 import { ContentService } from '../../core/services/content.service';
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-list',
   standalone: true,
   imports: [RouterLink],
@@ -42,9 +43,7 @@ import { ContentService } from '../../core/services/content.service';
                 <p class="card-blog__cat">{{ post.category }}</p>
                 <h3 class="card-blog__title">{{ post.title }}</h3>
                 @if (post.excerpt) {
-                  <p
-                    style="font-size:0.85rem;color:var(--muted);margin-bottom:0.75rem;font-weight:300;line-height:1.6;"
-                  >
+                  <p class="text-sm text-gray-500 mb-3 font-light leading-relaxed">
                     {{ post.excerpt }}
                   </p>
                 }
@@ -60,7 +59,7 @@ import { ContentService } from '../../core/services/content.service';
             >
               Las historias están en camino.
             </h2>
-            <p style="color:var(--muted);font-weight:300;">
+            <p class="text-gray-500 font-light">
               Iris y Rubi todavía están ordenando el caos editorial.
             </p>
           </div>

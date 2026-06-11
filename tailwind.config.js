@@ -3,6 +3,7 @@ module.exports = {
   content: ['./src/**/*.{html,ts}'],
   theme: {
     extend: {
+      /* ─── Brand colors ─── */
       colors: {
         orange: {
           DEFAULT: '#ff7a1a',
@@ -10,16 +11,13 @@ module.exports = {
           light: '#fff1e5',
         },
         surface: '#fff4e8',
-        text: {
-          DEFAULT: '#333333',
-          muted: '#6b7280',
-        },
-        border: '#e0e0e0',
         dark: '#141313',
       },
+      /* ─── Typography ─── */
       fontFamily: {
         sans: ["'Open Sans'", 'sans-serif'],
       },
+      /* ─── Animations ─── */
       animation: {
         marquee: 'marquee 20s linear infinite',
         'auth-pulse': 'authPulse 1.2s ease-in-out infinite',

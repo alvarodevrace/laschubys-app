@@ -1,5 +1,13 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, computed, effect, inject, resource, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  resource,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -9,7 +17,8 @@ import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 
 @Component({
-  selector: 'app-tienda',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-shop',
   standalone: true,
   imports: [FormsModule, RouterLink, CurrencyPipe],
   template: `
@@ -34,6 +43,7 @@ import { SeoService } from '../../core/services/seo.service';
               class="filter-pill"
               [class.is-active]="audience() === 'all'"
               (click)="audience.set('all')"
+              data-testid="tienda-filter-all"
             >
               Todo
             </button>
@@ -42,6 +52,7 @@ import { SeoService } from '../../core/services/seo.service';
               class="filter-pill"
               [class.is-active]="audience() === 'michis'"
               (click)="audience.set('michis')"
+              data-testid="tienda-filter-michis"
             >
               Para Michis
             </button>
@@ -50,6 +61,7 @@ import { SeoService } from '../../core/services/seo.service';
               class="filter-pill"
               [class.is-active]="audience() === 'michi-lovers'"
               (click)="audience.set('michi-lovers')"
+              data-testid="tienda-filter-michi-lovers"
             >
               Michi Lovers
             </button>
@@ -72,6 +84,7 @@ import { SeoService } from '../../core/services/seo.service';
               (ngModelChange)="query.set($event)"
               type="search"
               placeholder="Buscar por nombre o idea..."
+              data-testid="tienda-search-input"
             />
           </label>
         </div>
@@ -105,11 +118,21 @@ import { SeoService } from '../../core/services/seo.service';
                   class="shop-card__actions"
                   style="display:flex;gap:0.5rem;padding:0 0.85rem 0.85rem;"
                 >
-                  <button class="button-secondary" type="button" (click)="openPreview(product)">
+                  <button
+                    class="button-secondary"
+                    type="button"
+                    (click)="openPreview(product)"
+                    data-testid="tienda-preview-btn"
+                  >
                     Ver
                   </button>
                   @if (product.source === 'owned') {
-                    <button class="button-primary" type="button" (click)="addToCart(product)">
+                    <button
+                      class="button-primary"
+                      type="button"
+                      (click)="addToCart(product)"
+                      data-testid="tienda-add-to-cart-btn"
+                    >
                       Agregar
                     </button>
                   } @else {
@@ -118,6 +141,7 @@ import { SeoService } from '../../core/services/seo.service';
                       [href]="product.affiliateUrl"
                       target="_blank"
                       rel="noreferrer"
+                      data-testid="tienda-affiliate-link"
                       >Comprar</a
                     >
                   }
@@ -135,7 +159,7 @@ import { SeoService } from '../../core/services/seo.service';
     </section>
 
     @if (selectedProduct(); as product) {
-      <div class="modal-shell" (click)="closePreview()">
+      <div class="modal-shell" (click)="closePreview()" data-testid="tienda-modal-backdrop">
         <article class="modal-card" (click)="$event.stopPropagation()">
           <img [src]="product.images[0] || '/images/cats/rubi4.jpeg'" [alt]="product.name" />
           <div class="modal-card__body">
@@ -144,7 +168,12 @@ import { SeoService } from '../../core/services/seo.service';
             <p>{{ product.description || product.copy }}</p>
             <strong>{{ product.priceValue | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
             <div class="modal-card__actions">
-              <button class="button-primary" type="button" (click)="addToCart(product)">
+              <button
+                class="button-primary"
+                type="button"
+                (click)="addToCart(product)"
+                data-testid="tienda-modal-add-cart"
+              >
                 Agregar al carrito
               </button>
               @if (product.affiliateUrl) {
@@ -153,6 +182,7 @@ import { SeoService } from '../../core/services/seo.service';
                   [href]="product.affiliateUrl"
                   target="_blank"
                   rel="noreferrer"
+                  data-testid="tienda-modal-affiliate"
                   >Ir al enlace</a
                 >
               }
@@ -163,7 +193,7 @@ import { SeoService } from '../../core/services/seo.service';
     }
   `,
 })
-export class TiendaComponent {
+export class ShopComponent {
   private readonly content = inject(ContentService);
   private readonly cart = inject(CartService);
   private readonly seo = inject(SeoService);
