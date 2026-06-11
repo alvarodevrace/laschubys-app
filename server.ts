@@ -103,6 +103,19 @@ function setSecurityHeaders(res: ServerResponse) {
   if (process.env['NODE_ENV'] === 'production' || API_TARGET.startsWith('https://')) {
     res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   }
+
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://analytics.alvarodevrace.tech",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: https:",
+    "font-src 'self' https://fonts.gstatic.com",
+    "connect-src 'self' https://api.laschubys.com https://*.sentry.io",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ];
+  res.setHeader('Content-Security-Policy', cspDirectives.join('; '));
 }
 
 if (isMainModule(import.meta.url)) {

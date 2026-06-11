@@ -6,11 +6,11 @@ test.describe('Tienda', () => {
 
     // Verifica que los filtros existan
     await expect(page.locator('[data-testid="tienda-filter-all"]')).toBeVisible();
-    await expect(page.locator('[data-testid="tienda-filter-para-michis"]')).toBeVisible();
-    await expect(page.locator('[data-testid="tienda-filter-para-perros"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tienda-filter-michis"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tienda-filter-michi-lovers"]')).toBeVisible();
 
     // Haz click en filtro "Para Michis"
-    await page.locator('[data-testid="tienda-filter-para-michis"]').click();
+    await page.locator('[data-testid="tienda-filter-michis"]').click();
 
     // Verifica que productos se filtren (al menos 1 producto visible)
     const filteredProducts = page.locator('[data-testid="tienda-product-card"]');

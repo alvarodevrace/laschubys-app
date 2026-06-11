@@ -8,6 +8,7 @@
     "typecheck": "npx tsc --noEmit",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "test:e2e": "playwright test",
     "prepare": "husky",
     "lint": "ng lint"
   },
@@ -39,6 +40,7 @@
     "@angular/compiler-cli": "^21.2.0",
     "@angular/ssr": "^21.2.10",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.60.0",
     "@types/node": "^25.9.1",
     "@types/ws": "^8.18.1",
     "angular-eslint": "22.0.0",

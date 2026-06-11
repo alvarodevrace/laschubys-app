@@ -71,6 +71,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             @for (product of productsResource.value() ?? []; track product.id) {
               <article
                 class="rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                data-testid="home-featured-product"
               >
                 <div
                   class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
