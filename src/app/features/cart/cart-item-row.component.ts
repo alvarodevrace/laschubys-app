@@ -32,6 +32,7 @@ import { CartItem } from '../../core/models/cart.model';
               class="border-0 bg-transparent cursor-pointer text-gray-700"
               type="button"
               (click)="qtyChange.emit(item().qty - 1)"
+              data-testid="cart-decrement-btn"
             >
               -
             </button>
@@ -40,6 +41,7 @@ import { CartItem } from '../../core/models/cart.model';
               class="border-0 bg-transparent cursor-pointer text-gray-700"
               type="button"
               (click)="qtyChange.emit(item().qty + 1)"
+              data-testid="cart-increment-btn"
             >
               +
             </button>
@@ -48,6 +50,7 @@ import { CartItem } from '../../core/models/cart.model';
             class="border-0 bg-transparent cursor-pointer text-gray-700"
             type="button"
             (click)="remove.emit()"
+            data-testid="cart-remove-btn"
           >
             Eliminar
           </button>

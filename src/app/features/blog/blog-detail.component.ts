@@ -59,7 +59,11 @@ import { CommentsComponent } from './components/comments.component';
 
         <section class="max-w-3xl mx-auto px-4 py-8" data-reveal>
           <div>
-            <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
+            @defer (on viewport) {
+              <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
+            } @placeholder {
+              <div class="h-96" />
+            }
           </div>
         </section>
       </article>

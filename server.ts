@@ -92,10 +92,25 @@ export const reqHandler = createNodeRequestHandler(async (req, res, next) => {
   }
 });
 
+function setSecurityHeaders(res: ServerResponse) {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader(
+    'Permissions-Policy',
+    'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()',
+  );
+  if (process.env['NODE_ENV'] === 'production' || API_TARGET.startsWith('https://')) {
+    res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+  }
+}
+
 if (isMainModule(import.meta.url)) {
   const port = parseInt(process.env['PORT'] || '4321', 10);
 
   createServer((req, res) => {
+    setSecurityHeaders(res);
+
     if (req.url?.startsWith('/api')) {
       proxyToApi(req, res);
       return;

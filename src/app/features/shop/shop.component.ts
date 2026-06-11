@@ -8,7 +8,6 @@ import {
   signal,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { ProductPick } from '../../core/models/content.model';
@@ -21,7 +20,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-shop',
   standalone: true,
-  imports: [FormsModule, RouterLink, CurrencyPipe, NgClass, ButtonComponent],
+  imports: [RouterLink, CurrencyPipe, NgClass, ButtonComponent],
   template: `
     <section class="py-10 pb-8" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
@@ -120,8 +119,8 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             </svg>
             <input
               class="w-full border-0 outline-none bg-transparent text-sm placeholder:text-gray-400"
-              [ngModel]="query()"
-              (ngModelChange)="query.set($event)"
+              [value]="query()"
+              (input)="query.set($any($event).target.value)"
               type="search"
               placeholder="Buscar por nombre o idea..."
               data-testid="tienda-search-input"
@@ -135,77 +134,85 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       <div class="max-w-6xl mx-auto px-4">
         @if (productsResource.isLoading()) {
           <p>Cargando productos...</p>
-        } @else if (visibleProducts().length) {
-          <h2
-            class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900"
-            style="margin-bottom: 2rem;"
-          >
-            Productos Las Chubys
-          </h2>
-          <div class="shop-grid" style="margin-bottom: 3rem;">
-            @for (product of visibleProducts(); track product.id) {
-              <article
-                class="group rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-                [attr.data-product-id]="product.id"
-              >
-                <div
-                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
-                >
-                  {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
-                </div>
-                <div class="relative aspect-square overflow-hidden bg-gray-100">
-                  <img
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    [src]="product.images[0] || '/images/cats/iris4.jpeg'"
-                    [alt]="product.name"
-                    loading="lazy"
-                  />
-                </div>
-                <div class="p-3.5 pb-2">
-                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
-                    {{ product.name }}
-                  </p>
-                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
-                </div>
-                <div class="flex gap-2 px-3.5 pb-3.5">
-                  <app-button
-                    variant="secondary"
-                    type="button"
-                    (click)="openPreview(product)"
-                    data-testid="tienda-preview-btn"
-                  >
-                    Ver
-                  </app-button>
-                  @if (product.source === 'owned') {
-                    <app-button
-                      variant="primary"
-                      type="button"
-                      (click)="addToCart(product)"
-                      data-testid="tienda-add-to-cart-btn"
-                    >
-                      Agregar
-                    </app-button>
-                  } @else {
-                    <a
-                      class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
-                      [href]="product.affiliateUrl"
-                      target="_blank"
-                      rel="noreferrer"
-                      data-testid="tienda-affiliate-link"
-                      >Comprar</a
-                    >
-                  }
-                </div>
-              </article>
-            }
-          </div>
         } @else {
-          <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center">
-            <h2 class="text-xl font-extrabold text-gray-900 mb-2">
-              No encontramos productos con ese filtro.
-            </h2>
-            <p class="text-gray-500 text-sm mb-5">Prueba otra audiencia o limpia la búsqueda.</p>
-          </div>
+          @defer (on viewport) {
+            @if (visibleProducts().length) {
+              <h2
+                class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900"
+                style="margin-bottom: 2rem;"
+              >
+                Productos Las Chubys
+              </h2>
+              <div class="shop-grid" style="margin-bottom: 3rem;">
+                @for (product of visibleProducts(); track product.id) {
+                  <article
+                    class="group rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                    [attr.data-product-id]="product.id"
+                  >
+                    <div
+                      class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
+                    >
+                      {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+                    </div>
+                    <div class="relative aspect-square overflow-hidden bg-gray-100">
+                      <img
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        [src]="product.images[0] || '/images/cats/iris4.jpeg'"
+                        [alt]="product.name"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="p-3.5 pb-2">
+                      <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                        {{ product.name }}
+                      </p>
+                      <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
+                    </div>
+                    <div class="flex gap-2 px-3.5 pb-3.5">
+                      <app-button
+                        variant="secondary"
+                        type="button"
+                        (click)="openPreview(product)"
+                        data-testid="tienda-preview-btn"
+                      >
+                        Ver
+                      </app-button>
+                      @if (product.source === 'owned') {
+                        <app-button
+                          variant="primary"
+                          type="button"
+                          (click)="addToCart(product)"
+                          data-testid="tienda-add-to-cart-btn"
+                        >
+                          Agregar
+                        </app-button>
+                      } @else {
+                        <a
+                          class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
+                          [href]="product.affiliateUrl"
+                          target="_blank"
+                          rel="noreferrer"
+                          data-testid="tienda-affiliate-link"
+                          >Comprar</a
+                        >
+                      }
+                    </div>
+                  </article>
+                }
+              </div>
+            } @else {
+              <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center">
+                <h2 class="text-xl font-extrabold text-gray-900 mb-2">
+                  No encontramos productos con ese filtro.
+                </h2>
+                <p class="text-gray-500 text-sm mb-5">
+                  Prueba otra audiencia o limpia la búsqueda.
+                </p>
+              </div>
+            }
+          } @placeholder {
+            <div class="h-96" />
+          }
         }
       </div>
     </section>

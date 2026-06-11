@@ -1,15 +1,17 @@
 import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
 import { siteMeta } from '../../core/content/site-content';
+import { ApiService } from '../../core/services/api.service';
 import { SeoService } from '../../core/services/seo.service';
+import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-contact',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ButtonComponent],
   template: `
     <section class="py-10 pb-8" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
@@ -183,16 +185,91 @@ import { SeoService } from '../../core/services/seo.service';
         </div>
       </div>
     </section>
+
+    <section class="py-10 pb-12" data-reveal>
+      <div class="max-w-6xl mx-auto px-4">
+        <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Formulario</p>
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 mb-3">
+          Escríbenos directamente.
+        </h2>
+
+        <form
+          [formGroup]="contactForm"
+          (ngSubmit)="submit()"
+          class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl"
+        >
+          <div class="grid gap-1.5">
+            <label class="text-sm font-bold text-gray-700" for="contact-name">Nombre</label>
+            <input
+              id="contact-name"
+              formControlName="name"
+              type="text"
+              placeholder="Tu nombre"
+              class="w-full p-3 rounded-2xl border border-gray-200 bg-white text-sm"
+              data-testid="contact-name-input"
+            />
+          </div>
+          <div class="grid gap-1.5">
+            <label class="text-sm font-bold text-gray-700" for="contact-email">Correo</label>
+            <input
+              id="contact-email"
+              formControlName="email"
+              type="email"
+              placeholder="tu@email.com"
+              class="w-full p-3 rounded-2xl border border-gray-200 bg-white text-sm"
+              data-testid="contact-email-input"
+            />
+          </div>
+          <div class="grid gap-1.5 md:col-span-2">
+            <label class="text-sm font-bold text-gray-700" for="contact-message">Mensaje</label>
+            <textarea
+              id="contact-message"
+              formControlName="message"
+              rows="4"
+              placeholder="¿En qué podemos ayudarte?"
+              class="w-full p-3 rounded-2xl border border-gray-200 bg-white text-sm resize-y"
+              data-testid="contact-message-input"
+            ></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <app-button
+              type="submit"
+              variant="primary"
+              [disabled]="pending() || contactForm.invalid"
+              data-testid="contact-submit-btn"
+            >
+              {{ pending() ? 'Enviando...' : 'Enviar mensaje' }}
+            </app-button>
+          </div>
+          @if (feedback()) {
+            <p
+              class="md:col-span-2 text-sm"
+              [class.text-green-700]="sent()"
+              [class.text-red-700]="!sent()"
+            >
+              {{ feedback() }}
+            </p>
+          }
+        </form>
+      </div>
+    </section>
   `,
 })
 export class ContactComponent {
   private readonly seo = inject(SeoService);
+  private readonly api = inject(ApiService);
+  private readonly fb = inject(FormBuilder);
 
   protected readonly siteMeta = siteMeta;
-  protected readonly submitted = signal(false);
-  protected name = '';
-  protected email = '';
-  protected message = '';
+  protected readonly pending = signal(false);
+  protected readonly sent = signal(false);
+  protected readonly feedback = signal('');
+
+  protected readonly contactForm = this.fb.nonNullable.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    message: ['', [Validators.required, Validators.minLength(10)]],
+  });
 
   constructor() {
     this.seo.setPage(
@@ -203,10 +280,27 @@ export class ContactComponent {
     );
   }
 
-  protected submit() {
-    this.submitted.set(true);
-    this.name = '';
-    this.email = '';
-    this.message = '';
+  protected async submit() {
+    if (this.contactForm.invalid) {
+      return;
+    }
+
+    this.pending.set(true);
+    this.feedback.set('');
+    this.sent.set(false);
+
+    try {
+      await this.api.post('/api/contact', this.contactForm.getRawValue());
+      this.sent.set(true);
+      this.feedback.set('Mensaje enviado. Te responderemos pronto.');
+      this.contactForm.reset();
+    } catch {
+      this.sent.set(false);
+      this.feedback.set(
+        'No se pudo enviar el mensaje. Inténtalo de nuevo o escríbenos por WhatsApp.',
+      );
+    } finally {
+      this.pending.set(false);
+    }
   }
 }

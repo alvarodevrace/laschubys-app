@@ -66,46 +66,52 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
           >
         </div>
 
-        <div class="shop-grid">
-          @for (product of productsResource.value() ?? []; track product.id) {
-            <article
-              class="rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-            >
-              <div
-                class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
+        @defer (on viewport) {
+          <div class="shop-grid">
+            @for (product of productsResource.value() ?? []; track product.id) {
+              <article
+                class="rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
               >
-                {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
-              </div>
-              <div class="relative aspect-square overflow-hidden bg-gray-100">
-                <img
-                  [src]="product.images[0] || '/images/cats/iris4.jpeg'"
-                  [alt]="product.name"
-                  loading="lazy"
-                />
-              </div>
-              <div class="p-3.5 pb-2">
-                <p class="text-sm font-bold leading-snug text-gray-900 mb-1">{{ product.name }}</p>
-                <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
-              </div>
-              <div class="flex gap-2 px-3.5 pb-3.5">
-                <app-button
-                  variant="secondary"
-                  size="md"
-                  type="button"
-                  (click)="openPreview(product)"
+                <div
+                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
                 >
-                  Ver
-                </app-button>
-                <a
-                  class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-                  [routerLink]="['/tienda']"
-                  [queryParams]="{ product: product.id }"
-                  >Comprar</a
-                >
-              </div>
-            </article>
-          }
-        </div>
+                  {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+                </div>
+                <div class="relative aspect-square overflow-hidden bg-gray-100">
+                  <img
+                    [src]="product.images[0] || '/images/cats/iris4.jpeg'"
+                    [alt]="product.name"
+                    loading="lazy"
+                  />
+                </div>
+                <div class="p-3.5 pb-2">
+                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                    {{ product.name }}
+                  </p>
+                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
+                </div>
+                <div class="flex gap-2 px-3.5 pb-3.5">
+                  <app-button
+                    variant="secondary"
+                    size="md"
+                    type="button"
+                    (click)="openPreview(product)"
+                  >
+                    Ver
+                  </app-button>
+                  <a
+                    class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+                    [routerLink]="['/tienda']"
+                    [queryParams]="{ product: product.id }"
+                    >Comprar</a
+                  >
+                </div>
+              </article>
+            }
+          </div>
+        } @placeholder {
+          <div class="h-96" />
+        }
       </div>
     </section>
 
@@ -125,30 +131,34 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
           >
         </div>
 
-        <div class="cards-grid">
-          @for (post of postsResource.value() ?? []; track post.slug) {
-            <a
-              class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-              [routerLink]="['/blog', post.slug]"
-            >
-              <div class="aspect-video overflow-hidden bg-gray-100">
-                <img
-                  [src]="post.coverImage || '/images/cats/iris2.jpeg'"
-                  [alt]="post.title"
-                  loading="lazy"
-                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
-                {{ post.category }}
-              </p>
-              <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
-                {{ post.title }}
-              </h3>
-              <p class="card-blog__excerpt">{{ post.excerpt }}</p>
-            </a>
-          }
-        </div>
+        @defer (on viewport) {
+          <div class="cards-grid">
+            @for (post of postsResource.value() ?? []; track post.slug) {
+              <a
+                class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                [routerLink]="['/blog', post.slug]"
+              >
+                <div class="aspect-video overflow-hidden bg-gray-100">
+                  <img
+                    [src]="post.coverImage || '/images/cats/iris2.jpeg'"
+                    [alt]="post.title"
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
+                  {{ post.category }}
+                </p>
+                <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
+                  {{ post.title }}
+                </h3>
+                <p class="card-blog__excerpt">{{ post.excerpt }}</p>
+              </a>
+            }
+          </div>
+        } @placeholder {
+          <div class="h-96" />
+        }
       </div>
     </section>
 
@@ -214,27 +224,31 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          @for (persona of personas; track persona.name) {
-            <article
-              class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-5 items-center p-5 rounded-2xl bg-white border border-gray-200"
-            >
-              <img
-                [src]="persona.image"
-                [alt]="persona.name"
-                loading="lazy"
-                class="w-full h-36 object-cover rounded-2xl"
-              />
-              <div>
-                <p class="text-xs font-extrabold uppercase tracking-wide text-orange mb-1">
-                  {{ persona.role }}
-                </p>
-                <h3 class="text-lg font-extrabold text-gray-900 mb-1">{{ persona.name }}</h3>
-                <p class="text-sm text-gray-500 leading-relaxed">{{ persona.accent }}</p>
-              </div>
-            </article>
-          }
-        </div>
+        @defer (on viewport) {
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @for (persona of personas; track persona.name) {
+              <article
+                class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-5 items-center p-5 rounded-2xl bg-white border border-gray-200"
+              >
+                <img
+                  [src]="persona.image"
+                  [alt]="persona.name"
+                  loading="lazy"
+                  class="w-full h-36 object-cover rounded-2xl"
+                />
+                <div>
+                  <p class="text-xs font-extrabold uppercase tracking-wide text-orange mb-1">
+                    {{ persona.role }}
+                  </p>
+                  <h3 class="text-lg font-extrabold text-gray-900 mb-1">{{ persona.name }}</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">{{ persona.accent }}</p>
+                </div>
+              </article>
+            }
+          </div>
+        } @placeholder {
+          <div class="h-96" />
+        }
       </div>
     </section>
 
