@@ -110,7 +110,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             }
           </div>
         } @placeholder {
-          <div class="h-96" />
+          <div class="h-96"></div>
         }
       </div>
     </section>
@@ -157,7 +157,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             }
           </div>
         } @placeholder {
-          <div class="h-96" />
+          <div class="h-96"></div>
         }
       </div>
     </section>
@@ -247,7 +247,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             }
           </div>
         } @placeholder {
-          <div class="h-96" />
+          <div class="h-96"></div>
         }
       </div>
     </section>

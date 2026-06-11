@@ -62,7 +62,7 @@ import { CommentsComponent } from './components/comments.component';
             @defer (on viewport) {
               <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
             } @placeholder {
-              <div class="h-96" />
+              <div class="h-96"></div>
             }
           </div>
         </section>
