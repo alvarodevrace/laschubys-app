@@ -29,7 +29,7 @@ import { ContentService } from '../../core/services/content.service';
       </div>
     </section>
 
-    <section class="cards-section" data-reveal>
+    <section class="pb-16" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
         @if (postsResource.isLoading()) {
           <p>Cargando posts...</p>

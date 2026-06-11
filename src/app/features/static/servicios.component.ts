@@ -31,7 +31,7 @@ import { SeoService } from '../../core/services/seo.service';
 
     <section class="services-preview" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
-        <div class="section-header">
+        <div class="flex items-end justify-between gap-4 mb-6">
           <div>
             <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
               Experiencias

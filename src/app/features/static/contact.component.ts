@@ -91,7 +91,7 @@ import { SeoService } from '../../core/services/seo.service';
       </div>
     </section>
 
-    <section class="shop-section" data-reveal>
+    <section class="py-10 pb-12" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
         <div
           class="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-6 items-start p-7 rounded-3xl border border-orange/[0.14] bg-gradient-to-br from-white/[0.96] to-[#fff4e8]/[0.88] shadow-[0_22px_52px_rgba(32,18,12,0.08)]"
