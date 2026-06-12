@@ -93,7 +93,7 @@ function buildCspHeader(nonce: string, apiTarget: string): string {
     "img-src 'self' data: https:",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     `script-src 'self' 'nonce-${nonce}' https://analytics.alvarodevrace.tech`,
-    `connect-src 'self' ${apiTarget} ${supabaseUrl} wss://${new URL(supabaseUrl).host}`,
+    `connect-src 'self' ${apiTarget} ${supabaseUrl} wss://${new URL(supabaseUrl).host} https://analytics.alvarodevrace.tech`,
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
