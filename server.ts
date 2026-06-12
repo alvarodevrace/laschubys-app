@@ -105,6 +105,16 @@ function injectNonceIntoHtml(html: string, nonce: string): string {
   return html.replace(/<script(?![^>]*\snonce=)([^>]*)>/gi, `<script nonce="${nonce}"$1>`);
 }
 
+function sanitizeStylesheetLinks(html: string): string {
+  // Angular injects a render-blocking workaround: <link rel="stylesheet" media="print" onload="this.media='all'">.
+  // The inline `onload` handler violates our strict script-src nonce policy and can leave the page unstyled.
+  // Remove the onload handler and keep a regular stylesheet link; the duplicate fallback link remains untouched.
+  return html.replace(
+    /<link rel="stylesheet" href="([^"]+)" media="print" onload="[^"]*">/gi,
+    '<link rel="stylesheet" href="$1">',
+  );
+}
+
 async function renderWithCsp(
   req: IncomingMessage,
   res: ServerResponse,
@@ -117,7 +127,9 @@ async function renderWithCsp(
   }
 
   const nonce = randomBytes(16).toString('base64');
-  const html = injectNonceIntoHtml(await response.text(), nonce);
+  let html = await response.text();
+  html = injectNonceIntoHtml(html, nonce);
+  html = sanitizeStylesheetLinks(html);
 
   const headers = new Headers(response.headers);
   headers.set('Content-Security-Policy', buildCspHeader(nonce, API_TARGET));
