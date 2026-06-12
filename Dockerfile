@@ -2,6 +2,7 @@ FROM oven/bun:1-slim AS base
 WORKDIR /app
 
 FROM base AS deps
+ENV NODE_ENV=development
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 

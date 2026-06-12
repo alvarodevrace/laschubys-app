@@ -7,7 +7,10 @@ const isLocalhost =
   typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-const sentryDsn = typeof process !== 'undefined' ? process.env?.['SENTRY_DSN'] : undefined;
+const sentryDsn =
+  typeof document !== 'undefined'
+    ? document.querySelector<HTMLMetaElement>('meta[name="sentry-dsn"]')?.content
+    : undefined;
 if (sentryDsn) {
   Sentry.init({
     dsn: sentryDsn,
