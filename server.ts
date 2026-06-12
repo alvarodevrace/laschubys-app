@@ -105,6 +105,12 @@ function injectNonceIntoHtml(html: string, nonce: string): string {
   return html.replace(/<script(?![^>]*\snonce=)([^>]*)>/gi, `<script nonce="${nonce}"$1>`);
 }
 
+function injectSentryDsnMeta(html: string): string {
+  const dsn = process.env['SENTRY_DSN'];
+  if (!dsn) return html;
+  return html.replace('<head>', `<head><meta name="sentry-dsn" content="${dsn}">`);
+}
+
 function sanitizeStylesheetLinks(html: string): string {
   // Angular injects a render-blocking workaround: <link rel="stylesheet" media="print" onload="this.media='all'">.
   // The inline `onload` handler violates our strict script-src nonce policy and can leave the page unstyled.
@@ -130,6 +136,7 @@ async function renderWithCsp(
   let html = await response.text();
   html = injectNonceIntoHtml(html, nonce);
   html = sanitizeStylesheetLinks(html);
+  html = injectSentryDsnMeta(html);
 
   const headers = new Headers(response.headers);
   headers.set('Content-Security-Policy', buildCspHeader(nonce, API_TARGET));

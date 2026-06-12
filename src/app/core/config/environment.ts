@@ -1,6 +1,8 @@
+const isServer = typeof process !== 'undefined' && typeof window === 'undefined';
+
 export const environment = {
-  production: false,
+  production: isServer ? process.env['NODE_ENV'] === 'production' : true,
   apiUrl: '/api',
-  apiServerUrl: 'http://127.0.0.1:3000/api',
+  apiServerUrl: isServer ? `${process.env['API_URL'] || 'https://api.laschubys.com'}/api` : '/api',
   siteUrl: 'https://laschubys.com',
 };
