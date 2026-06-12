@@ -97,6 +97,9 @@ function buildCspHeader(nonce: string, apiTarget: string): string {
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
+    "object-src 'none'",
+    "script-src-attr 'none'",
+    'upgrade-insecure-requests',
   ].join('; ');
 }
 
@@ -141,6 +144,8 @@ function setSecurityHeaders(res: ServerResponse) {
     'Permissions-Policy',
     'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()',
   );
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Resource-Policy', 'same-origin');
   if (process.env['NODE_ENV'] === 'production' || API_TARGET.startsWith('https://')) {
     res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   }
