@@ -11,6 +11,13 @@ import { extname, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { randomBytes } from 'node:crypto';
 
+// Angular SSR interprets NG_TRUST_PROXY_HEADERS="true" as an array containing the literal
+// header name "true" instead of the boolean "trust all". Remove it so our constructor
+// option below is honored, while still allowing an explicit comma-separated header list.
+if (process.env['NG_TRUST_PROXY_HEADERS'] === 'true') {
+  delete process.env['NG_TRUST_PROXY_HEADERS'];
+}
+
 const MIME: Record<string, string> = {
   '.js': 'application/javascript',
   '.mjs': 'application/javascript',
@@ -30,7 +37,13 @@ const MIME: Record<string, string> = {
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
-const engine = new AngularNodeAppEngine();
+
+const allowedHosts = (process.env['NG_ALLOWED_HOSTS'] ?? 'laschubys.com,www.laschubys.com')
+  .split(',')
+  .map((h) => h.trim())
+  .filter(Boolean);
+
+const engine = new AngularNodeAppEngine({ allowedHosts, trustProxyHeaders: true });
 
 // In production, proxy to the public backend API.
 const API_TARGET = process.env['API_URL'] || 'https://api.laschubys.com';
