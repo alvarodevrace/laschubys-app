@@ -38,6 +38,7 @@ export class HeaderComponent {
   protected readonly count = this.cart.count;
   protected readonly firstName = computed(() => this.user()?.name.split(' ')[0] || '');
   protected readonly isHome = computed(() => this.currentUrl() === '/');
+  protected readonly heroVisible = computed(() => this.isHome() && !this.isPinned());
 
   constructor() {
     this.router.events
@@ -56,7 +57,14 @@ export class HeaderComponent {
       return;
     }
 
-    this.isPinned.set(window.scrollY > 8);
+    const scrollY = window.scrollY;
+    const pinned = this.isPinned();
+
+    if (!pinned && scrollY > 50) {
+      this.isPinned.set(true);
+    } else if (pinned && scrollY < 30) {
+      this.isPinned.set(false);
+    }
   }
 
   protected openCart() {
