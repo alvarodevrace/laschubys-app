@@ -3,24 +3,22 @@
   [class.shadow-sm]="isPinned()"
   id="nav-shell"
 >
-  <header>
-    <div class="relative transition-all duration-300 ease-in-out opacity-100">
-      <!-- Logo flotante grande centrado verticalmente entre buscador y nav -->
-      <a
-        routerLink="/"
-        aria-label="Inicio Las Chubys"
-        class="absolute top-1/2 -translate-y-1/2 left-[15%] -translate-x-1/2 z-[1001]"
-      >
-        <img
-          src="/brand/logoTitulo.png?v=4"
-          alt="Las Chubys"
-          class="h-28 md:h-40 w-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.14)]"
-        />
-      </a>
+  <!-- Logo flotante centrado verticalmente entre buscador y nav -->
+  <a
+    routerLink="/"
+    aria-label="Inicio Las Chubys"
+    class="absolute top-1/2 -translate-y-1/2 left-[15%] -translate-x-1/2 z-[1001]"
+  >
+    <img
+      src="/brand/logoTitulo.png?v=4"
+      alt="Las Chubys"
+      class="h-20 md:h-28 w-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.14)]"
+    />
+  </a>
 
-      <div
-        class="max-w-6xl mx-auto px-4 pt-12 md:pt-16 pb-4 grid grid-cols-[auto_1fr_auto] items-center gap-4"
-      >
+  <header>
+    <div class="transition-all duration-300 ease-in-out opacity-100">
+      <div class="max-w-6xl mx-auto px-4 py-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-4">
         <!-- Izquierda: hamburger -->
         <div class="flex items-center gap-2">
           <button
