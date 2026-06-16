@@ -36,6 +36,25 @@
     </div>
   </div>
 
+  <!-- Logo flotante grande en top -->
+  <a
+    routerLink="/"
+    aria-label="Inicio Las Chubys"
+    class="absolute top-1 md:top-2 left-1/2 -translate-x-1/2 z-[1001] transition-all duration-300 origin-top"
+    [class.opacity-100]="heroVisible()"
+    [class.scale-100]="heroVisible()"
+    [class.pointer-events-auto]="heroVisible()"
+    [class.opacity-0]="!heroVisible()"
+    [class.scale-75]="!heroVisible()"
+    [class.pointer-events-none]="!heroVisible()"
+  >
+    <img
+      src="/brand/logoTitulo.png?v=4"
+      alt="Las Chubys"
+      class="h-16 md:h-24 w-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.14)]"
+    />
+  </a>
+
   <header>
     <!-- ══ ESTADO HERO: home sin scroll ══════════════════════════ -->
     <div
@@ -43,7 +62,7 @@
       [class]="heroVisible() ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'"
     >
       <div class="max-w-6xl mx-auto px-4 py-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-4">
-        <!-- Izquierda: hamburger + logo grande flotante -->
+        <!-- Izquierda: hamburger -->
         <div class="flex items-center gap-2">
           <button
             class="lg:hidden min-w-11 min-h-11 -ml-2 inline-flex items-center justify-center text-gray-700 hover:text-orange transition-colors flex-shrink-0"
@@ -68,9 +87,6 @@
               <path d="M4 18h16" />
             </svg>
           </button>
-          <a routerLink="/" aria-label="Inicio Las Chubys" class="flex-shrink-0">
-            <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" class="h-16 w-auto" />
-          </a>
         </div>
         <!-- Centro: buscador -->
         <form
