@@ -94,6 +94,16 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
+    <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
+      <div class="flex gap-10 w-max animate-marquee motion-reduce:animate-none">
+        @for (item of promoLoop; track item + $index) {
+          <span class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{{
+            item
+          }}</span>
+        }
+      </div>
+    </section>
+
     <section class="bg-[#fff4e8] py-6 md:py-10">
       <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
@@ -136,16 +146,6 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             >
           </a>
         </div>
-      </div>
-    </section>
-
-    <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
-      <div class="flex gap-10 w-max animate-marquee motion-reduce:animate-none">
-        @for (item of promoLoop; track item + $index) {
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{{
-            item
-          }}</span>
-        }
       </div>
     </section>
 
