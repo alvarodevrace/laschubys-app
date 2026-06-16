@@ -153,7 +153,7 @@ export class AdminDashboardComponent {
   private readonly content = inject(ContentService);
   private readonly seo = inject(SeoService);
 
-  protected readonly firstName = computed(() => this.auth.user()?.name.split(' ')[0] || 'Mamá');
+  protected readonly firstName = computed(() => this.auth.user()?.name.split(' ')[0] || 'Brenda');
   protected readonly dashboardResource = resource({
     loader: async () => {
       const [posts, products] = await Promise.all([

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4321",
+    "start": "ng serve --port 4321 --no-hmr",
     "build": "NG_BUILD_PARTIAL_SSR=1 CI=1 ng build --configuration production --no-progress",
     "typecheck": "npx tsc --noEmit",
     "watch": "ng build --watch --configuration development",
@@ -39,6 +39,7 @@
     "@angular/compiler-cli": "^21.2.0",
     "@angular/ssr": "^21.2.10",
     "@eslint/js": "^10.0.1",
+    "@tailwindcss/postcss": "^4.3.0",
     "@types/node": "^25.9.1",
     "@types/ws": "^8.18.1",
     "angular-eslint": "22.0.0",
