@@ -20,23 +20,6 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
           <source media="(max-width: 768px)" srcset="/images/banner1mobil.PNG" />
           <img src="/images/banner1.PNG" alt="Las Chubys" class="w-full block" />
         </picture>
-        <div class="absolute bottom-4 left-4 right-4 flex gap-3 flex-wrap">
-          <a
-            routerLink="/auth/login"
-            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-            >Crear mi cuenta</a
-          >
-          <a
-            routerLink="/tienda"
-            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-            >Ver productos</a
-          >
-          <a
-            routerLink="/about"
-            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-            >Descubrir más</a
-          >
-        </div>
       </div>
     </section>
 
