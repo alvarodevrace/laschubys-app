@@ -94,6 +94,51 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
+    <section class="bg-[#fff4e8] py-6 md:py-10">
+      <div class="max-w-4xl mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+          <a
+            routerLink="/tienda"
+            [queryParams]="{ audience: 'michis' }"
+            class="group flex items-center justify-center gap-3 min-h-[80px] md:min-h-[96px] px-8 rounded-full border-2 border-orange/30 bg-white text-orange shadow-sm hover:bg-orange hover:text-white hover:border-orange hover:shadow-[0_16px_40px_rgba(255,122,26,0.22)] hover:-translate-y-1 transition-all duration-300"
+          >
+            <svg
+              class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2.5-9c.83 0 1.5-.67 1.5-1.5S10.33 8 9.5 8 8 8.67 8 9.5 8.67 11 9.5 11zm5 0c.83 0 1.5-.67 1.5-1.5S15.33 8 14.5 8 13 8.67 13 9.5s.67 1.5 1.5 1.5zm-7.5 3c.94 2.34 3.27 4 6 4s5.06-1.66 6-4H7z"
+              />
+            </svg>
+            <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
+              >Para Gatos</span
+            >
+          </a>
+          <a
+            routerLink="/tienda"
+            [queryParams]="{ audience: 'michi-lovers' }"
+            class="group flex items-center justify-center gap-3 min-h-[80px] md:min-h-[96px] px-8 rounded-full border-2 border-orange/30 bg-white text-orange shadow-sm hover:bg-orange hover:text-white hover:border-orange hover:shadow-[0_16px_40px_rgba(255,122,26,0.22)] hover:-translate-y-1 transition-all duration-300"
+          >
+            <svg
+              class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              />
+            </svg>
+            <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
+              >Para Personas</span
+            >
+          </a>
+        </div>
+      </div>
+    </section>
+
     <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
       <div class="flex gap-10 w-max animate-marquee motion-reduce:animate-none">
         @for (item of promoLoop; track item + $index) {

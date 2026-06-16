@@ -8,7 +8,7 @@ import {
   signal,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
@@ -276,6 +276,7 @@ export class ShopComponent {
   private readonly content = inject(ContentService);
   private readonly cart = inject(CartService);
   private readonly seo = inject(SeoService);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly audience = signal<'all' | 'michis' | 'michi-lovers'>('all');
   protected readonly query = signal('');
@@ -326,6 +327,11 @@ export class ShopComponent {
       '/images/banner1.PNG',
       '/tienda',
     );
+
+    const audienceParam = this.route.snapshot.queryParamMap.get('audience');
+    if (audienceParam === 'michis' || audienceParam === 'michi-lovers') {
+      this.audience.set(audienceParam);
+    }
 
     effect(() => {
       const products = this.productsResource.value();
