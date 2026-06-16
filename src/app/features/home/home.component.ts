@@ -104,7 +104,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
-    <section class="bg-[#fff4e8] py-6 md:py-10">
+    <section class="bg-white py-10 md:py-16">
       <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
           <a
