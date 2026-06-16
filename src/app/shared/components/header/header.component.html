@@ -3,32 +3,24 @@
   [class.shadow-sm]="isPinned()"
   id="nav-shell"
 >
-  <!-- Logo flotante grande en top -->
-  <a
-    routerLink="/"
-    aria-label="Inicio Las Chubys"
-    class="absolute top-1 md:top-3 left-[15%] -translate-x-1/2 z-[1001] transition-all duration-300 origin-top"
-    [class.opacity-100]="heroVisible()"
-    [class.scale-100]="heroVisible()"
-    [class.pointer-events-auto]="heroVisible()"
-    [class.opacity-0]="!heroVisible()"
-    [class.scale-75]="!heroVisible()"
-    [class.pointer-events-none]="!heroVisible()"
-  >
-    <img
-      src="/brand/logoTitulo.png?v=4"
-      alt="Las Chubys"
-      class="h-20 md:h-32 w-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.14)]"
-    />
-  </a>
-
   <header>
-    <!-- ══ ESTADO HERO: home sin scroll ══════════════════════════ -->
-    <div
-      class="overflow-hidden transition-all duration-300 ease-in-out"
-      [class]="heroVisible() ? 'max-h-24 opacity-100' : 'max-h-0 opacity-0 pointer-events-none'"
-    >
-      <div class="max-w-6xl mx-auto px-4 py-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+    <div class="relative transition-all duration-300 ease-in-out opacity-100">
+      <!-- Logo flotante grande centrado verticalmente entre buscador y nav -->
+      <a
+        routerLink="/"
+        aria-label="Inicio Las Chubys"
+        class="absolute top-1/2 -translate-y-1/2 left-[15%] -translate-x-1/2 z-[1001]"
+      >
+        <img
+          src="/brand/logoTitulo.png?v=4"
+          alt="Las Chubys"
+          class="h-28 md:h-40 w-auto drop-shadow-[0_8px_24px_rgba(0,0,0,0.14)]"
+        />
+      </a>
+
+      <div
+        class="max-w-6xl mx-auto px-4 pt-12 md:pt-16 pb-4 grid grid-cols-[auto_1fr_auto] items-center gap-4"
+      >
         <!-- Izquierda: hamburger -->
         <div class="flex items-center gap-2">
           <button
@@ -170,205 +162,6 @@
         </div>
       </div>
     </div>
-
-    <!-- ══ ESTADO COMPACTO: scroll o cualquier otra página ═══════ -->
-    <div
-      class="overflow-hidden transition-all duration-300 ease-in-out"
-      [class]="heroVisible() ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-20 opacity-100'"
-    >
-      <div class="max-w-6xl mx-auto px-4 py-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-4">
-        <!-- Izquierda: hamburger + logo pequeño -->
-        <div class="flex items-center gap-2">
-          <button
-            class="lg:hidden min-w-11 min-h-11 -ml-2 inline-flex items-center justify-center text-gray-700 hover:text-orange transition-colors"
-            type="button"
-            (click)="toggleMobileMenu()"
-            aria-label="Abrir menú"
-            [attr.aria-expanded]="isMenuOpen()"
-            data-testid="header-menu-toggle"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.9"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              class="w-5 h-5"
-            >
-              <path d="M4 6h16" />
-              <path d="M4 12h16" />
-              <path d="M4 18h16" />
-            </svg>
-          </button>
-          <a class="flex-shrink-0" routerLink="/" aria-label="Inicio Las Chubys">
-            <img
-              src="/brand/logoTitulo.png?v=4"
-              alt="Las Chubys"
-              width="60"
-              height="40"
-              class="h-9 w-auto"
-            />
-          </a>
-        </div>
-        <!-- Centro: buscador -->
-        <form
-          class="hidden md:flex items-center gap-2 px-4 py-2 rounded-2xl border border-gray-200 bg-gray-50 w-full max-w-md mx-auto"
-          role="search"
-          (ngSubmit)="submitSearch()"
-          data-testid="header-search-form"
-        >
-          <input
-            #searchInputCompact
-            type="search"
-            name="q"
-            placeholder="Buscar productos para los michis..."
-            autocomplete="off"
-            aria-label="Buscar productos"
-            [value]="searchQuery()"
-            (input)="searchQuery.set(searchInputCompact.value)"
-            class="flex-1 bg-transparent border-0 outline-none text-sm placeholder:text-gray-400"
-            data-testid="header-search-input"
-          />
-          <button
-            type="submit"
-            aria-label="Buscar"
-            class="p-1 text-gray-500 hover:text-orange transition-colors"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.9"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              class="w-[18px] h-[18px]"
-            >
-              <circle cx="11" cy="11" r="6.5" />
-              <path d="M16.2 16.2 21 21" />
-            </svg>
-          </button>
-        </form>
-        <!-- Derecha: acciones -->
-        <div class="flex items-center gap-1 justify-end">
-          @if (user(); as currentUser) {
-            <div class="relative">
-              <button
-                class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                type="button"
-                (click)="toggleUserMenu()"
-                data-testid="header-user-menu-toggle"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.9"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                  class="w-[18px] h-[18px]"
-                >
-                  <path d="M20 20a8 8 0 1 0-16 0"></path>
-                  <circle cx="12" cy="8" r="3.5"></circle>
-                </svg>
-                <span>{{ firstName() }}</span>
-              </button>
-
-              @if (isUserMenuOpen()) {
-                <div
-                  class="absolute right-0 top-full mt-2 w-40 bg-white rounded-2xl border border-gray-200 shadow-lg py-2"
-                  [class.hidden]="!isUserMenuOpen()"
-                  [class.block]="isUserMenuOpen()"
-                >
-                  @if (currentUser.role === 'admin') {
-                    <a
-                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                      routerLink="/admin"
-                      (click)="toggleUserMenu()"
-                      data-testid="header-admin-link"
-                      >Panel</a
-                    >
-                  }
-                  <button
-                    class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                    type="button"
-                    (click)="logout()"
-                    data-testid="header-logout-btn"
-                  >
-                    Salir
-                  </button>
-                </div>
-              }
-            </div>
-          } @else {
-            <a
-              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-              routerLink="/auth/login"
-              data-testid="header-login-link"
-            >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.9"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                class="w-[18px] h-[18px]"
-              >
-                <path d="M20 20a8 8 0 1 0-16 0"></path>
-                <circle cx="12" cy="8" r="3.5"></circle>
-              </svg>
-              <span>Mi Cuenta</span>
-            </a>
-          }
-
-          <button
-            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors relative"
-            type="button"
-            (click)="openCart()"
-            aria-label="Carrito de compras"
-            data-testid="header-cart-btn"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.9"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
-              class="w-[18px] h-[18px]"
-            >
-              <circle cx="9" cy="19" r="1.4"></circle>
-              <circle cx="17" cy="19" r="1.4"></circle>
-              <path
-                d="M3 4h2.2l1.7 8.2a1.4 1.4 0 0 0 1.4 1.1h8.8a1.4 1.4 0 0 0 1.4-1.1L20 7H7.1"
-              ></path>
-              <path d="M8.5 16h10.2"></path>
-            </svg>
-            <span>Carrito</span>
-            @if (count() > 0) {
-              <span
-                class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-orange text-white text-[10px] font-extrabold"
-                data-cart-count
-                >{{ count() }}</span
-              >
-            } @else {
-              <span
-                class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-orange text-white text-[10px] font-extrabold"
-                data-cart-count
-                hidden
-                >0</span
-              >
-            }
-          </button>
-        </div>
-      </div>
-    </div>
   </header>
 
   <nav class="hidden lg:block border-t border-gray-100" aria-label="Categorías">
@@ -473,6 +266,26 @@
           <polyline points="22 6 12 13 2 6"></polyline>
         </svg>
         <span>Contacto</span>
+      </a>
+      <a
+        routerLink="/media-kit"
+        routerLinkActive="is-active"
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold text-gray-600 rounded-xl hover:bg-gray-50 hover:text-orange transition-colors"
+        data-testid="header-nav-media-kit"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+          class="w-5 h-5"
+        >
+          <path d="M18 20V10"></path>
+          <path d="M12 20V4"></path>
+          <path d="M6 20v-6"></path>
+        </svg>
+        <span>Media Kit</span>
       </a>
     </div>
   </nav>
@@ -642,6 +455,28 @@
           <polyline points="22 6 12 13 2 6"></polyline>
         </svg>
         <span>Contacto</span>
+      </a>
+      <a
+        class="flex items-center min-h-11 gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
+        routerLink="/media-kit"
+        (click)="closeMobileMenu()"
+        data-testid="mobile-nav-media-kit"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.9"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="w-5 h-5 flex-shrink-0"
+        >
+          <path d="M18 20V10"></path>
+          <path d="M12 20V4"></path>
+          <path d="M6 20v-6"></path>
+        </svg>
+        <span>Media Kit</span>
       </a>
     </nav>
 

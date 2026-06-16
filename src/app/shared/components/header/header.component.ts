@@ -38,7 +38,6 @@ export class HeaderComponent {
   protected readonly count = this.cart.count;
   protected readonly firstName = computed(() => this.user()?.name.split(' ')[0] || '');
   protected readonly isHome = computed(() => this.currentUrl() === '/');
-  protected readonly heroVisible = computed(() => !this.isPinned());
 
   constructor() {
     this.router.events
