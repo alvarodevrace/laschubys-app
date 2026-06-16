@@ -24,15 +24,6 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
   standalone: true,
   imports: [RouterLink, ButtonComponent],
   template: `
-    <section class="relative">
-      <div class="relative overflow-hidden">
-        <picture>
-          <source media="(max-width: 768px)" srcset="/images/banner1mobil.PNG" />
-          <img src="/images/banner1.PNG" alt="Las Chubys" class="w-full block" />
-        </picture>
-      </div>
-    </section>
-
     <section
       #sliderSection
       class="group relative overflow-hidden bg-[#fff4e8]"
