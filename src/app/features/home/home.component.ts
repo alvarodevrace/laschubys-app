@@ -23,6 +23,23 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
+    <section class="bg-[#fff4e8] py-6 md:py-8">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          @for (photo of bannerPhotos; track photo.src + $index) {
+            <div class="rounded-2xl overflow-hidden aspect-video md:aspect-[4/3]">
+              <img
+                [src]="photo.src"
+                [alt]="photo.alt"
+                loading="lazy"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
     <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
       <div class="flex gap-10 w-max animate-marquee">
         @for (item of promoLoop; track item + $index) {
@@ -286,6 +303,11 @@ export class HomeComponent {
     'Michi Lovers',
     'Tienda Física',
     'Afiliados curados',
+  ];
+  protected readonly bannerPhotos: readonly { src: string; alt: string }[] = [
+    { src: '/images/banner1.PNG', alt: 'Las Chubys banner 1' },
+    { src: '/images/banner1.PNG', alt: 'Las Chubys banner 2' },
+    { src: '/images/banner1.PNG', alt: 'Las Chubys banner 3' },
   ];
   protected readonly selectedProduct = signal<ProductPick | null>(null);
   protected readonly postsResource = resource({
