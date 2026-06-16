@@ -1,8 +1,10 @@
 import {
   Component,
+  ElementRef,
   inject,
   resource,
   signal,
+  viewChild,
   ChangeDetectionStrategy,
   DestroyRef,
   afterNextRender,
@@ -32,12 +34,13 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
     </section>
 
     <section
-      class="relative overflow-hidden bg-[#fff4e8]"
+      #sliderSection
+      class="group relative overflow-hidden bg-[#fff4e8]"
       (mouseenter)="pauseAutoPlay()"
       (mouseleave)="resumeAutoPlay()"
     >
       <div
-        class="flex transition-transform duration-500 ease-out"
+        class="flex transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]"
         [style.transform]="'translateX(-' + currentSlide() * 100 + '%)'"
         (touchstart)="onTouchStart($event)"
         (touchend)="onTouchEnd($event)"
@@ -49,9 +52,14 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         }
       </div>
 
+      <div
+        class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/20 to-transparent"
+        aria-hidden="true"
+      ></div>
+
       <button
         type="button"
-        class="hidden md:grid absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 place-items-center rounded-full bg-white/80 text-orange shadow-md hover:bg-white transition-colors"
+        class="hidden md:grid opacity-0 group-hover:opacity-100 absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
         (click)="prevSlide()"
         aria-label="Banner anterior"
       >
@@ -61,7 +69,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </button>
       <button
         type="button"
-        class="hidden md:grid absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 place-items-center rounded-full bg-white/80 text-orange shadow-md hover:bg-white transition-colors"
+        class="hidden md:grid opacity-0 group-hover:opacity-100 absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
         (click)="nextSlide()"
         aria-label="Banner siguiente"
       >
@@ -70,18 +78,27 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         </svg>
       </button>
 
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
         @for (photo of bannerPhotos; track photo.src + $index) {
           <button
             type="button"
-            class="w-2.5 h-2.5 rounded-full transition-colors duration-200"
-            [class.bg-orange]="currentSlide() === $index"
-            [class.bg-white/70]="currentSlide() !== $index"
-            [class.ring-2]="currentSlide() === $index"
-            [class.ring-white]="currentSlide() === $index"
+            class="grid place-items-center w-10 h-10 rounded-full transition-transform duration-200 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange"
             (click)="goToSlide($index)"
             [attr.aria-label]="'Ver banner ' + ($index + 1)"
-          ></button>
+            [attr.aria-current]="currentSlide() === $index ? 'true' : null"
+          >
+            <span
+              class="block rounded-full transition-all duration-300"
+              [class.w-3]="currentSlide() === $index"
+              [class.h-3]="currentSlide() === $index"
+              [class.w-2]="currentSlide() !== $index"
+              [class.h-2]="currentSlide() !== $index"
+              [class.bg-orange]="currentSlide() === $index"
+              [class.bg-white/80]="currentSlide() !== $index"
+              [class.ring-2]="currentSlide() === $index"
+              [class.ring-white]="currentSlide() === $index"
+            ></span>
+          </button>
         }
       </div>
     </section>
@@ -358,6 +375,8 @@ export class HomeComponent {
   ];
   protected readonly currentSlide = signal(0);
   protected readonly autoPlayPaused = signal(false);
+  private readonly sliderVisible = signal(true);
+  private readonly sliderSection = viewChild.required<ElementRef<HTMLElement>>('sliderSection');
   private readonly destroyRef = inject(DestroyRef);
   private touchStartX = 0;
   private autoPlayIntervalId: number | null = null;
@@ -387,22 +406,56 @@ export class HomeComponent {
       ],
     });
 
-    afterNextRender(() => this.startAutoPlay());
+    afterNextRender(() => {
+      this.startAutoPlay();
+
+      const section = this.sliderSection().nativeElement;
+      section.setAttribute('tabindex', '0');
+      section.setAttribute('role', 'region');
+      section.setAttribute('aria-roledescription', 'carrusel');
+      section.setAttribute('aria-label', 'Banners destacados');
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          this.sliderVisible.set(entry.isIntersecting);
+          entry.isIntersecting ? this.startAutoPlay() : this.stopAutoPlay();
+        },
+        { threshold: 0.25 },
+      );
+      observer.observe(section);
+      this.destroyRef.onDestroy(() => observer.disconnect());
+
+      const onKeydown = (event: KeyboardEvent) => {
+        if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          this.prevSlide();
+        } else if (event.key === 'ArrowRight') {
+          event.preventDefault();
+          this.nextSlide();
+        }
+      };
+      section.addEventListener('keydown', onKeydown);
+      this.destroyRef.onDestroy(() => section.removeEventListener('keydown', onKeydown));
+    });
+
     this.destroyRef.onDestroy(() => this.stopAutoPlay());
   }
 
   protected nextSlide() {
     this.currentSlide.update((index) => (index + 1) % this.bannerPhotos.length);
+    this.resetAutoPlay();
   }
 
   protected prevSlide() {
     this.currentSlide.update(
       (index) => (index - 1 + this.bannerPhotos.length) % this.bannerPhotos.length,
     );
+    this.resetAutoPlay();
   }
 
   protected goToSlide(index: number) {
     this.currentSlide.set(index);
+    this.resetAutoPlay();
   }
 
   protected onTouchStart(event: TouchEvent) {
@@ -426,12 +479,14 @@ export class HomeComponent {
 
   protected resumeAutoPlay() {
     this.autoPlayPaused.set(false);
-    this.startAutoPlay();
+    if (this.sliderVisible()) {
+      this.startAutoPlay();
+    }
   }
 
   private startAutoPlay() {
-    if (this.autoPlayPaused() || this.autoPlayIntervalId) return;
-    this.autoPlayIntervalId = window.setInterval(() => this.nextSlide(), 5000);
+    if (this.autoPlayPaused() || !this.sliderVisible() || this.autoPlayIntervalId) return;
+    this.autoPlayIntervalId = window.setInterval(() => this.nextSlide(), 6000);
   }
 
   private stopAutoPlay() {
@@ -439,6 +494,12 @@ export class HomeComponent {
       window.clearInterval(this.autoPlayIntervalId);
       this.autoPlayIntervalId = null;
     }
+  }
+
+  private resetAutoPlay() {
+    if (this.autoPlayPaused() || !this.sliderVisible()) return;
+    this.stopAutoPlay();
+    this.startAutoPlay();
   }
 
   protected addToCart(product: ProductPick) {
