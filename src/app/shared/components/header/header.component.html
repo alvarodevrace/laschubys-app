@@ -18,9 +18,9 @@
 
   <header>
     <div class="transition-all duration-300 ease-in-out opacity-100">
-      <div class="max-w-6xl mx-auto px-4 py-1.5 grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div class="max-w-6xl mx-auto px-4 py-1.5 grid grid-cols-3 items-center gap-4">
         <!-- Izquierda: hamburger -->
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 justify-start">
           <button
             class="lg:hidden min-w-11 min-h-11 -ml-2 inline-flex items-center justify-center text-gray-700 hover:text-orange transition-colors flex-shrink-0"
             type="button"
@@ -85,10 +85,10 @@
           </button>
         </form>
         <!-- Derecha: acciones -->
-        <div class="flex items-center gap-1 flex-shrink-0">
+        <div class="flex items-center gap-1 flex-shrink-0 justify-end">
           @if (user(); as currentUser) {
             <button
-              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
+              class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border border-orange text-orange hover:bg-orange hover:text-white transition-colors"
               type="button"
               (click)="toggleUserMenu()"
             >
@@ -109,7 +109,7 @@
             </button>
           } @else {
             <a
-              class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
+              class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border border-orange text-orange hover:bg-orange hover:text-white transition-colors"
               routerLink="/auth/login"
             >
               <svg
@@ -129,7 +129,7 @@
             </a>
           }
           <button
-            class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors relative"
+            class="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold border border-orange text-orange hover:bg-orange hover:text-white transition-colors relative"
             type="button"
             (click)="openCart()"
             aria-label="Carrito de compras"
