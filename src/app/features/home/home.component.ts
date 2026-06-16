@@ -41,7 +41,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
     </section>
 
     <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
-      <div class="flex gap-10 w-max animate-marquee">
+      <div class="flex gap-10 w-max animate-marquee motion-reduce:animate-none">
         @for (item of promoLoop; track item + $index) {
           <span class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{{
             item
@@ -67,10 +67,10 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         </div>
 
         @defer (on viewport) {
-          <div class="shop-grid">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             @for (product of productsResource.value() ?? []; track product.id) {
               <article
-                class="rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                class="relative rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
               >
                 <div
                   class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
@@ -82,6 +82,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
                     [src]="product.images[0] || '/images/cats/iris4.jpeg'"
                     [alt]="product.name"
                     loading="lazy"
+                    class="w-full h-full object-cover"
                   />
                 </div>
                 <div class="p-3.5 pb-2">
@@ -115,7 +116,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
-    <section class="shop-section shop-section--gray">
+    <section class="py-12 md:py-16 bg-gray-50">
       <div class="max-w-6xl mx-auto px-4">
         <div class="flex items-end justify-between gap-4 mb-6">
           <div>
@@ -132,7 +133,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         </div>
 
         @defer (on viewport) {
-          <div class="cards-grid">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @for (post of postsResource.value() ?? []; track post.slug) {
               <a
                 class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
@@ -152,7 +153,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
                 <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
                   {{ post.title }}
                 </h3>
-                <p class="card-blog__excerpt">{{ post.excerpt }}</p>
+                <p class="text-sm text-gray-600 line-clamp-3 mx-3.5 mb-3.5">{{ post.excerpt }}</p>
               </a>
             }
           </div>
@@ -162,7 +163,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
-    <section class="shop-section shop-section--gray">
+    <section class="py-12 md:py-16 bg-gray-50">
       <div class="max-w-6xl mx-auto px-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
           <a

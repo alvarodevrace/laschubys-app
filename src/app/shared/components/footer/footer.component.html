@@ -1,8 +1,17 @@
 <footer class="bg-white border-t border-gray-100">
-  <div class="max-w-6xl mx-auto px-4 py-8 flex items-center justify-between gap-4">
+  <div
+    class="max-w-6xl mx-auto px-4 py-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+  >
     <div>
       <a class="block" routerLink="/" aria-label="Inicio Las Chubys" data-testid="footer-brand">
-        <img src="/brand/logoTitulo.png?v=4" alt="Las Chubys" loading="lazy" class="h-10 w-auto" />
+        <img
+          src="/brand/logoTitulo.png?v=4"
+          alt="Las Chubys"
+          width="60"
+          height="40"
+          loading="lazy"
+          class="h-10 w-auto"
+        />
       </a>
       <p class="text-sm text-gray-500 mt-2">Curado por Iris &amp; Rubi · Cat moms de Ecuador</p>
     </div>
@@ -12,7 +21,7 @@
         <a
           [href]="channel.href"
           [attr.aria-label]="channel.name"
-          class="w-10 h-10 inline-flex items-center justify-center rounded-full bg-gray-50 text-gray-500 hover:bg-orange hover:text-white transition-colors"
+          class="w-11 h-11 inline-flex items-center justify-center rounded-full bg-gray-50 text-gray-500 hover:bg-orange hover:text-white transition-colors"
           rel="noreferrer"
           target="_blank"
           [attr.data-testid]="'footer-social-' + channel.name.toLowerCase()"
@@ -50,19 +59,19 @@
       <p class="text-sm font-bold text-gray-900 mb-3">Las Chubys</p>
       <nav class="flex flex-col gap-2">
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/about"
           data-testid="footer-link-about"
           >¿Quiénes somos?</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/blog"
           data-testid="footer-link-blog"
           >Blog felino</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/contact"
           data-testid="footer-link-contact"
           >Contáctanos</a
@@ -73,20 +82,22 @@
       <p class="text-sm font-bold text-gray-900 mb-3">Servicio al cliente</p>
       <nav class="flex flex-col gap-2">
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/contact"
           data-testid="footer-link-contact"
           >Contáctanos</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           href="https://wa.me/593960463743"
           target="_blank"
           rel="noreferrer"
           data-testid="footer-link-whatsapp"
           >WhatsApp</a
         >
-        <a class="text-sm text-gray-500 hover:text-orange transition-colors" routerLink="/contact"
+        <a
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
+          routerLink="/contact"
           >Garantía, cambios y devoluciones</a
         >
       </nav>
@@ -95,19 +106,19 @@
       <p class="text-sm font-bold text-gray-900 mb-3">Compras y pagos</p>
       <nav class="flex flex-col gap-2">
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/auth/login"
           data-testid="footer-link-login"
           >Mi cuenta</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/carrito"
           data-testid="footer-link-cart"
           >Mis pedidos</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/tienda"
           data-testid="footer-link-shop"
           >Ir a la tienda</a
@@ -118,25 +129,25 @@
       <p class="text-sm font-bold text-gray-900 mb-3">Información</p>
       <nav class="flex flex-col gap-2">
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/contact"
           data-testid="footer-link-terms"
           >Términos y condiciones</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/contact"
           data-testid="footer-link-privacy"
           >Política de privacidad</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/contact"
           data-testid="footer-link-credit"
           >Compra con tarjeta de crédito</a
         >
         <a
-          class="text-sm text-gray-500 hover:text-orange transition-colors"
+          class="inline-flex items-center min-h-11 py-2 text-sm text-gray-500 hover:text-orange transition-colors"
           routerLink="/contact"
           data-testid="footer-link-debit"
           >Compra con tarjeta de débito</a
