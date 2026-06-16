@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideRouter, Router, withViewTransitions } from '@angular/router';
+import { provideRouter, Router, withInMemoryScrolling, withViewTransitions } from '@angular/router';
 import {
   LucideAngularModule,
   LayoutGrid,
@@ -29,7 +29,11 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideClientHydration(withEventReplay()),
-    provideRouter(routes, withViewTransitions()),
+    provideRouter(
+      routes,
+      withViewTransitions(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top' }),
+    ),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideAppInitializer(() => inject(AuthService).initSession()),
     importProvidersFrom(
