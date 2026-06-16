@@ -1,4 +1,12 @@
-import { Component, inject, resource, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  inject,
+  resource,
+  signal,
+  ChangeDetectionStrategy,
+  DestroyRef,
+  afterNextRender,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { marqueeItems, personas } from '../../core/content/site-content';
@@ -23,20 +31,58 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
-    <section class="bg-[#fff4e8] py-6 md:py-8">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          @for (photo of bannerPhotos; track photo.src + $index) {
-            <div class="rounded-2xl overflow-hidden aspect-video md:aspect-[4/3]">
-              <img
-                [src]="photo.src"
-                [alt]="photo.alt"
-                loading="lazy"
-                class="w-full h-full object-cover"
-              />
-            </div>
-          }
-        </div>
+    <section
+      class="relative overflow-hidden bg-[#fff4e8]"
+      (mouseenter)="pauseAutoPlay()"
+      (mouseleave)="resumeAutoPlay()"
+    >
+      <div
+        class="flex transition-transform duration-500 ease-out"
+        [style.transform]="'translateX(-' + currentSlide() * 100 + '%)'"
+        (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event)"
+      >
+        @for (photo of bannerPhotos; track photo.src + $index) {
+          <div class="w-full flex-shrink-0">
+            <img [src]="photo.src" [alt]="photo.alt" class="w-full block" />
+          </div>
+        }
+      </div>
+
+      <button
+        type="button"
+        class="hidden md:grid absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 place-items-center rounded-full bg-white/80 text-orange shadow-md hover:bg-white transition-colors"
+        (click)="prevSlide()"
+        aria-label="Banner anterior"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="hidden md:grid absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 place-items-center rounded-full bg-white/80 text-orange shadow-md hover:bg-white transition-colors"
+        (click)="nextSlide()"
+        aria-label="Banner siguiente"
+      >
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+        @for (photo of bannerPhotos; track photo.src + $index) {
+          <button
+            type="button"
+            class="w-2.5 h-2.5 rounded-full transition-colors duration-200"
+            [class.bg-orange]="currentSlide() === $index"
+            [class.bg-white/70]="currentSlide() !== $index"
+            [class.ring-2]="currentSlide() === $index"
+            [class.ring-white]="currentSlide() === $index"
+            (click)="goToSlide($index)"
+            [attr.aria-label]="'Ver banner ' + ($index + 1)"
+          ></button>
+        }
       </div>
     </section>
 
@@ -310,6 +356,11 @@ export class HomeComponent {
     { src: '/images/banner1.PNG', alt: 'Las Chubys banner 2' },
     { src: '/images/banner1.PNG', alt: 'Las Chubys banner 3' },
   ];
+  protected readonly currentSlide = signal(0);
+  protected readonly autoPlayPaused = signal(false);
+  private readonly destroyRef = inject(DestroyRef);
+  private touchStartX = 0;
+  private autoPlayIntervalId: number | null = null;
   protected readonly selectedProduct = signal<ProductPick | null>(null);
   protected readonly postsResource = resource({
     loader: async () => this.content.getPosts(3),
@@ -335,6 +386,59 @@ export class HomeComponent {
         'https://www.tiktok.com/@laschubys.oficial',
       ],
     });
+
+    afterNextRender(() => this.startAutoPlay());
+    this.destroyRef.onDestroy(() => this.stopAutoPlay());
+  }
+
+  protected nextSlide() {
+    this.currentSlide.update((index) => (index + 1) % this.bannerPhotos.length);
+  }
+
+  protected prevSlide() {
+    this.currentSlide.update(
+      (index) => (index - 1 + this.bannerPhotos.length) % this.bannerPhotos.length,
+    );
+  }
+
+  protected goToSlide(index: number) {
+    this.currentSlide.set(index);
+  }
+
+  protected onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  protected onTouchEnd(event: TouchEvent) {
+    const delta = this.touchStartX - event.changedTouches[0].screenX;
+    const threshold = 50;
+    if (delta > threshold) {
+      this.nextSlide();
+    } else if (delta < -threshold) {
+      this.prevSlide();
+    }
+  }
+
+  protected pauseAutoPlay() {
+    this.autoPlayPaused.set(true);
+    this.stopAutoPlay();
+  }
+
+  protected resumeAutoPlay() {
+    this.autoPlayPaused.set(false);
+    this.startAutoPlay();
+  }
+
+  private startAutoPlay() {
+    if (this.autoPlayPaused() || this.autoPlayIntervalId) return;
+    this.autoPlayIntervalId = window.setInterval(() => this.nextSlide(), 5000);
+  }
+
+  private stopAutoPlay() {
+    if (this.autoPlayIntervalId) {
+      window.clearInterval(this.autoPlayIntervalId);
+      this.autoPlayIntervalId = null;
+    }
   }
 
   protected addToCart(product: ProductPick) {
