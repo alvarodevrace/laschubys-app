@@ -166,48 +166,86 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         </div>
 
         @defer (on viewport) {
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            @for (product of productsResource.value() ?? []; track product.id) {
-              <article
-                class="relative rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-              >
-                <div
-                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
+          <div class="relative group">
+            <div
+              #productCarousel
+              class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
+              @for (product of productsResource.value() ?? []; track product.id) {
+                <article
+                  class="relative snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
                 >
-                  {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
-                </div>
-                <div class="relative aspect-square overflow-hidden bg-gray-100">
-                  <img
-                    [src]="product.images[0] || '/images/cats/iris4.jpeg'"
-                    [alt]="product.name"
-                    loading="lazy"
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-                <div class="p-3.5 pb-2">
-                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
-                    {{ product.name }}
-                  </p>
-                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
-                </div>
-                <div class="flex gap-2 px-3.5 pb-3.5">
-                  <app-button
-                    variant="secondary"
-                    size="md"
-                    type="button"
-                    (click)="openPreview(product)"
+                  <div
+                    class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
                   >
-                    Ver
-                  </app-button>
-                  <a
-                    class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-                    [routerLink]="['/tienda']"
-                    [queryParams]="{ product: product.id }"
-                    >Comprar</a
-                  >
-                </div>
-              </article>
-            }
+                    {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+                  </div>
+                  <div class="relative aspect-square overflow-hidden bg-gray-100">
+                    <img
+                      [src]="product.images[0] || '/images/cats/iris4.jpeg'"
+                      [alt]="product.name"
+                      loading="lazy"
+                      class="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div class="p-3.5 pb-2">
+                    <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                      {{ product.name }}
+                    </p>
+                    <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
+                  </div>
+                  <div class="flex gap-2 px-3.5 pb-3.5">
+                    <app-button
+                      variant="secondary"
+                      size="md"
+                      type="button"
+                      (click)="openPreview(product)"
+                    >
+                      Ver
+                    </app-button>
+                    <a
+                      class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+                      [routerLink]="['/tienda']"
+                      [queryParams]="{ product: product.id }"
+                      >Comprar</a
+                    >
+                  </div>
+                </article>
+              }
+            </div>
+
+            <button
+              type="button"
+              class="hidden lg:grid opacity-0 group-hover:opacity-100 absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+              (click)="scrollProducts(-1)"
+              aria-label="Productos anteriores"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="hidden lg:grid opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+              (click)="scrollProducts(1)"
+              aria-label="Productos siguientes"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         } @placeholder {
           <div class="h-96"></div>
@@ -421,8 +459,9 @@ export class HomeComponent {
     loader: async () => this.content.getPosts(3),
   });
   protected readonly productsResource = resource({
-    loader: async () => (await this.content.getProducts()).slice(0, 4),
+    loader: async () => (await this.content.getProducts()).slice(0, 6),
   });
+  private readonly productCarousel = viewChild.required<ElementRef<HTMLElement>>('productCarousel');
 
   constructor() {
     this.seo.setPage(
@@ -536,6 +575,12 @@ export class HomeComponent {
     if (this.autoPlayPaused() || !this.sliderVisible()) return;
     this.stopAutoPlay();
     this.startAutoPlay();
+  }
+
+  protected scrollProducts(direction: 1 | -1) {
+    const container = this.productCarousel().nativeElement;
+    const scrollAmount = container.clientWidth * 0.85;
+    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
   }
 
   protected addToCart(product: ProductPick) {
