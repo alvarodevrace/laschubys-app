@@ -456,7 +456,7 @@ export class HomeComponent {
   private autoPlayIntervalId: number | null = null;
   protected readonly selectedProduct = signal<ProductPick | null>(null);
   protected readonly postsResource = resource({
-    loader: async () => this.content.getPosts(3),
+    loader: async () => this.content.getPosts(5),
   });
   protected readonly productsResource = resource({
     loader: async () => (await this.content.getProducts()).slice(0, 6),
