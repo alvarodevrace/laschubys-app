@@ -149,7 +149,7 @@ export class CarouselComponent<T> {
 
   private startAutoPlay(): void {
     if (this.autoPlayIntervalId || this.items().length <= 1) return;
-    this.autoPlayIntervalId = window.setInterval(() => this.next(), 5000);
+    this.autoPlayIntervalId = window.setInterval(() => this.next(), 3000);
   }
 
   private stopAutoPlay(): void {
