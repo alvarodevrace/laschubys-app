@@ -124,7 +124,7 @@ import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
               />
             </svg>
             <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
-              >Para Gatos</span
+              >PARA MICHIS</span
             >
           </a>
           <a
@@ -143,7 +143,7 @@ import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
               />
             </svg>
             <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
-              >Para Personas</span
+              >PARA MICHILOVERS</span
             >
           </a>
         </div>
@@ -260,55 +260,6 @@ import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
         } @placeholder {
           <div class="h-96"></div>
         }
-      </div>
-    </section>
-
-    <section class="py-12 md:py-16 bg-gray-50">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-          <a
-            [routerLink]="['/tienda']"
-            [queryParams]="{ audience: 'michis' }"
-            class="relative rounded-2xl overflow-hidden aspect-video"
-          >
-            <img
-              src="/images/cats/iris2.jpeg"
-              alt="Para Michis"
-              loading="lazy"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute inset-0 flex flex-col justify-end p-6 text-white bg-gradient-to-t from-black/55 via-black/10 to-transparent"
-            >
-              <p class="text-xs font-extrabold uppercase tracking-widest opacity-90 mb-1">
-                Categoría base
-              </p>
-              <h3 class="text-xl md:text-2xl font-extrabold leading-tight mb-2">Para Michis</h3>
-              <span class="text-sm font-bold opacity-90">Explorar picks y tienda →</span>
-            </div>
-          </a>
-          <a
-            [routerLink]="['/tienda']"
-            [queryParams]="{ audience: 'michi-lovers' }"
-            class="relative rounded-2xl overflow-hidden aspect-video"
-          >
-            <img
-              src="/images/cats/iris2.jpeg"
-              alt="Michi Lovers"
-              loading="lazy"
-              class="w-full h-full object-cover"
-            />
-            <div
-              class="absolute inset-0 flex flex-col justify-end p-6 text-white bg-gradient-to-t from-black/55 via-black/10 to-transparent"
-            >
-              <p class="text-xs font-extrabold uppercase tracking-widest opacity-90 mb-1">
-                Categoría base
-              </p>
-              <h3 class="text-xl md:text-2xl font-extrabold leading-tight mb-2">Michi Lovers</h3>
-              <span class="text-sm font-bold opacity-90">Ver regalos y picks →</span>
-            </div>
-          </a>
-        </div>
       </div>
     </section>
 
