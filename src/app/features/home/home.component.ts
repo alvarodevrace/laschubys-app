@@ -170,7 +170,7 @@ import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
           <app-carousel [items]="productsResource.value() ?? []">
             <ng-template let-product>
               <article
-                class="relative w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                class="relative snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
               >
                 <div
                   class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
@@ -236,7 +236,7 @@ import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
           <app-carousel [items]="postsResource.value() ?? []">
             <ng-template let-post>
               <a
-                class="group grid gap-2 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                class="group grid gap-2 snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
                 [routerLink]="['/blog', post.slug]"
               >
                 <div class="aspect-video overflow-hidden bg-gray-100">

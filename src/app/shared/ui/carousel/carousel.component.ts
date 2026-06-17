@@ -29,11 +29,9 @@ import { CommonModule } from '@angular/common';
         (touchend)="onTouchEnd($event)"
       >
         @for (item of displayItems(); track trackByItem($index, item)) {
-          <div class="snap-start flex-shrink-0 carousel-item">
-            <ng-container
-              *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"
-            ></ng-container>
-          </div>
+          <ng-container
+            *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"
+          ></ng-container>
         }
       </div>
 
@@ -94,7 +92,7 @@ export class CarouselComponent<T> {
   }
 
   private updateScrollAmount(): void {
-    const first = this.containerEl.querySelector('.carousel-item') as HTMLElement | null;
+    const first = this.containerEl.firstElementChild as HTMLElement | null;
     if (!first) return;
     const style = getComputedStyle(this.containerEl);
     const gap = parseFloat(style.columnGap || style.gap || '0');
