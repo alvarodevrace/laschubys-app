@@ -1,7 +1,16 @@
-import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  OnInit,
+  resource,
+} from '@angular/core';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AdminService, AdminProduct } from '../../../core/services/admin.service';
+import { ContentService } from '../../../core/services/content.service';
+import { Category } from '../../../core/models/content.model';
 import { ImageUploaderComponent } from '../shared/image-uploader.component';
 
 @Component({
@@ -54,12 +63,27 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
               name="name"
               [(ngModel)]="form.name"
               required
+              (blur)="autoSlug()"
               placeholder="Nombre del producto"
               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
             />
           </div>
 
-          <!-- Precio + Tipo -->
+          <!-- Slug -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
+              >Slug</label
+            >
+            <input
+              name="slug"
+              [(ngModel)]="form.slug"
+              placeholder="limpiador-dental-50-unidades"
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+            />
+            <p class="mt-1 text-xs text-gray-400">Se genera automáticamente desde el nombre.</p>
+          </div>
+
+          <!-- Precio + Source -->
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
@@ -84,7 +108,7 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
             </div>
             <div>
               <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-                >Tipo *</label
+                >Origen *</label
               >
               <select
                 name="source"
@@ -94,6 +118,42 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
               >
                 <option value="owned">Propio</option>
                 <option value="affiliate">Afiliado</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Categoría + Tipo producto -->
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
+                >Categoría</label
+              >
+              <select
+                name="category_id"
+                [(ngModel)]="form.category_id"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+              >
+                <option value="">Sin categoría</option>
+                @for (category of categoriesResource.value() ?? []; track category.id) {
+                  <option [value]="category.id">{{ category.name }}</option>
+                }
+              </select>
+              @if (categoriesResource.error()) {
+                <p class="mt-1 text-xs text-red-600">No se pudieron cargar las categorías.</p>
+              }
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
+                >Tipo de producto</label
+              >
+              <select
+                name="product_type"
+                [(ngModel)]="form.product_type"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+              >
+                <option [ngValue]="null">Sin tipo</option>
+                <option value="physical">Físico</option>
+                <option value="link">Enlace externo</option>
               </select>
             </div>
           </div>
@@ -121,6 +181,34 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
               [(ngModel)]="form.description"
               rows="3"
               placeholder="Descripción detallada del producto..."
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+            ></textarea>
+          </div>
+
+          <!-- Detalle del producto -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
+              >Detalle del producto</label
+            >
+            <textarea
+              name="details"
+              [(ngModel)]="form.details"
+              rows="4"
+              placeholder="Descripción larga del producto..."
+              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+            ></textarea>
+          </div>
+
+          <!-- Especificaciones -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
+              >Especificaciones</label
+            >
+            <textarea
+              name="specifications"
+              [(ngModel)]="form.specifications"
+              rows="4"
+              placeholder="Ejemplo: Peso: 2kg&#10;Color: Azul"
               class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
             ></textarea>
           </div>
@@ -223,6 +311,7 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
 })
 export class AdminProductFormComponent implements OnInit {
   private readonly admin = inject(AdminService);
+  private readonly content = inject(ContentService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
@@ -230,18 +319,37 @@ export class AdminProductFormComponent implements OnInit {
   protected readonly loadingProduct = signal(false);
   protected readonly saving = signal(false);
   protected readonly error = signal<string | null>(null);
+  protected readonly categoriesResource = resource({
+    loader: async () => this.content.getCategories(),
+  });
   protected form: Partial<AdminProduct> & { images: string[] } = {
     name: '',
+    slug: '',
     price: 0,
     source: 'owned',
+    category_id: '',
+    product_type: null,
     copy: '',
     description: '',
+    details: null,
+    specifications: null,
     tag: '',
     shipping_note: '',
     affiliate_url: '',
     active: true,
     images: [],
   };
+
+  protected autoSlug() {
+    const name = this.form.name;
+    if (!name || this.form.slug) return;
+    this.form.slug = String(name)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -264,12 +372,19 @@ export class AdminProductFormComponent implements OnInit {
   }
 
   protected async submit() {
+    if (this.saving()) return;
     this.saving.set(true);
     this.error.set(null);
     try {
       const routeId = this.route.snapshot.paramMap.get('id');
       const { id: _id, created_at: _ca, updated_at: _ua, ...rest } = this.form as any;
-      const payload = { ...rest, price: Number(this.form.price) };
+      const payload: Partial<AdminProduct> = {
+        ...rest,
+        price: Number(this.form.price),
+        category_id: this.form.category_id || null,
+        product_type: this.form.product_type || null,
+        slug: this.form.slug?.trim() || undefined,
+      };
       if (this.isEdit() && routeId) {
         await this.admin.updateProduct(routeId, payload);
       } else {

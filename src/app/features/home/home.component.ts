@@ -18,12 +18,20 @@ import { CartService } from '../../core/services/cart.service';
 import { BlogPost, ProductPick } from '../../core/models/content.model';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
+import { PhotoGalleryComponent } from '../../shared/ui/photo-gallery/photo-gallery.component';
+import { SectionShellComponent } from '../../shared/ui/section-shell/section-shell.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ButtonComponent, CarouselComponent],
+  imports: [
+    RouterLink,
+    ButtonComponent,
+    CarouselComponent,
+    PhotoGalleryComponent,
+    SectionShellComponent,
+  ],
   template: `
     <section
       #sliderSection
@@ -150,159 +158,116 @@ import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
       </div>
     </section>
 
-    <section class="py-10 pb-12">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-end justify-between gap-4 mb-6">
-          <div>
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Tienda</p>
-            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
-              Nuestros productos
-            </h2>
-          </div>
-          <a
-            class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
-            routerLink="/tienda"
-            >Ver todo →</a
-          >
+    <app-section-shell variant="warm">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Tienda</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+            Nuestros productos
+          </h2>
         </div>
-
-        @defer (on viewport) {
-          <app-carousel [items]="productsResource.value() ?? []">
-            <ng-template let-product>
-              <article
-                class="relative snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-              >
-                <div
-                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
-                >
-                  {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
-                </div>
-                <div class="relative aspect-square overflow-hidden bg-gray-100">
-                  <img
-                    [src]="product.images[0] || '/images/cats/iris4.jpeg'"
-                    [alt]="product.name"
-                    loading="lazy"
-                    class="w-full h-full object-cover"
-                  />
-                </div>
-                <div class="p-3.5 pb-2">
-                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
-                    {{ product.name }}
-                  </p>
-                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
-                </div>
-                <div class="flex gap-2 px-3.5 pb-3.5">
-                  <app-button
-                    variant="secondary"
-                    size="md"
-                    type="button"
-                    (click)="openPreview(product)"
-                  >
-                    Ver
-                  </app-button>
-                  <a
-                    class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-                    [routerLink]="['/tienda']"
-                    [queryParams]="{ product: product.id }"
-                    >Comprar</a
-                  >
-                </div>
-              </article>
-            </ng-template>
-          </app-carousel>
-        } @placeholder {
-          <div class="h-96"></div>
-        }
+        <a
+          class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
+          routerLink="/tienda"
+          >Ver todo →</a
+        >
       </div>
-    </section>
 
-    <section class="py-12 md:py-16 bg-gray-50">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-end justify-between gap-4 mb-6">
-          <div>
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Blog</p>
-            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
-              Historias y consejos
-            </h2>
-          </div>
-          <a
-            class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
-            routerLink="/blog"
-            >Ver más →</a
-          >
-        </div>
-
-        @defer (on viewport) {
-          <app-carousel [items]="postsResource.value() ?? []">
-            <ng-template let-post>
-              <a
-                class="group grid gap-2 snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-                [routerLink]="['/blog', post.slug]"
+      @defer (on viewport) {
+        <app-carousel [items]="productsResource.value() ?? []">
+          <ng-template let-product>
+            <article
+              class="relative snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+            >
+              <div
+                class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
               >
-                <div class="aspect-video overflow-hidden bg-gray-100">
-                  <img
-                    [src]="post.coverImage || '/images/cats/iris2.jpeg'"
-                    [alt]="post.title"
-                    loading="lazy"
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
-                  {{ post.category }}
-                </p>
-                <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
-                  {{ post.title }}
-                </h3>
-                <p class="text-sm text-gray-600 line-clamp-3 mx-3.5 mb-3.5">{{ post.excerpt }}</p>
-              </a>
-            </ng-template>
-          </app-carousel>
-        } @placeholder {
-          <div class="h-96"></div>
-        }
-      </div>
-    </section>
-
-    <section class="py-10 pb-12">
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-end justify-between gap-4 mb-6">
-          <div>
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
-              Persona Spotlight
-            </p>
-            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
-              Iris y Rubi al frente
-            </h2>
-          </div>
-        </div>
-
-        @defer (on viewport) {
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            @for (persona of personas; track persona.name) {
-              <article
-                class="grid grid-cols-1 sm:grid-cols-[140px_1fr] gap-5 items-center p-5 rounded-2xl bg-white border border-gray-200"
-              >
+                {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+              </div>
+              <div class="relative aspect-square overflow-hidden bg-gray-100">
                 <img
-                  [src]="persona.image"
-                  [alt]="persona.name"
+                  [src]="product.images[0] || '/images/cats/iris4.jpeg'"
+                  [alt]="product.name"
                   loading="lazy"
-                  class="w-full h-36 object-cover rounded-2xl"
+                  class="w-full h-full object-cover"
                 />
-                <div>
-                  <p class="text-xs font-extrabold uppercase tracking-wide text-orange mb-1">
-                    {{ persona.role }}
-                  </p>
-                  <h3 class="text-lg font-extrabold text-gray-900 mb-1">{{ persona.name }}</h3>
-                  <p class="text-sm text-gray-500 leading-relaxed">{{ persona.accent }}</p>
-                </div>
-              </article>
-            }
-          </div>
-        } @placeholder {
-          <div class="h-96"></div>
-        }
+              </div>
+              <div class="p-3.5 pb-2">
+                <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                  {{ product.name }}
+                </p>
+                <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
+              </div>
+              <div class="flex gap-2 px-3.5 pb-3.5">
+                <app-button
+                  variant="secondary"
+                  size="md"
+                  type="button"
+                  (click)="openPreview(product)"
+                >
+                  Ver
+                </app-button>
+                <a
+                  class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+                  [routerLink]="['/tienda']"
+                  [queryParams]="{ product: product.id }"
+                  >Comprar</a
+                >
+              </div>
+            </article>
+          </ng-template>
+        </app-carousel>
+      } @placeholder {
+        <div class="h-96"></div>
+      }
+    </app-section-shell>
+
+    <app-photo-gallery />
+
+    <app-section-shell variant="warm">
+      <div class="flex items-end justify-between gap-4 mb-6">
+        <div>
+          <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Blog</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+            Historias y consejos
+          </h2>
+        </div>
+        <a
+          class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
+          routerLink="/blog"
+          >Ver más →</a
+        >
       </div>
-    </section>
+
+      @defer (on viewport) {
+        <app-carousel [items]="postsResource.value() ?? []">
+          <ng-template let-post>
+            <a
+              class="group grid gap-2 snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+              [routerLink]="['/blog', post.slug]"
+            >
+              <div class="aspect-video overflow-hidden bg-gray-100">
+                <img
+                  [src]="post.coverImage || '/images/cats/iris2.jpeg'"
+                  [alt]="post.title"
+                  loading="lazy"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
+                {{ post.category }}
+              </p>
+              <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
+                {{ post.title }}
+              </h3>
+              <p class="text-sm text-gray-600 line-clamp-3 mx-3.5 mb-3.5">{{ post.excerpt }}</p>
+            </a>
+          </ng-template>
+        </app-carousel>
+      } @placeholder {
+        <div class="h-96"></div>
+      }
+    </app-section-shell>
 
     @if (selectedProduct(); as product) {
       <div

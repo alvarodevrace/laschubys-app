@@ -24,11 +24,16 @@ export interface AdminProduct {
   tag: string | null;
   copy: string | null;
   description: string | null;
+  details: string | null;
+  specifications: string | null;
   images: string[] | null;
   affiliate_url: string | null;
   shipping_note: string | null;
   active: boolean;
   created_at: string;
+  category_id?: string | null;
+  product_type?: 'physical' | 'link' | null;
+  slug?: string | null;
 }
 
 const BASE = environment.apiUrl;

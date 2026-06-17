@@ -1,7 +1,9 @@
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, resource, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { AdminService, AdminProduct } from '../../../core/services/admin.service';
+import { ContentService } from '../../../core/services/content.service';
+import { Category } from '../../../core/models/content.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,6 +64,16 @@ import { AdminService, AdminProduct } from '../../../core/services/admin.service
                 class="text-left px-4 py-3 text-xs font-extrabold uppercase tracking-wide text-gray-500 hidden sm:table-cell"
               >
                 Precio
+              </th>
+              <th
+                class="text-left px-4 py-3 text-xs font-extrabold uppercase tracking-wide text-gray-500 hidden md:table-cell"
+              >
+                Categoría
+              </th>
+              <th
+                class="text-left px-4 py-3 text-xs font-extrabold uppercase tracking-wide text-gray-500 hidden md:table-cell"
+              >
+                Origen
               </th>
               <th
                 class="text-left px-4 py-3 text-xs font-extrabold uppercase tracking-wide text-gray-500 hidden md:table-cell"
@@ -127,6 +139,11 @@ import { AdminService, AdminProduct } from '../../../core/services/admin.service
                   }}</span>
                 </td>
                 <td class="px-4 py-4 hidden md:table-cell">
+                  <span class="text-gray-600 text-xs font-medium">
+                    {{ categoryName(product.category_id) }}
+                  </span>
+                </td>
+                <td class="px-4 py-4 hidden md:table-cell">
                   @if (product.source === 'owned') {
                     <span
                       class="inline-flex px-2 py-0.5 rounded-lg bg-orange/10 text-orange text-xs font-bold"
@@ -137,6 +154,21 @@ import { AdminService, AdminProduct } from '../../../core/services/admin.service
                       class="inline-flex px-2 py-0.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-bold"
                       >Afiliado</span
                     >
+                  }
+                </td>
+                <td class="px-4 py-4 hidden md:table-cell">
+                  @if (product.product_type === 'physical') {
+                    <span
+                      class="inline-flex px-2 py-0.5 rounded-lg bg-green-100 text-green-700 text-xs font-bold"
+                      >Físico</span
+                    >
+                  } @else if (product.product_type === 'link') {
+                    <span
+                      class="inline-flex px-2 py-0.5 rounded-lg bg-purple-50 text-purple-600 text-xs font-bold"
+                      >Enlace</span
+                    >
+                  } @else {
+                    <span class="text-gray-400 text-xs">—</span>
                   }
                 </td>
                 <td class="px-4 py-4 text-gray-500 text-xs hidden lg:table-cell">
@@ -260,15 +292,25 @@ import { AdminService, AdminProduct } from '../../../core/services/admin.service
 })
 export class AdminProductsComponent {
   private readonly admin = inject(AdminService);
+  private readonly content = inject(ContentService);
 
   protected readonly products = signal<AdminProduct[]>([]);
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly deleting = signal<AdminProduct | null>(null);
   protected readonly deleteLoading = signal(false);
+  protected readonly categoriesResource = resource({
+    loader: async () => this.content.getCategories(),
+  });
 
   constructor() {
     this.load();
+  }
+
+  protected categoryName(categoryId: string | null | undefined): string {
+    if (!categoryId) return '—';
+    const category = this.categoriesResource.value()?.find((c) => c.id === categoryId);
+    return category?.name ?? '—';
   }
 
   private async load() {

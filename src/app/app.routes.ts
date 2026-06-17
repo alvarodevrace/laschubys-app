@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { resolveProductDetail } from './features/shop/product-detail.resolver';
+
 export const routes: Routes = [
   {
     path: '',
@@ -22,6 +24,12 @@ export const routes: Routes = [
       {
         path: 'tienda',
         loadComponent: () => import('./features/shop/shop.component').then((m) => m.ShopComponent),
+      },
+      {
+        path: 'tienda/:slug',
+        loadComponent: () =>
+          import('./features/shop/product-detail.component').then((m) => m.ProductDetailComponent),
+        resolve: { product: resolveProductDetail },
       },
       {
         path: 'carrito',

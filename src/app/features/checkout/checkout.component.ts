@@ -33,20 +33,27 @@ interface CheckoutPayload {
   standalone: true,
   imports: [RouterLink, ReactiveFormsModule, CurrencyPipe, ButtonComponent],
   template: `
-    <section class="max-w-6xl mx-auto px-4 py-10 pb-8">
-      <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
-        <a routerLink="/">Inicio</a>
-        <span>›</span>
-        <a routerLink="/carrito">Carrito</a>
-        <span>›</span>
-        <span>Checkout</span>
-      </nav>
-      <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Checkout</p>
-      <h1>Finalizar pedido.</h1>
-      <p class="text-gray-500">Completa tus datos y deja listo el pedido para confirmacion.</p>
+    <section class="py-10 pb-8">
+      <div class="max-w-6xl mx-auto px-4">
+        <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
+          <a routerLink="/">Inicio</a>
+          <span>›</span>
+          <a routerLink="/tienda">Tienda</a>
+          <span>›</span>
+          <span class="text-gray-900 font-medium">Carrito</span>
+        </nav>
+        <h1
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-2"
+        >
+          Mi Carrito de Compras
+        </h1>
+        <p class="text-gray-500 max-w-2xl">
+          Revisa tus productos y completa tus datos para finalizar el pedido.
+        </p>
+      </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-4">
+    <section class="max-w-6xl mx-auto px-4 pb-16">
       @if (!items().length) {
         <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center">
           <h2 class="text-xl font-extrabold text-gray-900 mb-2">No hay productos para procesar.</h2>
@@ -54,127 +61,208 @@ interface CheckoutPayload {
             Vuelve a la tienda y agrega al menos un item al carrito.
           </p>
           <a
-            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
+            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide bg-orange text-white hover:bg-orange-dark transition-colors"
             routerLink="/tienda"
             data-testid="checkout-empty-shop-link"
             >Ir a tienda</a
           >
         </div>
       } @else {
-        <div class="grid grid-cols-1 lg:grid-cols-[1.35fr_0.8fr] gap-5 items-start">
-          <form
-            class="grid gap-4 p-5 rounded-3xl bg-gray-50 border border-gray-200"
-            [formGroup]="checkoutForm"
-            (ngSubmit)="submit()"
-            data-testid="checkout-form"
-          >
-            <label class="grid gap-1.5">
-              <span class="text-gray-500 text-sm">Nombre completo</span>
-              <input
-                class="min-h-12 px-4 rounded-2xl border border-gray-200 bg-white"
-                formControlName="name"
-                data-testid="checkout-input-name"
-              />
-              @if (checkoutForm.get('name')?.touched && checkoutForm.get('name')?.invalid) {
-                <span class="checkout-error">Este campo es requerido</span>
-              }
-            </label>
-            <label class="grid gap-1.5">
-              <span class="text-gray-500 text-sm">Telefono</span>
-              <input
-                class="min-h-12 px-4 rounded-2xl border border-gray-200 bg-white"
-                formControlName="phone"
-                data-testid="checkout-input-phone"
-              />
-              @if (checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) {
-                <span class="checkout-error">Este campo es requerido</span>
-              }
-            </label>
-            <label class="grid gap-1.5">
-              <span class="text-gray-500 text-sm">Correo</span>
-              <input
-                class="min-h-12 px-4 rounded-2xl border border-gray-200 bg-white"
-                formControlName="email"
-                type="email"
-                data-testid="checkout-input-email"
-              />
-              @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
-                <span class="checkout-error">Correo inválido</span>
-              }
-            </label>
-            <label class="grid gap-1.5">
-              <span class="text-gray-500 text-sm">Provincia</span>
-              <select
-                class="min-h-12 px-4 rounded-2xl border border-gray-200 bg-white"
-                formControlName="province"
-                data-testid="checkout-input-province"
-              >
-                <option value="">Selecciona</option>
-                <option>Pichincha</option>
-                <option>Guayas</option>
-                <option>Azuay</option>
-                <option>Manabi</option>
-                <option>El Oro</option>
-                <option>Otra</option>
-              </select>
-              @if (checkoutForm.get('province')?.touched && checkoutForm.get('province')?.invalid) {
-                <span class="checkout-error">Este campo es requerido</span>
-              }
-            </label>
-            <label class="grid gap-1.5">
-              <span class="text-gray-500 text-sm">Direccion completa</span>
-              <textarea
-                class="min-h-12 px-4 rounded-2xl border border-gray-200 bg-white min-h-[120px] resize-y"
-                formControlName="address"
-                rows="4"
-                data-testid="checkout-input-address"
-              ></textarea>
-              @if (checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) {
-                <span class="checkout-error">Este campo es requerido</span>
-              }
-            </label>
+        <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.8fr] gap-6 items-start">
+          <!-- Product table -->
+          <div class="p-5 rounded-3xl bg-white border border-gray-200 overflow-x-auto">
+            <table class="w-full min-w-[600px] text-sm">
+              <thead>
+                <tr class="border-b border-gray-200 text-left text-gray-500">
+                  <th class="pb-3 font-extrabold">Producto</th>
+                  <th class="pb-3 font-extrabold">Envío</th>
+                  <th class="pb-3 font-extrabold">Precio</th>
+                  <th class="pb-3 font-extrabold">Cantidad</th>
+                  <th class="pb-3 font-extrabold text-right">Total</th>
+                  <th class="pb-3"></th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of items(); track item.id) {
+                  <tr class="border-b border-gray-100 last:border-0">
+                    <td class="py-4">
+                      <div class="flex items-center gap-3">
+                        <img
+                          [src]="item.image"
+                          [alt]="item.name"
+                          class="w-16 h-16 object-cover rounded-xl"
+                        />
+                        <div>
+                          <p class="font-extrabold text-gray-900">{{ item.name }}</p>
+                          <p class="text-xs text-gray-500">
+                            {{ item.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="py-4 text-gray-500">a calcular</td>
+                    <td class="py-4 font-bold">
+                      {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
+                    </td>
+                    <td class="py-4">
+                      <div class="flex items-center gap-2">
+                        <button
+                          type="button"
+                          class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:border-orange hover:text-orange"
+                          (click)="updateQty(item.id, item.qty - 1)"
+                        >
+                          -
+                        </button>
+                        <span class="min-w-[1.5rem] text-center font-extrabold">{{
+                          item.qty
+                        }}</span>
+                        <button
+                          type="button"
+                          class="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 hover:border-orange hover:text-orange"
+                          (click)="updateQty(item.id, item.qty + 1)"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td class="py-4 text-right font-extrabold">
+                      {{ item.qty * item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
+                    </td>
+                    <td class="py-4 text-right">
+                      <button
+                        type="button"
+                        class="p-1 text-gray-400 hover:text-red-500"
+                        (click)="removeItem(item.id)"
+                        aria-label="Eliminar"
+                      >
+                        <svg
+                          class="w-4 h-4"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
 
-            @if (error()) {
-              <p class="text-red-700">{{ error() }}</p>
-            }
-
-            @if (success()) {
-              <p class="text-green-700">{{ success() }}</p>
-            }
-
-            <app-button
-              variant="primary"
-              type="submit"
-              [disabled]="checkoutForm.invalid || pending()"
-              data-testid="checkout-submit-btn"
-            >
-              {{ pending() ? 'Procesando...' : 'Confirmar pedido' }}
-            </app-button>
-          </form>
-
-          <aside class="grid gap-4 p-5 rounded-3xl bg-gray-50 border border-gray-200">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Resumen</p>
-            <div class="grid gap-3.5">
-              @for (item of items(); track item.id) {
-                <div class="flex justify-between gap-4 items-start">
-                  <div>
-                    <strong>{{ item.name }}</strong>
-                    <p>
-                      {{ item.qty }}
-                      x {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
-                    </p>
-                  </div>
-                  <span>
-                    {{ item.qty * item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
-                  </span>
+          <!-- Summary + form -->
+          <div class="grid gap-5">
+            <aside class="p-5 rounded-3xl bg-gray-50 border border-gray-200">
+              <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-3">
+                Resumen
+              </p>
+              <div class="grid gap-3 text-sm">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Subtotal</span>
+                  <span class="font-bold">{{
+                    total() | currency: 'USD' : 'symbol' : '1.0-0'
+                  }}</span>
                 </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Impuestos</span>
+                  <span class="font-bold">$0</span>
+                </div>
+                <div class="flex justify-between pt-3 border-t border-gray-200 text-base">
+                  <span class="font-extrabold text-gray-900">TOTAL</span>
+                  <strong class="font-extrabold text-orange">{{
+                    total() | currency: 'USD' : 'symbol' : '1.0-0'
+                  }}</strong>
+                </div>
+              </div>
+            </aside>
+
+            <form
+              class="grid gap-4 p-5 rounded-3xl bg-white border border-gray-200"
+              [formGroup]="checkoutForm"
+              (ngSubmit)="submit()"
+              data-testid="checkout-form"
+            >
+              <p class="text-xs font-extrabold uppercase tracking-widest text-orange">
+                Datos de entrega
+              </p>
+              <label class="grid gap-1.5">
+                <span class="text-gray-500 text-sm">Nombre completo *</span>
+                <input
+                  class="min-h-11 px-4 rounded-2xl border border-gray-200 bg-white"
+                  formControlName="name"
+                  data-testid="checkout-input-name"
+                />
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-gray-500 text-sm">Teléfono *</span>
+                <input
+                  class="min-h-11 px-4 rounded-2xl border border-gray-200 bg-white"
+                  formControlName="phone"
+                  data-testid="checkout-input-phone"
+                />
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-gray-500 text-sm">Correo *</span>
+                <input
+                  class="min-h-11 px-4 rounded-2xl border border-gray-200 bg-white"
+                  formControlName="email"
+                  type="email"
+                  data-testid="checkout-input-email"
+                />
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-gray-500 text-sm">Provincia *</span>
+                <select
+                  class="min-h-11 px-4 rounded-2xl border border-gray-200 bg-white"
+                  formControlName="province"
+                  data-testid="checkout-input-province"
+                >
+                  <option value="">Selecciona</option>
+                  <option>Pichincha</option>
+                  <option>Guayas</option>
+                  <option>Azuay</option>
+                  <option>Manabi</option>
+                  <option>El Oro</option>
+                  <option>Otra</option>
+                </select>
+              </label>
+              <label class="grid gap-1.5">
+                <span class="text-gray-500 text-sm">Dirección completa *</span>
+                <textarea
+                  class="min-h-[100px] px-4 py-3 rounded-2xl border border-gray-200 bg-white resize-y"
+                  formControlName="address"
+                  rows="3"
+                  data-testid="checkout-input-address"
+                ></textarea>
+              </label>
+
+              @if (error()) {
+                <p class="text-red-600 text-sm">{{ error() }}</p>
               }
-            </div>
-            <div class="flex justify-between gap-4 pt-4 border-t border-gray-200 text-gray-900">
-              <span>Total</span>
-              <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
-            </div>
-          </aside>
+              @if (success()) {
+                <p class="text-green-600 text-sm">{{ success() }}</p>
+              }
+
+              <label class="flex items-start gap-2 text-sm text-gray-600">
+                <input type="checkbox" class="mt-1" required />
+                <span>Acepto los términos y condiciones</span>
+              </label>
+
+              <app-button
+                variant="primary"
+                type="submit"
+                [disabled]="checkoutForm.invalid || pending()"
+                data-testid="checkout-submit-btn"
+              >
+                {{ pending() ? 'Procesando...' : 'Finalizar compra' }}
+              </app-button>
+            </form>
+          </div>
         </div>
       }
     </section>
@@ -202,6 +290,14 @@ export class CheckoutComponent {
     province: this.fb.control('', { nonNullable: true, validators: Validators.required }),
     address: this.fb.control('', { nonNullable: true, validators: Validators.required }),
   });
+
+  protected updateQty(id: string, qty: number) {
+    this.cart.updateQty(id, qty);
+  }
+
+  protected removeItem(id: string) {
+    this.cart.removeItem(id);
+  }
 
   constructor() {
     this.seo.setPage(
