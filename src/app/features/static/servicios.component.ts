@@ -18,7 +18,7 @@ import { SeoService } from '../../core/services/seo.service';
           <span>Servicios</span>
         </nav>
         <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-2"
         >
           Nuestros Servicios
         </h1>

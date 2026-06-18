@@ -14,10 +14,15 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
   imports: [ReactiveFormsModule, RouterLink, ButtonComponent],
   template: `
     <section class="py-10 pb-8" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
+          <a routerLink="/">Inicio</a>
+          <span>›</span>
+          <span>Contacto</span>
+        </nav>
         <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">Contacto</p>
         <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-2"
         >
           Hablemos.
         </h1>
@@ -28,13 +33,13 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
           <a
-            class="grid grid-cols-[52px_1fr] gap-4 items-center p-5 rounded-2xl transition-all duration-200 border border-orange/[0.18] bg-gradient-to-b from-white/[0.98] to-[#fff4e8]/[0.92] shadow-[0_18px_40px_rgba(53,25,11,0.08)] hover:-translate-y-0.5 hover:border-orange/[0.44] hover:shadow-[0_24px_48px_rgba(53,25,11,0.12)]"
+            class="group flex items-center gap-4 min-h-[92px] p-5 rounded-2xl transition-all duration-200 border border-orange/[0.18] bg-gradient-to-b from-white/[0.98] to-[#fff4e8]/[0.92] shadow-[0_18px_40px_rgba(53,25,11,0.08)] hover:-translate-y-0.5 hover:border-orange/[0.44] hover:shadow-[0_24px_48px_rgba(53,25,11,0.12)]"
             href="https://wa.me/593960463743"
             target="_blank"
             rel="noreferrer"
           >
             <span
-              class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange"
+              class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange transition-colors duration-200 group-hover:bg-orange group-hover:text-white"
               aria-hidden="true"
             >
               <svg
@@ -56,17 +61,20 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
                 ></path>
               </svg>
             </span>
-            <span class="block text-xs font-extrabold uppercase tracking-widest text-orange mb-1"
-              >WhatsApp</span
-            >
-            <span class="block text-sm font-bold text-gray-900">+593 96 046 3743</span>
+            <div class="min-w-0">
+              <span
+                class="block text-xs font-extrabold uppercase tracking-widest text-orange mb-0.5"
+                >WhatsApp</span
+              >
+              <span class="block text-sm font-bold text-gray-900 truncate">+593 96 046 3743</span>
+            </div>
           </a>
           <a
-            class="grid grid-cols-[52px_1fr] gap-4 items-center p-5 rounded-2xl transition-all duration-200 border border-orange/[0.18] bg-gradient-to-b from-white/[0.98] to-[#fff4e8]/[0.92] shadow-[0_18px_40px_rgba(53,25,11,0.08)] hover:-translate-y-0.5 hover:border-orange/[0.44] hover:shadow-[0_24px_48px_rgba(53,25,11,0.12)]"
+            class="group flex items-center gap-4 min-h-[92px] p-5 rounded-2xl transition-all duration-200 border border-orange/[0.18] bg-gradient-to-b from-white/[0.98] to-[#fff4e8]/[0.92] shadow-[0_18px_40px_rgba(53,25,11,0.08)] hover:-translate-y-0.5 hover:border-orange/[0.44] hover:shadow-[0_24px_48px_rgba(53,25,11,0.12)]"
             [href]="'mailto:' + siteMeta.email"
           >
             <span
-              class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange"
+              class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange transition-colors duration-200 group-hover:bg-orange group-hover:text-white"
               aria-hidden="true"
             >
               <svg
@@ -84,10 +92,15 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
                 <polyline points="22 6 12 13 2 6"></polyline>
               </svg>
             </span>
-            <span class="block text-xs font-extrabold uppercase tracking-widest text-orange mb-1"
-              >Correo</span
-            >
-            <span class="block text-sm font-bold text-gray-900">{{ siteMeta.email }}</span>
+            <div class="min-w-0">
+              <span
+                class="block text-xs font-extrabold uppercase tracking-widest text-orange mb-0.5"
+                >Correo</span
+              >
+              <span class="block text-sm font-bold text-gray-900 truncate">{{
+                siteMeta.email
+              }}</span>
+            </div>
           </a>
         </div>
       </div>
@@ -113,7 +126,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
 
           <div class="grid gap-3">
             <a
-              href="https://www.instagram.com/laschubys.oficial/"
+              href="https://www.instagram.com/laschubys/"
               target="_blank"
               rel="noreferrer"
               aria-label="Instagram"
@@ -158,28 +171,23 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
               <span>TikTok</span>
             </a>
             <a
-              routerLink="/tienda"
+              href="https://www.facebook.com/people/Las-Chubys/61589964727281/"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
               class="min-h-14 inline-flex items-center gap-3.5 px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wide text-gray-700 transition-all duration-200 bg-white/[0.88] border border-gray-200/[0.9] hover:-translate-y-px hover:text-orange-dark hover:border-orange/[0.28]"
             >
               <span
                 class="w-8 h-8 rounded-xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange"
                 aria-hidden="true"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.9"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-[18px] h-[18px] block"
-                >
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                  <path d="M3 6h18"></path>
-                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-[18px] h-[18px] block">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                  ></path>
                 </svg>
               </span>
-              <span>Tienda</span>
+              <span>Facebook</span>
             </a>
           </div>
         </div>
@@ -196,7 +204,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         <form
           [formGroup]="contactForm"
           (ngSubmit)="submit()"
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl"
+          class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto"
         >
           <div class="grid gap-1.5">
             <label class="text-sm font-bold text-gray-700" for="contact-name">Nombre</label>

@@ -14,65 +14,86 @@ import { CommentsComponent } from './components/comments.component';
     @if (postResource.value(); as post) {
       <article>
         <section class="py-10 pb-6" data-reveal>
-          <div class="max-w-6xl mx-auto px-4">
+          <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
               <a routerLink="/">Inicio</a>
               <span>›</span>
               <a routerLink="/blog">Blog</a>
               <span>›</span>
-              <span>{{ post.title }}</span>
+              <span class="truncate max-w-[200px] md:max-w-md">{{ post.title }}</span>
             </nav>
 
             <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
               {{ post.category }}
             </p>
             <h1
-              class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+              class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-4"
             >
               {{ post.title }}
             </h1>
-            <p class="text-gray-500 max-w-2xl">{{ post.excerpt }}</p>
+            <p class="text-gray-500 max-w-2xl text-lg leading-relaxed">{{ post.excerpt }}</p>
 
-            <div class="flex flex-wrap gap-2 text-sm text-gray-500 mt-4">
+            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-6">
+              <span class="font-medium text-gray-700">{{ post.author }}</span>
+              <span class="text-gray-300">·</span>
               <span>{{ post.publishedAt }}</span>
-              <span>·</span>
-              <span>{{ post.author }}</span>
-              <span>·</span>
+              <span class="text-gray-300">·</span>
               <span>{{ post.readTime }}</span>
             </div>
           </div>
         </section>
 
-        <div class="max-w-6xl mx-auto px-4 mb-8" data-reveal>
-          <img
-            [src]="post.coverImage || '/images/cats/iris3.jpeg'"
-            [alt]="post.title"
-            class="w-full rounded-3xl object-cover aspect-video"
-          />
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-10" data-reveal>
+          <div class="rounded-3xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.12)]">
+            <img
+              [src]="post.coverImage || '/images/cats/iris3.jpeg'"
+              [alt]="post.title"
+              class="w-full aspect-video object-cover"
+            />
+          </div>
         </div>
 
-        <section class="max-w-3xl mx-auto px-4 grid gap-6 py-8" data-reveal>
-          @for (paragraph of post.content; track $index) {
-            <p class="text-gray-700 leading-relaxed">{{ paragraph }}</p>
-          }
-        </section>
-
-        <section class="max-w-3xl mx-auto px-4 py-8" data-reveal>
-          <div>
-            @defer (on viewport) {
-              <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
-            } @placeholder {
-              <div class="h-96"></div>
+        <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-reveal>
+          <div class="prose prose-lg max-w-none">
+            @for (paragraph of post.content; track $index) {
+              <p class="text-gray-700 leading-[1.8] text-base md:text-lg mb-6">{{ paragraph }}</p>
             }
           </div>
         </section>
+
+        <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-reveal>
+          @defer (on viewport) {
+            <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
+          } @placeholder {
+            <div class="h-96" aria-hidden="true"></div>
+          }
+        </section>
       </article>
     } @else if (postResource.isLoading()) {
-      <section class="max-w-6xl mx-auto px-4 pb-6"><p>Cargando post...</p></section>
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="h-8 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
+        <div class="h-12 w-3/4 bg-gray-200 rounded animate-pulse mb-4"></div>
+        <div class="h-6 w-1/2 bg-gray-200 rounded animate-pulse mb-8"></div>
+        <div class="aspect-video bg-gray-200 rounded-3xl animate-pulse mb-10"></div>
+        <div class="max-w-3xl space-y-4">
+          @for (s of [1, 2, 3, 4]; track s) {
+            <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+          }
+        </div>
+      </section>
     } @else {
-      <section class="max-w-6xl mx-auto px-4 pb-6">
-        <h1>Post no encontrado</h1>
-        <p class="post__excerpt">No encontramos este artículo en la migración actual.</p>
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+        <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">404</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-3">
+          Post no encontrado
+        </h1>
+        <p class="text-gray-500 mb-6">No encontramos este artículo en la migración actual.</p>
+        <a
+          routerLink="/blog"
+          class="inline-flex items-center justify-center min-h-12 px-7 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+        >
+          Volver al blog
+        </a>
       </section>
     }
   `,

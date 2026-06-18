@@ -3,22 +3,23 @@ import { RouterLink } from '@angular/router';
 
 import { SeoService } from '../../core/services/seo.service';
 import { ContentService } from '../../core/services/content.service';
+import { BlogPostCardComponent } from './components/blog-post-card.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, BlogPostCardComponent],
   template: `
     <section class="py-10 pb-8" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
           <a routerLink="/">Inicio</a>
           <span>›</span>
           <span>Blog</span>
         </nav>
         <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-2"
         >
           Historias reales. Sin filtros.
         </h1>
@@ -29,52 +30,40 @@ import { ContentService } from '../../core/services/content.service';
       </div>
     </section>
 
-    <section class="pb-16" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
+    <section class="pb-20" data-reveal>
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         @if (postsResource.isLoading()) {
-          <p>Cargando posts...</p>
-        } @else if (postsResource.value()?.length) {
-          <div class="cards-grid">
-            @for (post of postsResource.value() ?? []; track post.slug) {
-              <a
-                class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-                [routerLink]="['/blog', post.slug]"
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            @for (skeleton of [1, 2, 3, 4, 5, 6]; track skeleton) {
+              <article
+                class="rounded-2xl overflow-hidden bg-white border border-gray-100 shadow-sm"
               >
-                <div class="aspect-video overflow-hidden bg-gray-100">
-                  <img
-                    [src]="post.coverImage || fallbackImage($index)"
-                    [alt]="post.title"
-                    loading="lazy"
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+                <div class="aspect-video bg-gray-200 animate-pulse"></div>
+                <div class="p-5 space-y-3">
+                  <div class="h-3 w-20 bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-5 w-full bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-4 w-3/4 bg-gray-200 rounded animate-pulse"></div>
+                  <div class="h-3 w-1/2 bg-gray-200 rounded animate-pulse"></div>
                 </div>
-                <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
-                  {{ post.category }}
-                </p>
-                <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
-                  {{ post.title }}
-                </h3>
-                @if (post.excerpt) {
-                  <p class="text-sm text-gray-500 mb-3 font-light leading-relaxed">
-                    {{ post.excerpt }}
-                  </p>
-                }
-                <span class="mx-3.5 mb-3.5 text-sm font-bold text-orange">Leer artículo</span>
-              </a>
+              </article>
+            }
+          </div>
+        } @else if (postsResource.value()?.length) {
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            @for (post of postsResource.value() ?? []; track post.slug) {
+              <app-blog-post-card [post]="post" />
             }
           </div>
         } @else {
-          <div style="text-align:center;padding:4rem 0;">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
+          <div class="text-center py-20">
+            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-3">
               Próximamente
             </p>
-            <h2
-              style="font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;"
-            >
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 mb-3">
               Las historias están en camino.
             </h2>
-            <p class="text-gray-500 font-light">
-              Iris y Rubi todavía están ordenando el caos editorial.
+            <p class="text-gray-500 max-w-md mx-auto">
+              Iris y Rubi todavía están ordenando el caos editorial. Vuelve pronto.
             </p>
           </div>
         }
@@ -89,18 +78,6 @@ export class BlogListComponent {
   protected readonly postsResource = resource({
     loader: async () => this.content.getPosts(),
   });
-
-  protected fallbackImage(index: number) {
-    const photos = [
-      '/images/cats/iris.jpeg',
-      '/images/cats/rubi.jpeg',
-      '/images/cats/iris2.jpeg',
-      '/images/cats/rubi2.jpeg',
-      '/images/cats/iris3.jpeg',
-      '/images/cats/rubi3.jpeg',
-    ];
-    return photos[index % photos.length];
-  }
 
   constructor() {
     this.seo.setPage(

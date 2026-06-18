@@ -354,8 +354,9 @@ export class HomeComponent {
       name: 'Las Chubys',
       url: 'https://laschubys.com',
       sameAs: [
-        'https://www.instagram.com/laschubys.oficial/',
+        'https://www.instagram.com/laschubys/',
         'https://www.tiktok.com/@laschubys.oficial',
+        'https://www.facebook.com/people/Las-Chubys/61589964727281/',
       ],
     });
 

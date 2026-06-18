@@ -11,8 +11,8 @@ export const siteMeta: SiteMeta = {
 export const socialChannels = [
   {
     name: 'Instagram',
-    handle: '@laschubys.oficial',
-    href: 'https://www.instagram.com/laschubys.oficial/',
+    handle: '@laschubys',
+    href: 'https://www.instagram.com/laschubys/',
     copy: 'Fotos, carouseles y glamour felino para la audiencia diaria.',
   },
   {
@@ -22,10 +22,10 @@ export const socialChannels = [
     copy: 'Zoomies, travesuras y clips cortos con alto potencial viral.',
   },
   {
-    name: 'Amazon Finds',
-    handle: 'Curaduría',
-    href: '/tienda',
-    copy: 'Selecciones cute para cat moms listas para tu carrito.',
+    name: 'Facebook',
+    handle: 'Las Chubys',
+    href: 'https://www.facebook.com/people/Las-Chubys/61589964727281/',
+    copy: 'Comunidad, actualidades y contenido compartido para cat moms.',
   },
 ] as const;
 
