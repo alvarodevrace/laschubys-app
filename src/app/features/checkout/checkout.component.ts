@@ -8,6 +8,7 @@ import { ApiService } from '../../core/services/api.service';
 import { CartService } from '../../core/services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { ScrollRevealDirective } from '../../shared/animations';
 
 interface CheckoutPayload {
   customer: {
@@ -31,9 +32,9 @@ interface CheckoutPayload {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-checkout',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, CurrencyPipe, ButtonComponent],
+  imports: [RouterLink, ReactiveFormsModule, CurrencyPipe, ButtonComponent, ScrollRevealDirective],
   template: `
-    <section class="py-10 pb-8">
+    <section class="py-10 pb-8" appScrollReveal>
       <div class="max-w-6xl mx-auto px-4">
         <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
           <a routerLink="/">Inicio</a>
@@ -55,7 +56,7 @@ interface CheckoutPayload {
 
     <section class="max-w-6xl mx-auto px-4 pb-16">
       @if (!items().length) {
-        <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center">
+        <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center" appScrollReveal>
           <h2 class="text-xl font-extrabold text-gray-900 mb-2">No hay productos para procesar.</h2>
           <p class="text-gray-500 text-sm mb-5">
             Vuelve a la tienda y agrega al menos un item al carrito.
@@ -70,7 +71,10 @@ interface CheckoutPayload {
       } @else {
         <div class="grid grid-cols-1 lg:grid-cols-[1.4fr_0.8fr] gap-6 items-start">
           <!-- Product table -->
-          <div class="p-5 rounded-3xl bg-white border border-gray-200 overflow-x-auto">
+          <div
+            class="p-5 rounded-3xl bg-white border border-gray-200 overflow-x-auto"
+            appScrollReveal
+          >
             <table class="w-full min-w-[600px] text-sm">
               <thead>
                 <tr class="border-b border-gray-200 text-left text-gray-500">
@@ -157,7 +161,11 @@ interface CheckoutPayload {
 
           <!-- Summary + form -->
           <div class="grid gap-5">
-            <aside class="p-5 rounded-3xl bg-gray-50 border border-gray-200">
+            <aside
+              class="p-5 rounded-3xl bg-gray-50 border border-gray-200"
+              appScrollReveal
+              [delay]="0.1"
+            >
               <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-3">
                 Resumen
               </p>
@@ -183,6 +191,8 @@ interface CheckoutPayload {
 
             <form
               class="grid gap-4 p-5 rounded-3xl bg-white border border-gray-200"
+              appScrollReveal
+              [delay]="0.2"
               [formGroup]="checkoutForm"
               (ngSubmit)="submit()"
               data-testid="checkout-form"

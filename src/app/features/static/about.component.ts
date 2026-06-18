@@ -3,12 +3,24 @@ import { RouterLink } from '@angular/router';
 
 import { personas, serviceHighlights, socialChannels } from '../../core/content/site-content';
 import { SeoService } from '../../core/services/seo.service';
+import {
+  ScrollRevealDirective,
+  ParallaxDirective,
+  StaggerChildrenDirective,
+  TextRevealDirective,
+} from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-about',
   standalone: true,
-  imports: [RouterLink],
+  imports: [
+    RouterLink,
+    ScrollRevealDirective,
+    ParallaxDirective,
+    StaggerChildrenDirective,
+    TextRevealDirective,
+  ],
   template: `
     <!-- Hero -->
     <section class="relative bg-orange-light overflow-hidden" aria-labelledby="about-title">
@@ -24,7 +36,7 @@ import { SeoService } from '../../core/services/seo.service';
           <span>Nosotras</span>
         </nav>
 
-        <div class="max-w-xl z-10">
+        <div class="max-w-xl z-10" appScrollReveal [y]="30" [duration]="0.7">
           <p class="inline-block text-xs font-extrabold uppercase tracking-widest text-orange mb-4">
             Bienvenidos a nuestra casa
           </p>
@@ -32,7 +44,15 @@ import { SeoService } from '../../core/services/seo.service';
             id="about-title"
             class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-dark mb-5"
           >
-            Dos gatas.<br />Una mamá.<br />Un universo.
+            <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
+              >Dos gatas.</span
+            >
+            <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
+              >Una mamá.</span
+            >
+            <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
+              >Un universo.</span
+            >
           </h1>
           <p class="text-base md:text-lg text-gray-600 leading-relaxed mb-8">
             Las Chubys nació de una casa llena de pelos, siestas y zoomies. Hoy somos una comunidad
@@ -62,12 +82,16 @@ import { SeoService } from '../../core/services/seo.service';
               src="/images/cats/iris.jpeg"
               alt="Iris, la gata seria de Las Chubys"
               loading="eager"
+              appParallax
+              [speed]="-0.25"
               class="absolute top-0 left-0 w-[72%] h-[82%] object-cover rounded-[2rem] shadow-[0_24px_60px_rgba(0,0,0,0.14)]"
             />
             <img
               src="/images/cats/rubi.jpeg"
               alt="Rubi, la gata revoltosa de Las Chubys"
               loading="eager"
+              appParallax
+              [speed]="0.2"
               class="absolute bottom-0 right-0 w-[58%] h-[58%] object-cover rounded-[2rem] shadow-[0_24px_60px_rgba(0,0,0,0.14)] border-[6px] border-orange-light"
             />
           </div>
@@ -87,7 +111,7 @@ import { SeoService } from '../../core/services/seo.service';
     <!-- Protagonistas -->
     <section class="py-16 md:py-24 bg-white" aria-labelledby="cats-title">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header class="text-center mb-12 md:mb-16">
+        <header class="text-center mb-12 md:mb-16" appScrollReveal [y]="30" [duration]="0.6">
           <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
             Las protagonistas
           </p>
@@ -96,7 +120,14 @@ import { SeoService } from '../../core/services/seo.service';
           </h2>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
+          appStaggerChildren
+          childSelector="article"
+          [staggerDelay]="0.12"
+          [duration]="0.6"
+          [y]="40"
+        >
           @for (cat of cats; track cat.name) {
             <article
               class="group relative rounded-[2rem] overflow-hidden bg-surface shadow-sm hover:shadow-[0_20px_50px_rgba(255,122,26,0.14)] transition-all duration-300 hover:-translate-y-1"
@@ -130,7 +161,13 @@ import { SeoService } from '../../core/services/seo.service';
       <div
         class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
       >
-        <div class="order-2 lg:order-1">
+        <div
+          class="order-2 lg:order-1"
+          appScrollReveal
+          [x]="-50"
+          [duration]="0.7"
+          [easing]="'easeOut'"
+        >
           <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
             La historia
           </p>
@@ -160,7 +197,13 @@ import { SeoService } from '../../core/services/seo.service';
             Cuéntanos tu historia
           </a>
         </div>
-        <div class="order-1 lg:order-2">
+        <div
+          class="order-1 lg:order-2"
+          appScrollReveal
+          [x]="50"
+          [duration]="0.7"
+          [easing]="'easeOut'"
+        >
           <img
             src="/images/cats/iris3.jpeg"
             alt="Iris y Rubi en casa"
@@ -175,7 +218,7 @@ import { SeoService } from '../../core/services/seo.service';
     @defer (on viewport) {
       <section class="py-16 md:py-24 bg-surface" aria-labelledby="services-title">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header class="text-center mb-12 md:mb-16">
+          <header class="text-center mb-12 md:mb-16" appScrollReveal [y]="30" [duration]="0.6">
             <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
               Lo que hacemos
             </p>
@@ -187,7 +230,14 @@ import { SeoService } from '../../core/services/seo.service';
             </h2>
           </header>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+            appStaggerChildren
+            childSelector="article"
+            [staggerDelay]="0.1"
+            [duration]="0.55"
+            [y]="35"
+          >
             @for (service of services; track service.title) {
               <article
                 class="bg-white rounded-[1.5rem] p-7 md:p-8 shadow-sm hover:shadow-[0_16px_40px_rgba(255,122,26,0.12)] transition-all duration-300 hover:-translate-y-1 text-center"
@@ -208,7 +258,7 @@ import { SeoService } from '../../core/services/seo.service';
     @defer (on viewport) {
       <section class="py-16 md:py-24 bg-white" aria-labelledby="gallery-title">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header class="text-center mb-12 md:mb-16">
+          <header class="text-center mb-12 md:mb-16" appScrollReveal [y]="30" [duration]="0.6">
             <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
               Momentos
             </p>
@@ -220,7 +270,14 @@ import { SeoService } from '../../core/services/seo.service';
             </h2>
           </header>
 
-          <div class="columns-2 md:columns-3 gap-4 space-y-4">
+          <div
+            class="columns-2 md:columns-3 gap-4 space-y-4"
+            appStaggerChildren
+            childSelector="figure"
+            [staggerDelay]="0.08"
+            [duration]="0.5"
+            [y]="30"
+          >
             @for (photo of galleryPhotos; track photo) {
               <figure class="break-inside-avoid rounded-2xl overflow-hidden shadow-sm">
                 <img
@@ -241,7 +298,13 @@ import { SeoService } from '../../core/services/seo.service';
     <!-- CTA -->
     @defer (on viewport) {
       <section class="py-16 md:py-24 bg-surface" aria-labelledby="cta-title">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div
+          class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+          appScrollReveal
+          [y]="35"
+          [duration]="0.7"
+          [scale]="0.98"
+        >
           <h2
             id="cta-title"
             class="text-3xl md:text-4xl font-extrabold tracking-tight text-dark mb-4"
@@ -253,7 +316,7 @@ import { SeoService } from '../../core/services/seo.service';
           </p>
           <a
             routerLink="/contact"
-            class="inline-flex items-center justify-center min-h-12 px-7 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+            class="inline-flex items-center justify-center min-h-12 px-7 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)] animate-subtle-pulse"
           >
             Contáctanos
           </a>
@@ -263,6 +326,29 @@ import { SeoService } from '../../core/services/seo.service';
       <div class="h-40 bg-surface" aria-hidden="true"></div>
     }
   `,
+  styles: [
+    `
+      @keyframes subtle-pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(255, 122, 26, 0.35);
+        }
+        50% {
+          box-shadow: 0 0 0 10px rgba(255, 122, 26, 0);
+        }
+      }
+
+      .animate-subtle-pulse {
+        animation: subtle-pulse 2.5s ease-in-out infinite;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .animate-subtle-pulse {
+          animation: none;
+        }
+      }
+    `,
+  ],
 })
 export class AboutComponent {
   private readonly seo = inject(SeoService);

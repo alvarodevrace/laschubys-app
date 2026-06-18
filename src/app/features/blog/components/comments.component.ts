@@ -6,12 +6,13 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { BlogComment } from '../../../core/models/content.model';
 import { ContentService } from '../../../core/services/content.service';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { StaggerChildrenDirective } from '../../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-comments',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, ButtonComponent, StaggerChildrenDirective],
   template: `
     <section class="grid gap-6 mt-12">
       <div class="flex justify-between items-center gap-4">
@@ -19,7 +20,7 @@ import { ButtonComponent } from '../../../shared/ui/button/button.component';
         <span>{{ comments().length }}</span>
       </div>
 
-      <div class="grid gap-4">
+      <div class="grid gap-4" appStaggerChildren [staggerDelay]="0.08" childSelector="article">
         @if (comments().length === 0) {
           <p class="m-0 leading-relaxed">Todavía no hay comentarios públicos en este post.</p>
         } @else {

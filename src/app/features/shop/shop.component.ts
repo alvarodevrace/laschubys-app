@@ -14,6 +14,7 @@ import { CartService } from '../../core/services/cart.service';
 import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import { StaggerChildrenDirective, TiltCardDirective } from '../../shared/animations';
 import { CategorySidebarComponent } from './category-sidebar.component';
 import { ProductCardComponent } from './product-card.component';
 
@@ -21,7 +22,14 @@ import { ProductCardComponent } from './product-card.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-shop',
   standalone: true,
-  imports: [RouterLink, ButtonComponent, CategorySidebarComponent, ProductCardComponent],
+  imports: [
+    RouterLink,
+    ButtonComponent,
+    CategorySidebarComponent,
+    ProductCardComponent,
+    StaggerChildrenDirective,
+    TiltCardDirective,
+  ],
   template: `
     <section class="py-10 pb-8" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
@@ -171,9 +179,15 @@ import { ProductCardComponent } from './product-card.component';
                     </button>
                   }
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div
+                  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                  appStaggerChildren
+                  childSelector="app-product-card"
+                  [staggerDelay]="0.08"
+                >
                   @for (product of visibleProducts(); track product.id) {
                     <app-product-card
+                      appTiltCard
                       [product]="product"
                       [adding]="addingIds().has(product.id)"
                       (add)="addToCart($event)"

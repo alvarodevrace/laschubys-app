@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -6,14 +6,28 @@ import { siteMeta } from '../../core/content/site-content';
 import { ApiService } from '../../core/services/api.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
+import {
+  ScrollRevealDirective,
+  StaggerChildrenDirective,
+  TextRevealDirective,
+  TiltCardDirective,
+} from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-contact',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ButtonComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    ButtonComponent,
+    ScrollRevealDirective,
+    StaggerChildrenDirective,
+    TextRevealDirective,
+    TiltCardDirective,
+  ],
   template: `
-    <section class="py-10 pb-8" data-reveal>
+    <section class="py-10 pb-8" appScrollReveal>
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
           <a routerLink="/">Inicio</a>
@@ -23,6 +37,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
         <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">Contacto</p>
         <h1
           class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-2"
+          appTextReveal
         >
           Hablemos.
         </h1>
@@ -37,6 +52,9 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             href="https://wa.me/593960463743"
             target="_blank"
             rel="noreferrer"
+            appTiltCard
+            [max]="6"
+            [scale]="1.02"
           >
             <span
               class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange transition-colors duration-200 group-hover:bg-orange group-hover:text-white"
@@ -72,6 +90,9 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
           <a
             class="group flex items-center gap-4 min-h-[92px] p-5 rounded-2xl transition-all duration-200 border border-orange/[0.18] bg-gradient-to-b from-white/[0.98] to-[#fff4e8]/[0.92] shadow-[0_18px_40px_rgba(53,25,11,0.08)] hover:-translate-y-0.5 hover:border-orange/[0.44] hover:shadow-[0_24px_48px_rgba(53,25,11,0.12)]"
             [href]="'mailto:' + siteMeta.email"
+            appTiltCard
+            [max]="6"
+            [scale]="1.02"
           >
             <span
               class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-orange/[0.12] text-orange transition-colors duration-200 group-hover:bg-orange group-hover:text-white"
@@ -106,7 +127,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
-    <section class="py-10 pb-12" data-reveal>
+    <section class="py-10 pb-12" appScrollReveal>
       <div class="max-w-6xl mx-auto px-4">
         <div
           class="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-6 items-start p-7 rounded-3xl border border-orange/[0.14] bg-gradient-to-br from-white/[0.96] to-[#fff4e8]/[0.88] shadow-[0_22px_52px_rgba(32,18,12,0.08)]"
@@ -194,7 +215,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
       </div>
     </section>
 
-    <section class="py-10 pb-12" data-reveal>
+    <section class="py-10 pb-12" appScrollReveal>
       <div class="max-w-6xl mx-auto px-4">
         <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Formulario</p>
         <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900 mb-3">
@@ -205,8 +226,11 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
           [formGroup]="contactForm"
           (ngSubmit)="submit()"
           class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto"
+          appStaggerChildren
+          childSelector=".field"
+          [staggerDelay]="0.08"
         >
-          <div class="grid gap-1.5">
+          <div class="field grid gap-1.5">
             <label class="text-sm font-bold text-gray-700" for="contact-name">Nombre</label>
             <input
               id="contact-name"
@@ -217,7 +241,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
               data-testid="contact-name-input"
             />
           </div>
-          <div class="grid gap-1.5">
+          <div class="field grid gap-1.5">
             <label class="text-sm font-bold text-gray-700" for="contact-email">Correo</label>
             <input
               id="contact-email"
@@ -228,7 +252,7 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
               data-testid="contact-email-input"
             />
           </div>
-          <div class="grid gap-1.5 md:col-span-2">
+          <div class="field grid gap-1.5 md:col-span-2">
             <label class="text-sm font-bold text-gray-700" for="contact-message">Mensaje</label>
             <textarea
               id="contact-message"
@@ -239,14 +263,14 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
               data-testid="contact-message-input"
             ></textarea>
           </div>
-          <div class="md:col-span-2">
+          <div class="field md:col-span-2">
             <app-button
               type="submit"
-              variant="primary"
+              [variant]="justSent() ? 'secondary' : 'primary'"
               [disabled]="pending() || contactForm.invalid"
               data-testid="contact-submit-btn"
             >
-              {{ pending() ? 'Enviando...' : 'Enviar mensaje' }}
+              {{ buttonLabel() }}
             </app-button>
           </div>
           @if (feedback()) {
@@ -271,7 +295,14 @@ export class ContactComponent {
   protected readonly siteMeta = siteMeta;
   protected readonly pending = signal(false);
   protected readonly sent = signal(false);
+  protected readonly justSent = signal(false);
   protected readonly feedback = signal('');
+
+  protected readonly buttonLabel = computed(() => {
+    if (this.pending()) return 'Enviando...';
+    if (this.justSent()) return 'Enviado ✓';
+    return 'Enviar mensaje';
+  });
 
   protected readonly contactForm = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -300,8 +331,10 @@ export class ContactComponent {
     try {
       await this.api.post('/api/contact', this.contactForm.getRawValue());
       this.sent.set(true);
+      this.justSent.set(true);
       this.feedback.set('Mensaje enviado. Te responderemos pronto.');
       this.contactForm.reset();
+      setTimeout(() => this.justSent.set(false), 2500);
     } catch {
       this.sent.set(false);
       this.feedback.set(

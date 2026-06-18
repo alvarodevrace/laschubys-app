@@ -1,10 +1,12 @@
 import { Component, input, signal, ChangeDetectionStrategy } from '@angular/core';
 
+import { ParallaxDirective, StaggerChildrenDirective } from '../../shared/animations';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-product-gallery',
   standalone: true,
-  imports: [],
+  imports: [ParallaxDirective, StaggerChildrenDirective],
   template: `
     <div class="grid gap-4">
       <div
@@ -15,6 +17,8 @@ import { Component, input, signal, ChangeDetectionStrategy } from '@angular/core
           [src]="images()[selectedIndex()] || '/images/cats/iris4.jpeg'"
           [alt]="'Imagen ' + (selectedIndex() + 1) + ' del producto'"
           loading="eager"
+          appParallax
+          [speed]="0.15"
         />
         @if (images().length <= 0) {
           <div class="absolute inset-0 grid place-items-center text-gray-400 text-sm font-medium">
@@ -26,6 +30,9 @@ import { Component, input, signal, ChangeDetectionStrategy } from '@angular/core
       @if (images().length > 1) {
         <div
           class="flex gap-3 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          appStaggerChildren
+          childSelector="button"
+          [staggerDelay]="0.06"
         >
           @for (image of images(); track image + $index) {
             <button

@@ -15,11 +15,17 @@ import { marqueeItems, personas } from '../../core/content/site-content';
 import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 import { CartService } from '../../core/services/cart.service';
-import { BlogPost, ProductPick } from '../../core/models/content.model';
+import { ProductPick } from '../../core/models/content.model';
 import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 import { PhotoGalleryComponent } from '../../shared/ui/photo-gallery/photo-gallery.component';
 import { SectionShellComponent } from '../../shared/ui/section-shell/section-shell.component';
+import {
+  MarqueeComponent,
+  ScrollRevealDirective,
+  StaggerChildrenDirective,
+  TiltCardDirective,
+} from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +37,10 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
     CarouselComponent,
     PhotoGalleryComponent,
     SectionShellComponent,
+    MarqueeComponent,
+    ScrollRevealDirective,
+    StaggerChildrenDirective,
+    TiltCardDirective,
   ],
   template: `
     <section
@@ -97,6 +107,7 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
               [class.bg-white/80]="currentSlide() !== $index"
               [class.ring-2]="currentSlide() === $index"
               [class.ring-white]="currentSlide() === $index"
+              [class.motion-safe:animate-pulse]="currentSlide() === $index"
             ></span>
           </button>
         }
@@ -104,13 +115,14 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
     </section>
 
     <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
-      <div class="flex gap-10 w-max animate-marquee motion-reduce:animate-none">
+      <app-marquee [speed]="'25s'" [pauseOnHover]="true" [fadeEdges]="true">
         @for (item of promoLoop; track item + $index) {
-          <span class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap">{{
-            item
-          }}</span>
+          <span
+            class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap px-5"
+            >{{ item }}</span
+          >
         }
-      </div>
+      </app-marquee>
     </section>
 
     <section class="bg-white py-10 md:py-16">
@@ -120,6 +132,7 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
             routerLink="/tienda"
             [queryParams]="{ audience: 'michis' }"
             class="group flex items-center justify-center gap-3 min-h-[80px] md:min-h-[96px] px-8 rounded-full border-2 border-orange/30 bg-white text-orange shadow-sm hover:bg-orange hover:text-white hover:border-orange hover:shadow-[0_16px_40px_rgba(255,122,26,0.22)] hover:-translate-y-1 transition-all duration-300"
+            appScrollReveal
           >
             <svg
               class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
@@ -139,6 +152,8 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
             routerLink="/tienda"
             [queryParams]="{ audience: 'michi-lovers' }"
             class="group flex items-center justify-center gap-3 min-h-[80px] md:min-h-[96px] px-8 rounded-full border-2 border-orange/30 bg-white text-orange shadow-sm hover:bg-orange hover:text-white hover:border-orange hover:shadow-[0_16px_40px_rgba(255,122,26,0.22)] hover:-translate-y-1 transition-all duration-300"
+            appScrollReveal
+            [delay]="0.1"
           >
             <svg
               class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
@@ -176,45 +191,54 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
       @defer (on viewport) {
         <app-carousel [items]="productsResource.value() ?? []">
           <ng-template let-product>
-            <article
-              class="relative snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl bg-white border border-gray-200 overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+            <div
+              class="snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)]"
+              appScrollReveal
+              [delay]="0.05"
             >
-              <div
-                class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
+              <article
+                class="relative h-full rounded-2xl bg-white border border-gray-200 overflow-hidden transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                appTiltCard
+                [max]="8"
+                [scale]="1.02"
               >
-                {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
-              </div>
-              <div class="relative aspect-square overflow-hidden bg-gray-100">
-                <img
-                  [src]="product.images[0] || '/images/cats/iris4.jpeg'"
-                  [alt]="product.name"
-                  loading="lazy"
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="p-3.5 pb-2">
-                <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
-                  {{ product.name }}
-                </p>
-                <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
-              </div>
-              <div class="flex gap-2 px-3.5 pb-3.5">
-                <app-button
-                  variant="secondary"
-                  size="md"
-                  type="button"
-                  (click)="openPreview(product)"
+                <div
+                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
                 >
-                  Ver
-                </app-button>
-                <a
-                  class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-                  [routerLink]="['/tienda']"
-                  [queryParams]="{ product: product.id }"
-                  >Comprar</a
-                >
-              </div>
-            </article>
+                  {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+                </div>
+                <div class="relative aspect-square overflow-hidden bg-gray-100">
+                  <img
+                    [src]="product.images[0] || '/images/cats/iris4.jpeg'"
+                    [alt]="product.name"
+                    loading="lazy"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <div class="p-3.5 pb-2">
+                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                    {{ product.name }}
+                  </p>
+                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
+                </div>
+                <div class="flex gap-2 px-3.5 pb-3.5">
+                  <app-button
+                    variant="secondary"
+                    size="md"
+                    type="button"
+                    (click)="openPreview(product)"
+                  >
+                    Ver
+                  </app-button>
+                  <a
+                    class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
+                    [routerLink]="['/tienda']"
+                    [queryParams]="{ product: product.id }"
+                    >Comprar</a
+                  >
+                </div>
+              </article>
+            </div>
           </ng-template>
         </app-carousel>
       } @placeholder {
@@ -222,7 +246,13 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
       }
     </app-section-shell>
 
-    <app-photo-gallery />
+    <app-photo-gallery
+      appStaggerChildren
+      childSelector=".group"
+      [staggerDelay]="0.05"
+      [duration]="0.5"
+      [y]="24"
+    />
 
     <app-section-shell variant="warm">
       <div class="flex items-end justify-between gap-4 mb-6">
@@ -242,26 +272,35 @@ import { SectionShellComponent } from '../../shared/ui/section-shell/section-she
       @defer (on viewport) {
         <app-carousel [items]="postsResource.value() ?? []">
           <ng-template let-post>
-            <a
-              class="group grid gap-2 snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)] rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-              [routerLink]="['/blog', post.slug]"
+            <div
+              class="snap-start flex-shrink-0 w-[85%] sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.75rem)] xl:w-[calc(25%-0.75rem)]"
+              appScrollReveal
+              [delay]="0.05"
             >
-              <div class="aspect-video overflow-hidden bg-gray-100">
-                <img
-                  [src]="post.coverImage || '/images/cats/iris2.jpeg'"
-                  [alt]="post.title"
-                  loading="lazy"
-                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
-                {{ post.category }}
-              </p>
-              <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
-                {{ post.title }}
-              </h3>
-              <p class="text-sm text-gray-600 line-clamp-3 mx-3.5 mb-3.5">{{ post.excerpt }}</p>
-            </a>
+              <a
+                class="group grid gap-2 h-full rounded-2xl overflow-hidden bg-white border border-gray-200 transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                [routerLink]="['/blog', post.slug]"
+                appTiltCard
+                [max]="8"
+                [scale]="1.02"
+              >
+                <div class="aspect-video overflow-hidden bg-gray-100">
+                  <img
+                    [src]="post.coverImage || '/images/cats/iris2.jpeg'"
+                    [alt]="post.title"
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
+                  {{ post.category }}
+                </p>
+                <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
+                  {{ post.title }}
+                </h3>
+                <p class="text-sm text-gray-600 line-clamp-3 mx-3.5 mb-3.5">{{ post.excerpt }}</p>
+              </a>
+            </div>
           </ng-template>
         </app-carousel>
       } @placeholder {
@@ -372,7 +411,11 @@ export class HomeComponent {
       const observer = new IntersectionObserver(
         ([entry]) => {
           this.sliderVisible.set(entry.isIntersecting);
-          entry.isIntersecting ? this.startAutoPlay() : this.stopAutoPlay();
+          if (entry.isIntersecting) {
+            this.startAutoPlay();
+          } else {
+            this.stopAutoPlay();
+          }
         },
         { threshold: 0.25 },
       );

@@ -4,16 +4,17 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SeoService } from '../../core/services/seo.service';
 import { ContentService } from '../../core/services/content.service';
 import { CommentsComponent } from './components/comments.component';
+import { ScrollRevealDirective, ParallaxDirective } from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-detail',
   standalone: true,
-  imports: [RouterLink, CommentsComponent],
+  imports: [RouterLink, CommentsComponent, ScrollRevealDirective, ParallaxDirective],
   template: `
     @if (postResource.value(); as post) {
       <article>
-        <section class="py-10 pb-6" data-reveal>
+        <section class="py-10 pb-6" appScrollReveal>
           <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
               <a routerLink="/">Inicio</a>
@@ -28,10 +29,14 @@ import { CommentsComponent } from './components/comments.component';
             </p>
             <h1
               class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-4"
+              appScrollReveal
+              [y]="20"
             >
               {{ post.title }}
             </h1>
-            <p class="text-gray-500 max-w-2xl text-lg leading-relaxed">{{ post.excerpt }}</p>
+            <p class="text-gray-500 max-w-2xl text-lg leading-relaxed" appScrollReveal [y]="20">
+              {{ post.excerpt }}
+            </p>
 
             <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-6">
               <span class="font-medium text-gray-700">{{ post.author }}</span>
@@ -43,25 +48,35 @@ import { CommentsComponent } from './components/comments.component';
           </div>
         </section>
 
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-10" data-reveal>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-10" appScrollReveal [y]="60">
           <div class="rounded-3xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.12)]">
             <img
               [src]="post.coverImage || '/images/cats/iris3.jpeg'"
               [alt]="post.title"
-              class="w-full aspect-video object-cover"
+              class="w-full aspect-video object-cover scale-110"
+              appParallax
+              [speed]="0.15"
             />
           </div>
         </div>
 
-        <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-reveal>
+        <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" appScrollReveal [y]="40">
           <div class="prose prose-lg max-w-none">
             @for (paragraph of post.content; track $index) {
-              <p class="text-gray-700 leading-[1.8] text-base md:text-lg mb-6">{{ paragraph }}</p>
+              <p
+                class="text-gray-700 leading-[1.8] text-base md:text-lg mb-6"
+                appScrollReveal
+                [y]="30"
+                [delay]="0.05 * $index"
+                [duration]="0.5"
+              >
+                {{ paragraph }}
+              </p>
             }
           </div>
         </section>
 
-        <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-reveal>
+        <section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8" appScrollReveal [y]="60">
           @defer (on viewport) {
             <app-comments [slug]="post.slug" [(comments)]="commentsModel" />
           } @placeholder {
