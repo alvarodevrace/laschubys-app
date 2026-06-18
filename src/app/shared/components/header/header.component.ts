@@ -48,10 +48,10 @@ interface NavItem {
       data-testid="header-pill"
     >
       <div
-        class="rounded-full bg-white/45 backdrop-blur-xl border border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_10px_40px_-12px_rgba(20,19,19,0.18)] px-2 sm:px-3 py-1.5 flex items-center justify-between gap-2 sm:gap-3"
+        class="rounded-full bg-white/45 backdrop-blur-xl border border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_10px_40px_-12px_rgba(20,19,19,0.18)] px-2 sm:px-3 py-1.5 flex items-center gap-2 sm:gap-3"
       >
         <!-- Izquierda: hamburger + logo -->
-        <div class="flex items-center gap-1 sm:gap-2 flex-shrink-0">
+        <div class="flex items-center gap-1 sm:gap-2 flex-1">
           <button
             class="lg:hidden w-9 h-9 inline-flex items-center justify-center rounded-full text-gray-700 hover:text-orange hover:bg-orange-50 transition-colors"
             type="button"
@@ -78,7 +78,10 @@ interface NavItem {
         </div>
 
         <!-- Centro: navegación desktop -->
-        <nav class="hidden lg:flex items-center gap-0.5" aria-label="Categorías">
+        <nav
+          class="hidden lg:flex items-center justify-center gap-0.5 flex-shrink-0"
+          aria-label="Categorías"
+        >
           @for (item of navItems; track item.testId) {
             @if (item.children) {
               <div class="relative group">
@@ -167,7 +170,7 @@ interface NavItem {
         </nav>
 
         <!-- Derecha: búsqueda, usuario, carrito -->
-        <div class="flex items-center gap-0.5 sm:gap-1 flex-shrink-0">
+        <div class="flex items-center justify-end gap-0.5 sm:gap-1 flex-1">
           <!-- Buscador desktop -->
           <form
             class="hidden md:flex items-center relative"
