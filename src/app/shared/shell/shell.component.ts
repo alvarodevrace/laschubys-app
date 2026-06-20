@@ -29,7 +29,7 @@ import { WhatsappFloatComponent } from '../components/whatsapp-float/whatsapp-fl
   ],
   template: `
     <app-header />
-    <main class="min-h-[calc(100vh-360px)]">
+    <main class="min-h-[calc(100vh-360px)] pt-20">
       <router-outlet />
     </main>
     <app-footer />

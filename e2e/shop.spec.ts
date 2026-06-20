@@ -1,30 +1,38 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Tienda', () => {
-  test('filtra productos y abre modal de detalle', async ({ page }) => {
+  test('filtra productos y navega al detalle con SSR', async ({ page }) => {
     await page.goto('/tienda');
 
-    // Verifica que los filtros existan
+    // Verifica que los filtros principales existan
     await expect(page.locator('[data-testid="tienda-filter-all"]')).toBeVisible();
-    await expect(page.locator('[data-testid="tienda-filter-para-michis"]')).toBeVisible();
-    await expect(page.locator('[data-testid="tienda-filter-para-perros"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tienda-filter-michis"]')).toBeVisible();
+    await expect(page.locator('[data-testid="tienda-filter-michi-lovers"]')).toBeVisible();
 
-    // Haz click en filtro "Para Michis"
-    await page.locator('[data-testid="tienda-filter-para-michis"]').click();
+    // Haz click en filtro "Para Michis" y verifica que haya al menos una tarjeta
+    await page.locator('[data-testid="tienda-filter-michis"]').click();
+    const cards = page.locator('[data-testid="product-card"]');
+    await expect(cards.first()).toBeVisible();
 
-    // Verifica que productos se filtren (al menos 1 producto visible)
-    const filteredProducts = page.locator('[data-testid="tienda-product-card"]');
-    await expect(filteredProducts).toHaveCount(1);
+    // Abre el primer producto
+    const firstCard = cards.first();
+    const slug = await firstCard.getAttribute('data-product-slug');
+    const name = await firstCard.locator('h3').textContent();
+    await firstCard.click();
 
-    // Haz click en "Ver" de un producto (abre modal)
-    await page.locator('[data-testid="tienda-product-ver-btn"]').first().click();
+    // Verifica navegación a la página de detalle
+    await expect(page).toHaveURL(`/tienda/${slug}`);
 
-    // Verifica que el modal se abra
-    const modalBackdrop = page.locator('[data-testid="tienda-modal-backdrop"]');
-    await expect(modalBackdrop).toBeVisible();
+    // Verifica SSR: título y encabezado contienen el nombre real del producto
+    await expect(page.locator('h1')).toContainText(name ?? '');
+    await expect(page.title()).resolves.toContain(name ?? '');
 
-    // Cierra el modal
-    await page.locator('[data-testid="tienda-modal-close-btn"]').click();
-    await expect(modalBackdrop).not.toBeVisible();
+    // Verifica que existan las tabs de detalle y especificaciones
+    await expect(page.locator('#details-tab')).toBeVisible();
+    await expect(page.locator('#specifications-tab')).toBeVisible();
+
+    // Cambia a la pestaña de especificaciones
+    await page.locator('#specifications-tab').click();
+    await expect(page.locator('#specifications-panel')).toBeVisible();
   });
 });

@@ -50,3 +50,6 @@ __screenshots__/
 Thumbs.db
 storybook-static/
 debug-storybook.log
+
+# Isolated worktrees
+.worktrees/

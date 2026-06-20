@@ -1,11 +1,12 @@
-import { Component, input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { twMerge } from 'tailwind-merge';
 
 const cardVariants = cva('bg-white rounded-2xl', {
   variants: {
     variant: {
       default: '',
-      bordered: 'border border-gray-200',
+      bordered: 'border border-border',
       elevated: 'shadow-lg',
     },
     padding: {
@@ -28,7 +29,7 @@ type CardVariants = VariantProps<typeof cardVariants>;
   standalone: true,
   imports: [],
   template: `
-    <div [class]="cardVariants({ variant: variant(), padding: padding() })" data-testid="card">
+    <div [class]="computedClass()" data-testid="card">
       <ng-content></ng-content>
     </div>
   `,
@@ -36,5 +37,9 @@ type CardVariants = VariantProps<typeof cardVariants>;
 export class CardComponent {
   readonly variant = input<CardVariants['variant']>('default');
   readonly padding = input<CardVariants['padding']>('md');
-  protected readonly cardVariants = cardVariants;
+  readonly className = input<string>('');
+
+  protected readonly computedClass = computed(() =>
+    twMerge(cardVariants({ variant: this.variant(), padding: this.padding() }), this.className()),
+  );
 }

@@ -1,5 +1,9 @@
 import { CurrencyPipe } from '@angular/common';
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { provideIcons } from '@ng-icons/core';
+import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
 
 import { CartItem } from '../../core/models/cart.model';
 
@@ -7,10 +11,11 @@ import { CartItem } from '../../core/models/cart.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-cart-item-row',
   standalone: true,
-  imports: [CurrencyPipe],
+  providers: [provideIcons({ lucideMinus, lucidePlus })],
+  imports: [CurrencyPipe, HlmButtonImports, HlmIconImports],
   template: `
     <article
-      class="grid grid-cols-[112px_1fr] gap-4 p-4 rounded-3xl bg-gray-50 border border-gray-200"
+      class="grid grid-cols-[112px_1fr] gap-4 p-4 rounded-3xl bg-surface border border-border"
     >
       <img
         class="w-28 h-28 object-cover rounded-2xl"
@@ -27,27 +32,35 @@ import { CartItem } from '../../core/models/cart.model';
           </p>
         </div>
         <div class="flex justify-between gap-4">
-          <div class="inline-flex items-center gap-3 px-2 py-1 rounded-full border border-gray-200">
+          <div class="inline-flex items-center gap-2">
             <button
-              class="border-0 bg-transparent cursor-pointer text-gray-700"
+              hlmBtn
+              variant="outline"
+              size="icon-sm"
               type="button"
               (click)="qtyChange.emit(item().qty - 1)"
               data-testid="cart-decrement-btn"
+              aria-label="Disminuir cantidad"
             >
-              -
+              <ng-icon hlmIcon name="lucideMinus" class="w-4 h-4" />
             </button>
-            <span>{{ item().qty }}</span>
+            <span class="min-w-[1.5rem] text-center font-extrabold">{{ item().qty }}</span>
             <button
-              class="border-0 bg-transparent cursor-pointer text-gray-700"
+              hlmBtn
+              variant="outline"
+              size="icon-sm"
               type="button"
               (click)="qtyChange.emit(item().qty + 1)"
               data-testid="cart-increment-btn"
+              aria-label="Aumentar cantidad"
             >
-              +
+              <ng-icon hlmIcon name="lucidePlus" class="w-4 h-4" />
             </button>
           </div>
           <button
-            class="border-0 bg-transparent cursor-pointer text-gray-700"
+            hlmBtn
+            variant="ghost"
+            size="sm"
             type="button"
             (click)="remove.emit()"
             data-testid="cart-remove-btn"

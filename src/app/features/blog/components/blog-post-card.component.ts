@@ -1,33 +1,50 @@
 import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { HlmCardImports } from '@spartan-ng/helm/card';
+
 import { BlogPost } from '../../../core/models/content.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-post-card',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, HlmCardImports],
   template: `
     <a
-      class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+      class="group flex flex-col h-full overflow-hidden"
+      hlmCard
       [routerLink]="['/blog', post().slug]"
     >
-      <div class="aspect-video overflow-hidden bg-gray-100">
+      <div class="relative aspect-video overflow-hidden bg-muted">
         <img
           [src]="post().coverImage || fallbackImage()"
           [alt]="post().title"
           loading="lazy"
-          class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        <div
+          class="absolute inset-0 bg-transparent group-hover:bg-black/5 transition-colors duration-300"
+        ></div>
       </div>
-      <div class="blog-card__body">
-        <p class="mx-3.5 mt-2 text-xs font-extrabold uppercase tracking-wide text-orange">
+
+      <div hlmCardContent class="flex flex-col flex-1 py-5">
+        <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
           {{ post().category }}
         </p>
-        <h3>{{ post().title }}</h3>
-        <p class="mx-3.5 mb-2 text-xs text-gray-500 leading-relaxed">{{ post().excerpt }}</p>
-        <span class="blog-card__meta">{{ post().publishedAt }} · {{ post().readTime }}</span>
+        <h3
+          class="text-lg font-bold leading-snug text-foreground mb-2 group-hover:text-primary transition-colors duration-200"
+        >
+          {{ post().title }}
+        </h3>
+        <p class="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4 flex-1">
+          {{ post().excerpt }}
+        </p>
+      </div>
+
+      <div hlmCardFooter class="justify-between">
+        <span class="text-xs text-muted-foreground">{{ post().publishedAt }}</span>
+        <span class="text-xs font-bold text-primary">{{ post().readTime }}</span>
       </div>
     </a>
   `,

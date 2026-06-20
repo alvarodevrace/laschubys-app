@@ -1,8 +1,29 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './core/auth/auth.guard';
-import { adminGuard } from './core/auth/admin.guard';
 
-export const routes: Routes = [
+import { environment } from './core/config/environment';
+
+const linktreeRoute: Routes = [
+  {
+    path: 'linktree',
+    loadComponent: () =>
+      import('./features/linktree/linktree.component').then((m) => m.LinktreeComponent),
+  },
+];
+
+const constructionRoutes: Routes = [
+  ...linktreeRoute,
+  {
+    path: '',
+    loadComponent: () =>
+      import('./features/static/under-construction.component').then(
+        (m) => m.UnderConstructionComponent,
+      ),
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
+];
+
+const shellRoutes: Routes = [
+  ...linktreeRoute,
   {
     path: '',
     loadComponent: () => import('./shared/shell/shell.component').then((m) => m.ShellComponent),
@@ -26,12 +47,16 @@ export const routes: Routes = [
         loadComponent: () => import('./features/shop/shop.component').then((m) => m.ShopComponent),
       },
       {
+        path: 'tienda/:slug',
+        loadComponent: () =>
+          import('./features/shop/product-detail.component').then((m) => m.ProductDetailComponent),
+      },
+      {
         path: 'carrito',
         loadComponent: () => import('./features/cart/cart.component').then((m) => m.CartComponent),
       },
       {
         path: 'checkout',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./features/checkout/checkout.component').then((m) => m.CheckoutComponent),
       },
@@ -51,6 +76,11 @@ export const routes: Routes = [
           import('./features/static/contact.component').then((m) => m.ContactComponent),
       },
       {
+        path: 'media-kit',
+        loadComponent: () =>
+          import('./features/media-kit/media-kit.component').then((m) => m.MediaKitComponent),
+      },
+      {
         path: 'auth/login',
         loadComponent: () =>
           import('./features/auth/auth-login.component').then((m) => m.AuthLoginComponent),
@@ -62,11 +92,53 @@ export const routes: Routes = [
       },
       {
         path: 'admin',
-        canActivate: [adminGuard],
         loadComponent: () =>
-          import('./features/admin/admin-dashboard.component').then(
-            (m) => m.AdminDashboardComponent,
-          ),
+          import('./features/admin/admin-layout.component').then((m) => m.AdminLayoutComponent),
+        children: [
+          { path: '', redirectTo: 'posts', pathMatch: 'full' },
+          {
+            path: 'posts',
+            loadComponent: () =>
+              import('./features/admin/posts/admin-posts.component').then(
+                (m) => m.AdminPostsComponent,
+              ),
+          },
+          {
+            path: 'posts/new',
+            loadComponent: () =>
+              import('./features/admin/posts/admin-post-form.component').then(
+                (m) => m.AdminPostFormComponent,
+              ),
+          },
+          {
+            path: 'posts/:id/edit',
+            loadComponent: () =>
+              import('./features/admin/posts/admin-post-form.component').then(
+                (m) => m.AdminPostFormComponent,
+              ),
+          },
+          {
+            path: 'products',
+            loadComponent: () =>
+              import('./features/admin/products/admin-products.component').then(
+                (m) => m.AdminProductsComponent,
+              ),
+          },
+          {
+            path: 'products/new',
+            loadComponent: () =>
+              import('./features/admin/products/admin-product-form.component').then(
+                (m) => m.AdminProductFormComponent,
+              ),
+          },
+          {
+            path: 'products/:id/edit',
+            loadComponent: () =>
+              import('./features/admin/products/admin-product-form.component').then(
+                (m) => m.AdminProductFormComponent,
+              ),
+          },
+        ],
       },
       {
         path: 'ui',
@@ -77,3 +149,5 @@ export const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
+
+export const routes: Routes = environment.underConstruction ? constructionRoutes : shellRoutes;

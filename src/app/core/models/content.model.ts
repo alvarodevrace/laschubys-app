@@ -18,6 +18,14 @@ export interface BlogPost {
   coverImage?: string | null;
 }
 
+export interface Category {
+  id: string;
+  slug: string;
+  name: string;
+  sortOrder: number;
+  active: boolean;
+}
+
 export interface ProductPick {
   id: string;
   tag: string;
@@ -28,9 +36,16 @@ export interface ProductPick {
   priceValue: number;
   copy: string;
   description: string;
+  details: string;
+  specifications: string;
   images: string[];
   affiliateUrl?: string;
   shippingNote: string;
+  slug: string;
+  categoryId?: string | null;
+  categoryName?: string;
+  productType: 'physical' | 'link';
+  relatedProducts?: ProductPick[];
 }
 
 export interface SiteMeta {
@@ -74,9 +89,15 @@ export interface DbProduct {
   tag: string | null;
   copy: string | null;
   description: string | null;
+  details: string | null;
+  specifications: string | null;
   images: string[] | null;
   affiliate_url: string | null;
   shipping_note: string | null;
   active: boolean;
   created_at?: string;
+  category_id?: string | null;
+  product_type?: 'physical' | 'link' | null;
+  slug?: string | null;
+  categories?: { slug: string; name: string } | null;
 }

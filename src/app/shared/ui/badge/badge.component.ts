@@ -29,8 +29,8 @@ export class BadgeComponent {
   } as const;
 
   protected readonly variantClasses = {
-    default: 'bg-orange text-white',
-    outline: 'border border-gray-300 text-gray-600 bg-transparent',
-    ghost: 'bg-gray-100 text-gray-600',
+    default: 'bg-primary text-primary-foreground',
+    outline: 'border border-border text-muted-foreground bg-transparent',
+    ghost: 'bg-muted text-muted-foreground',
   } as const;
 }

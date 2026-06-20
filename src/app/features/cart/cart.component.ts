@@ -2,28 +2,46 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+
 import { CartService } from '../../core/services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
 import { CartItemRowComponent } from './cart-item-row.component';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-cart',
   standalone: true,
-  imports: [RouterLink, CurrencyPipe, CartItemRowComponent, ButtonComponent],
+  imports: [
+    RouterLink,
+    CurrencyPipe,
+    CartItemRowComponent,
+    HlmBreadcrumbImports,
+    HlmButtonImports,
+    HlmCardImports,
+  ],
   template: `
     <section class="max-w-6xl mx-auto px-4 py-10 pb-8">
-      <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
-        <a routerLink="/">Inicio</a>
-        <span>›</span>
-        <a routerLink="/tienda">Tienda</a>
-        <span>›</span>
-        <span>Carrito</span>
+      <nav class="mb-4" hlmBreadcrumb aria-label="Breadcrumb">
+        <ol hlmBreadcrumbList>
+          <li hlmBreadcrumbItem>
+            <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
+          </li>
+          <li hlmBreadcrumbSeparator></li>
+          <li hlmBreadcrumbItem>
+            <a hlmBreadcrumbLink [link]="['/tienda']">Tienda</a>
+          </li>
+          <li hlmBreadcrumbSeparator></li>
+          <li hlmBreadcrumbItem>
+            <span hlmBreadcrumbPage>Carrito</span>
+          </li>
+        </ol>
       </nav>
-      <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Carrito</p>
+      <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">Carrito</p>
       <h1>Tu selección actual.</h1>
-      <p class="text-gray-500">
+      <p class="text-muted-foreground">
         Ajusta cantidades, revisa total y sigue a checkout cuando esté listo.
       </p>
     </section>
@@ -41,42 +59,46 @@ import { ButtonComponent } from '../../shared/ui/button/button.component';
             }
           </div>
 
-          <aside class="grid gap-4 p-5 rounded-3xl bg-gray-50 border border-gray-200 sticky top-4">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Resumen</p>
-            <div class="flex justify-between gap-4 text-gray-500">
-              <span>Items</span>
-              <strong>{{ count() }}</strong>
+          <aside hlmCard class="sticky top-4">
+            <div hlmCardHeader>
+              <p class="text-xs font-extrabold uppercase tracking-widest text-primary">Resumen</p>
             </div>
-            <div class="flex justify-between gap-4 text-gray-500">
-              <span>Subtotal</span>
-              <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+            <div hlmCardContent class="grid gap-3">
+              <div class="flex justify-between gap-4 text-muted-foreground">
+                <span>Items</span>
+                <strong>{{ count() }}</strong>
+              </div>
+              <div class="flex justify-between gap-4 text-muted-foreground">
+                <span>Subtotal</span>
+                <strong>{{ total() | currency: 'USD' : 'symbol' : '1.0-0' }}</strong>
+              </div>
+              <div class="flex justify-between gap-4 text-muted-foreground">
+                <span>Envío</span>
+                <strong>Por calcular</strong>
+              </div>
             </div>
-            <div class="flex justify-between gap-4 text-gray-500">
-              <span>Envío</span>
-              <strong>Por calcular</strong>
+            <div hlmCardFooter class="grid gap-3">
+              <a hlmBtn routerLink="/checkout" size="lg" class="w-full">Ir al checkout</a>
+              <button hlmBtn variant="outline" type="button" class="w-full" (click)="clear()">
+                Vaciar carrito
+              </button>
             </div>
-            <a
-              class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
-              routerLink="/checkout"
-              >Ir al checkout</a
-            >
-            <app-button variant="secondary" type="button" (click)="clear()"
-              >Vaciar carrito</app-button
-            >
           </aside>
         </div>
       } @else {
-        <div class="p-10 rounded-3xl bg-gray-50 border border-gray-200 text-center">
-          <h2 class="text-xl font-extrabold text-gray-900 mb-2">Tu carrito está vacío.</h2>
-          <p class="text-gray-500 text-sm mb-5">
-            Empieza por la tienda y arma tu selección con calma.
-          </p>
-          <a
-            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px"
-            routerLink="/tienda"
-            >Ir a tienda</a
-          >
-        </div>
+        <section hlmCard class="text-center">
+          <div hlmCardHeader>
+            <h2 hlmCardTitle>Tu carrito está vacío.</h2>
+          </div>
+          <div hlmCardContent>
+            <p class="text-muted-foreground text-sm">
+              Empieza por la tienda y arma tu selección con calma.
+            </p>
+          </div>
+          <div hlmCardFooter class="justify-center">
+            <a hlmBtn routerLink="/tienda" size="lg">Ir a tienda</a>
+          </div>
+        </section>
       }
     </section>
   `,

@@ -1,30 +1,28 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-auth-callback',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, HlmAlertImports, HlmButtonImports, HlmSpinnerImports],
   template: `
     <section
-      class="min-h-[calc(100vh-280px)] grid place-items-center p-8 bg-gradient-to-b from-[#2a1a10] to-[#141313]"
+      class="min-h-[calc(100vh-280px)] grid place-items-center p-8 bg-gradient-to-b from-stone-900 to-stone-950"
     >
       <div class="grid gap-4 justify-items-center text-center text-white">
         <p class="text-sm font-extrabold tracking-widest uppercase text-white/70">Las Chubys</p>
-        <div class="flex gap-2" aria-hidden="true">
-          <span class="w-1.5 h-1.5 rounded-full bg-orange animate-auth-pulse"></span>
-          <span class="w-1.5 h-1.5 rounded-full bg-orange animate-auth-pulse"></span>
-          <span class="w-1.5 h-1.5 rounded-full bg-orange animate-auth-pulse"></span>
-        </div>
         @if (error()) {
-          <p class="m-0 max-w-md leading-relaxed text-white/90">{{ error() }}</p>
-          <a
-            class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-            routerLink="/auth/login"
-            >Intentar de nuevo</a
-          >
+          <div hlmAlert variant="destructive">
+            <div hlmAlertDescription>{{ error() }}</div>
+          </div>
+          <a hlmBtn routerLink="/auth/login">Intentar de nuevo</a>
         } @else {
+          <hlm-spinner />
           <p class="m-0 max-w-md leading-relaxed">Completando acceso...</p>
         }
       </div>

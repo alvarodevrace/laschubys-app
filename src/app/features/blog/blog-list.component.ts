@@ -1,81 +1,103 @@
 import { Component, inject, resource, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+
 import { SeoService } from '../../core/services/seo.service';
 import { ContentService } from '../../core/services/content.service';
+import { BlogPostCardComponent } from './components/blog-post-card.component';
+import {
+  ScrollRevealDirective,
+  StaggerChildrenDirective,
+  TiltCardDirective,
+} from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [
+    RouterLink,
+    BlogPostCardComponent,
+    ScrollRevealDirective,
+    StaggerChildrenDirective,
+    TiltCardDirective,
+    HlmButtonImports,
+    HlmCardImports,
+    HlmSkeletonImports,
+    HlmBreadcrumbImports,
+  ],
   template: `
-    <section class="py-10 pb-8" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
-        <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
-          <a routerLink="/">Inicio</a>
-          <span>›</span>
-          <span>Blog</span>
+    <section class="py-10 pb-8" appScrollReveal>
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="mb-4" hlmBreadcrumb>
+          <ol hlmBreadcrumbList>
+            <li hlmBreadcrumbItem>
+              <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
+            </li>
+            <li hlmBreadcrumbSeparator></li>
+            <li hlmBreadcrumbItem>
+              <span hlmBreadcrumbPage>Blog</span>
+            </li>
+          </ol>
         </nav>
         <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-gray-900 mb-2"
+          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-primary mb-2"
+          appTextReveal
         >
           Historias reales. Sin filtros.
         </h1>
-        <p class="text-gray-500 max-w-2xl">
+        <p class="text-muted-foreground max-w-2xl">
           Vida cotidiana con Iris y Rubi. Tips, reseñas y momentos que toda amante de gatas
           entiende.
         </p>
       </div>
     </section>
 
-    <section class="pb-16" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
+    <section class="pb-20" appScrollReveal [y]="60" [delay]="0.1">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         @if (postsResource.isLoading()) {
-          <p>Cargando posts...</p>
-        } @else if (postsResource.value()?.length) {
-          <div class="cards-grid">
-            @for (post of postsResource.value() ?? []; track post.slug) {
-              <a
-                class="group grid gap-2 rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-                [routerLink]="['/blog', post.slug]"
-              >
-                <div class="aspect-video overflow-hidden bg-gray-100">
-                  <img
-                    [src]="post.coverImage || fallbackImage($index)"
-                    [alt]="post.title"
-                    loading="lazy"
-                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            @for (skeleton of [1, 2, 3, 4, 5, 6]; track skeleton) {
+              <hlm-card class="overflow-hidden">
+                <hlm-skeleton class="aspect-video w-full rounded-none" />
+                <div hlmCardContent class="space-y-3 py-5">
+                  <hlm-skeleton class="h-3 w-20" />
+                  <hlm-skeleton class="h-5 w-full" />
+                  <hlm-skeleton class="h-4 w-3/4" />
+                  <hlm-skeleton class="h-3 w-1/2" />
                 </div>
-                <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
-                  {{ post.category }}
-                </p>
-                <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
-                  {{ post.title }}
-                </h3>
-                @if (post.excerpt) {
-                  <p class="text-sm text-gray-500 mb-3 font-light leading-relaxed">
-                    {{ post.excerpt }}
-                  </p>
-                }
-                <span class="mx-3.5 mb-3.5 text-sm font-bold text-orange">Leer artículo</span>
-              </a>
+              </hlm-card>
+            }
+          </div>
+        } @else if (postsResource.value()?.length) {
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+            appStaggerChildren
+            [staggerDelay]="0.1"
+            childSelector="[appTiltCard]"
+          >
+            @for (post of postsResource.value() ?? []; track post.slug) {
+              <div appTiltCard [scale]="1.03" class="h-full">
+                <app-blog-post-card [post]="post" />
+              </div>
             }
           </div>
         } @else {
-          <div style="text-align:center;padding:4rem 0;">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
+          <div class="text-center py-20">
+            <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-3">
               Próximamente
             </p>
-            <h2
-              style="font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;"
-            >
+            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground mb-3">
               Las historias están en camino.
             </h2>
-            <p class="text-gray-500 font-light">
-              Iris y Rubi todavía están ordenando el caos editorial.
+            <p class="text-muted-foreground max-w-md mx-auto mb-6">
+              Iris y Rubi todavía están ordenando el caos editorial. Vuelve pronto.
             </p>
+            <a hlmBtn routerLink="/">Volver al inicio</a>
           </div>
         }
       </div>
@@ -89,18 +111,6 @@ export class BlogListComponent {
   protected readonly postsResource = resource({
     loader: async () => this.content.getPosts(),
   });
-
-  protected fallbackImage(index: number) {
-    const photos = [
-      '/images/cats/iris.jpeg',
-      '/images/cats/rubi.jpeg',
-      '/images/cats/iris2.jpeg',
-      '/images/cats/rubi2.jpeg',
-      '/images/cats/iris3.jpeg',
-      '/images/cats/rubi3.jpeg',
-    ];
-    return photos[index % photos.length];
-  }
 
   constructor() {
     this.seo.setPage(

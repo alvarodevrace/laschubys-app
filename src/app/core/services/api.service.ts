@@ -11,22 +11,52 @@ export class ApiService {
 
   get<T>(url: string, waitMs = 8000) {
     const targetUrl = this.resolveUrl(url);
-    return firstValueFrom(this.http.get<T>(targetUrl).pipe(timeout(waitMs), catchError((error) => this.handleError(error, targetUrl))));
+    return firstValueFrom(
+      this.http.get<T>(targetUrl).pipe(
+        timeout(waitMs),
+        catchError((error) => this.handleError(error, targetUrl)),
+      ),
+    );
   }
 
   post<T>(url: string, body: unknown, waitMs = 15000) {
     const targetUrl = this.resolveUrl(url);
-    return firstValueFrom(this.http.post<T>(targetUrl, body).pipe(timeout(waitMs), catchError((error) => this.handleError(error, targetUrl))));
+    return firstValueFrom(
+      this.http.post<T>(targetUrl, body).pipe(
+        timeout(waitMs),
+        catchError((error) => this.handleError(error, targetUrl)),
+      ),
+    );
   }
 
   put<T>(url: string, body: unknown, waitMs = 15000) {
     const targetUrl = this.resolveUrl(url);
-    return firstValueFrom(this.http.put<T>(targetUrl, body).pipe(timeout(waitMs), catchError((error) => this.handleError(error, targetUrl))));
+    return firstValueFrom(
+      this.http.put<T>(targetUrl, body).pipe(
+        timeout(waitMs),
+        catchError((error) => this.handleError(error, targetUrl)),
+      ),
+    );
+  }
+
+  postForm<T>(url: string, body: FormData, waitMs = 30000) {
+    const targetUrl = this.resolveUrl(url);
+    return firstValueFrom(
+      this.http.post<T>(targetUrl, body).pipe(
+        timeout(waitMs),
+        catchError((error) => this.handleError(error, targetUrl)),
+      ),
+    );
   }
 
   delete<T>(url: string, waitMs = 15000) {
     const targetUrl = this.resolveUrl(url);
-    return firstValueFrom(this.http.delete<T>(targetUrl).pipe(timeout(waitMs), catchError((error) => this.handleError(error, targetUrl))));
+    return firstValueFrom(
+      this.http.delete<T>(targetUrl).pipe(
+        timeout(waitMs),
+        catchError((error) => this.handleError(error, targetUrl)),
+      ),
+    );
   }
 
   private resolveUrl(url: string) {
