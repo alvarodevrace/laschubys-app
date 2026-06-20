@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { environment } from './core/config/environment';
+import { UnderConstructionComponent } from './features/static/under-construction.component';
 
 const linktreeRoute: Routes = [
   {
@@ -14,10 +15,7 @@ const constructionRoutes: Routes = [
   ...linktreeRoute,
   {
     path: '',
-    loadComponent: () =>
-      import('./features/static/under-construction.component').then(
-        (m) => m.UnderConstructionComponent,
-      ),
+    component: UnderConstructionComponent,
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
