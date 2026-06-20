@@ -1,8 +1,29 @@
 import { Routes } from '@angular/router';
 
-import { resolveProductDetail } from './features/shop/product-detail.resolver';
+import { environment } from './core/config/environment';
 
-export const routes: Routes = [
+const linktreeRoute: Routes = [
+  {
+    path: 'linktree',
+    loadComponent: () =>
+      import('./features/linktree/linktree.component').then((m) => m.LinktreeComponent),
+  },
+];
+
+const constructionRoutes: Routes = [
+  ...linktreeRoute,
+  {
+    path: '',
+    loadComponent: () =>
+      import('./features/static/under-construction.component').then(
+        (m) => m.UnderConstructionComponent,
+      ),
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' },
+];
+
+const shellRoutes: Routes = [
+  ...linktreeRoute,
   {
     path: '',
     loadComponent: () => import('./shared/shell/shell.component').then((m) => m.ShellComponent),
@@ -29,7 +50,6 @@ export const routes: Routes = [
         path: 'tienda/:slug',
         loadComponent: () =>
           import('./features/shop/product-detail.component').then((m) => m.ProductDetailComponent),
-        resolve: { product: resolveProductDetail },
       },
       {
         path: 'carrito',
@@ -129,3 +149,5 @@ export const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
+
+export const routes: Routes = environment.underConstruction ? constructionRoutes : shellRoutes;

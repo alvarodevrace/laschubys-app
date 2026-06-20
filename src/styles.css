@@ -1,12 +1,38 @@
-@import 'tailwindcss';
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css';
 
+@import '@spartan-ng/brain/hlm-tailwind-preset.css';
 @theme {
-  --color-orange: #ff7a1a;
-  --color-orange-dark: #e06300;
-  --color-orange-light: #fff1e5;
-  --color-orange-50: #fff7ed;
-  --color-surface: #fff4e8;
-  --color-dark: #141313;
+  /* Paleta de marca: naranja + stone (Tailwind v4) */
+  --color-orange-50: oklch(98% 0.016 73.684);
+  --color-orange-100: oklch(95.4% 0.038 75.164);
+  --color-orange-200: oklch(90.1% 0.076 70.697);
+  --color-orange-300: oklch(83.7% 0.128 66.29);
+  --color-orange-400: oklch(75% 0.183 55.934);
+  --color-orange-500: oklch(70.5% 0.213 47.604);
+  --color-orange-600: oklch(64.6% 0.222 41.116);
+  --color-orange-700: oklch(55.3% 0.195 38.402);
+  --color-orange-800: oklch(47% 0.157 37.304);
+  --color-orange-900: oklch(40.8% 0.123 38.172);
+  --color-orange-950: oklch(26.6% 0.079 36.259);
+
+  --color-stone-50: oklch(98.5% 0.001 106.423);
+  --color-stone-100: oklch(97% 0.001 106.424);
+  --color-stone-200: oklch(92.3% 0.003 48.717);
+  --color-stone-300: oklch(86.9% 0.005 56.366);
+  --color-stone-400: oklch(70.9% 0.01 56.259);
+  --color-stone-500: oklch(55.3% 0.013 58.071);
+  --color-stone-600: oklch(44.4% 0.011 73.639);
+  --color-stone-700: oklch(37.4% 0.01 67.558);
+  --color-stone-800: oklch(26.8% 0.007 34.298);
+  --color-stone-900: oklch(21.6% 0.006 56.043);
+  --color-stone-950: oklch(14.7% 0.004 49.25);
+
+  --color-surface: var(--color-stone-50);
+  --color-surface-foreground: var(--color-stone-950);
+
   --font-sans: 'Open Sans', sans-serif;
   --animate-marquee: marquee 20s linear infinite;
   --animate-auth-pulse: authPulse 1.2s ease-in-out infinite;
@@ -35,15 +61,10 @@
 }
 
 /* ─────────────────────────────────────────
-   Base tokens + reset
-   ───────────────────────────────────────── */
+Base tokens + reset
+───────────────────────────────────────── */
 @layer base {
   :root {
-    --orange: #ff7a1a;
-    --orange-dark: #e06300;
-    --surface: #fff4e8;
-    --text: #333333;
-    --white: #ffffff;
     color-scheme: light;
   }
 
@@ -54,8 +75,8 @@
 
   body {
     margin: 0;
-    background: #ffffff;
-    color: #333333;
+    background: var(--background);
+    color: var(--foreground);
     font-family: 'Open Sans', sans-serif;
     font-size: 15px;
     line-height: 1.6;
@@ -71,5 +92,104 @@
   textarea,
   select {
     font: inherit;
+  }
+
+  /* Cursor personalizado: huella de gato Las Chubys */
+  html {
+    cursor:
+      url('/brand/mouse-cursor.png') 16 16,
+      auto;
+  }
+
+  a,
+  button,
+  [role='button'],
+  [type='button'],
+  [type='submit'],
+  [type='reset'],
+  summary,
+  label[for] {
+    cursor:
+      url('/brand/mouse-cursor.png') 16 16,
+      pointer;
+  }
+
+  :disabled,
+  [disabled],
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+}
+
+:root {
+  color-scheme: light;
+
+  /* Luma-like: suave, redondeado, fluido */
+  --radius: 1rem;
+  --background: oklch(1 0 0);
+  --foreground: var(--color-stone-950);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--color-stone-950);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--color-stone-950);
+  --primary: var(--color-orange-500);
+  --primary-foreground: var(--color-orange-50);
+  --secondary: var(--color-stone-100);
+  --secondary-foreground: var(--color-stone-900);
+  --muted: var(--color-stone-100);
+  --muted-foreground: var(--color-stone-500);
+  --accent: var(--color-orange-50);
+  --accent-foreground: var(--color-stone-900);
+  --destructive: var(--color-red-500);
+  --border: var(--color-stone-200);
+  --input: var(--color-stone-200);
+  --ring: var(--color-orange-500);
+  --sidebar: var(--color-stone-50);
+  --sidebar-foreground: var(--color-stone-950);
+  --sidebar-primary: var(--color-stone-900);
+  --sidebar-primary-foreground: var(--color-stone-50);
+  --sidebar-accent: var(--color-stone-100);
+  --sidebar-accent-foreground: var(--color-stone-900);
+  --sidebar-border: var(--color-stone-200);
+  --sidebar-ring: var(--color-orange-500);
+}
+
+:root.dark {
+  color-scheme: dark;
+
+  --background: var(--color-stone-950);
+  --foreground: var(--color-stone-50);
+  --card: var(--color-stone-900);
+  --card-foreground: var(--color-stone-50);
+  --popover: var(--color-stone-900);
+  --popover-foreground: var(--color-stone-50);
+  --primary: var(--color-orange-500);
+  --primary-foreground: var(--color-stone-950);
+  --secondary: var(--color-stone-800);
+  --secondary-foreground: var(--color-stone-50);
+  --muted: var(--color-stone-800);
+  --muted-foreground: var(--color-stone-400);
+  --accent: var(--color-stone-800);
+  --accent-foreground: var(--color-stone-50);
+  --destructive: var(--color-red-500);
+  --border: var(--color-stone-800);
+  --input: var(--color-stone-800);
+  --ring: var(--color-orange-400);
+  --sidebar: var(--color-stone-900);
+  --sidebar-foreground: var(--color-stone-50);
+  --sidebar-primary: var(--color-stone-50);
+  --sidebar-primary-foreground: var(--color-stone-900);
+  --sidebar-accent: var(--color-stone-800);
+  --sidebar-accent-foreground: var(--color-stone-50);
+  --sidebar-border: var(--color-stone-800);
+  --sidebar-ring: var(--color-orange-400);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

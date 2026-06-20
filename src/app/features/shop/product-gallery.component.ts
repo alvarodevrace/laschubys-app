@@ -10,7 +10,7 @@ import { ParallaxDirective, StaggerChildrenDirective } from '../../shared/animat
   template: `
     <div class="grid gap-4">
       <div
-        class="relative aspect-square md:aspect-[4/3] overflow-hidden rounded-3xl bg-gray-100 border border-gray-200"
+        class="relative aspect-square md:aspect-[4/3] overflow-hidden rounded-3xl bg-muted border border-border"
       >
         <img
           class="w-full h-full object-cover"
@@ -21,7 +21,9 @@ import { ParallaxDirective, StaggerChildrenDirective } from '../../shared/animat
           [speed]="0.15"
         />
         @if (images().length <= 0) {
-          <div class="absolute inset-0 grid place-items-center text-gray-400 text-sm font-medium">
+          <div
+            class="absolute inset-0 grid place-items-center text-muted-foreground text-sm font-medium"
+          >
             Sin imágenes
           </div>
         }
@@ -37,11 +39,12 @@ import { ParallaxDirective, StaggerChildrenDirective } from '../../shared/animat
           @for (image of images(); track image + $index) {
             <button
               type="button"
-              class="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 transition-all"
-              [class.border-orange]="selectedIndex() === $index"
-              [class.border-gray-200]="selectedIndex() !== $index"
+              class="relative flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 p-0 transition-all"
+              [class.border-primary]="selectedIndex() === $index"
+              [class.border-border]="selectedIndex() !== $index"
               [class.ring-2]="selectedIndex() === $index"
-              [class.ring-orange/20]="selectedIndex() === $index"
+              [class.ring-primary/20]="selectedIndex() === $index"
+              [class.opacity-70]="selectedIndex() !== $index"
               (click)="selectedIndex.set($index)"
               [attr.aria-label]="'Ver imagen ' + ($index + 1)"
             >

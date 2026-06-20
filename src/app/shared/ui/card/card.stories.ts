@@ -21,8 +21,8 @@ const meta: Meta<CardComponent> = {
     props: args,
     template: `
       <app-card [variant]="variant" [padding]="padding">
-        <h3 class="text-lg font-semibold text-gray-900">Card Title</h3>
-        <p class="mt-2 text-sm text-gray-600">
+        <h3 class="text-lg font-semibold text-foreground">Card Title</h3>
+        <p class="mt-2 text-sm text-muted-foreground">
           This is an example card content. Use the controls to preview different variants.
         </p>
       </app-card>
@@ -63,13 +63,13 @@ export const PaddingSizes: Story = {
     template: `
       <div class="flex flex-col gap-4">
         <app-card variant="bordered" padding="sm">
-          <p class="text-sm text-gray-700">Small padding (p-4)</p>
+          <p class="text-sm text-muted-foreground">Small padding (p-4)</p>
         </app-card>
         <app-card variant="bordered" padding="md">
-          <p class="text-sm text-gray-700">Medium padding (p-6)</p>
+          <p class="text-sm text-muted-foreground">Medium padding (p-6)</p>
         </app-card>
         <app-card variant="bordered" padding="lg">
-          <p class="text-sm text-gray-700">Large padding (p-8)</p>
+          <p class="text-sm text-muted-foreground">Large padding (p-8)</p>
         </app-card>
       </div>
     `,

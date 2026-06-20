@@ -12,11 +12,16 @@ import {
   viewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
 
 @Component({
   selector: 'app-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HlmButtonImports, HlmIconImports],
+  providers: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="relative group">
@@ -37,24 +42,26 @@ import { CommonModule } from '@angular/common';
 
       <button
         type="button"
-        class="hidden lg:grid opacity-0 group-hover:opacity-100 absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+        hlmBtn
+        variant="outline"
+        size="icon-lg"
+        class="hidden lg:grid opacity-0 group-hover:opacity-100 absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2"
         (click)="prev()"
         aria-label="Anterior"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
+        <ng-icon hlmIcon name="lucideChevronLeft" class="w-6 h-6" />
       </button>
 
       <button
         type="button"
-        class="hidden lg:grid opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+        hlmBtn
+        variant="outline"
+        size="icon-lg"
+        class="hidden lg:grid opacity-0 group-hover:opacity-100 absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2"
         (click)="next()"
         aria-label="Siguiente"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
+        <ng-icon hlmIcon name="lucideChevronRight" class="w-6 h-6" />
       </button>
     </div>
   `,

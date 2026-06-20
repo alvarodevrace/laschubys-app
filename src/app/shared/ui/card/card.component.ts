@@ -6,7 +6,7 @@ const cardVariants = cva('bg-white rounded-2xl', {
   variants: {
     variant: {
       default: '',
-      bordered: 'border border-gray-200',
+      bordered: 'border border-border',
       elevated: 'shadow-lg',
     },
     padding: {

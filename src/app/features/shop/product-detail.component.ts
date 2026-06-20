@@ -3,11 +3,18 @@ import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@ang
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
+import { provideIcons } from '@ng-icons/core';
+import { lucideAlertCircle } from '@ng-icons/lucide';
+
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmTabsImports } from '@spartan-ng/helm/tabs';
 
 import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 import { ProductCardComponent } from './product-card.component';
 import { ProductGalleryComponent } from './product-gallery.component';
@@ -19,28 +26,47 @@ import { ProductGalleryComponent } from './product-gallery.component';
   imports: [
     RouterLink,
     CurrencyPipe,
-    ButtonComponent,
+    HlmBreadcrumbImports,
+    HlmButtonImports,
+    HlmIconImports,
+    HlmBadgeImports,
+    HlmTabsImports,
     CarouselComponent,
     ProductCardComponent,
     ProductGalleryComponent,
   ],
+  providers: [provideIcons({ lucideAlertCircle })],
   template: `
     <section class="py-10 pb-8" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
-        <nav class="flex items-center gap-2 mb-6 text-sm text-gray-500" aria-label="Breadcrumb">
-          <a routerLink="/">Inicio</a>
-          <span>›</span>
-          <a routerLink="/tienda">Tienda</a>
-          @if (product()?.categoryName) {
-            <span>›</span>
-            <a [routerLink]="['/tienda']" [queryParams]="{ categoria: product()!.categoryName }">
-              {{ product()!.categoryName }}
-            </a>
-          }
-          <span>›</span>
-          <span class="text-gray-900 font-medium truncate max-w-[200px]">{{
-            product()?.name ?? 'Producto'
-          }}</span>
+        <nav class="mb-6" hlmBreadcrumb aria-label="Breadcrumb">
+          <ol hlmBreadcrumbList>
+            <li hlmBreadcrumbItem>
+              <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
+            </li>
+            <li hlmBreadcrumbSeparator></li>
+            <li hlmBreadcrumbItem>
+              <a hlmBreadcrumbLink [link]="['/tienda']">Tienda</a>
+            </li>
+            @if (product()?.categoryName) {
+              <li hlmBreadcrumbSeparator></li>
+              <li hlmBreadcrumbItem>
+                <a
+                  hlmBreadcrumbLink
+                  [link]="['/tienda']"
+                  [queryParams]="{ categoria: product()!.categoryName }"
+                >
+                  {{ product()!.categoryName }}
+                </a>
+              </li>
+            }
+            <li hlmBreadcrumbSeparator></li>
+            <li hlmBreadcrumbItem>
+              <span hlmBreadcrumbPage class="truncate max-w-[200px] md:max-w-md">{{
+                product()?.name ?? 'Producto'
+              }}</span>
+            </li>
+          </ol>
         </nav>
       </div>
     </section>
@@ -54,85 +80,53 @@ import { ProductGalleryComponent } from './product-gallery.component';
             <div class="grid content-start gap-5">
               <div class="flex flex-wrap gap-2">
                 @if (product.categoryName) {
-                  <span
-                    class="inline-flex px-2.5 py-1 rounded-full bg-orange/10 text-orange text-xs font-extrabold uppercase tracking-wide"
-                  >
+                  <span hlmBadge>
                     {{ product.categoryName }}
                   </span>
                 }
                 <span
-                  class="inline-flex px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wide"
-                  [class.bg-green-100]="product.productType === 'physical'"
-                  [class.text-green-700]="product.productType === 'physical'"
-                  [class.bg-blue-50]="product.productType === 'link'"
-                  [class.text-blue-600]="product.productType === 'link'"
+                  hlmBadge
+                  [variant]="product.productType === 'physical' ? 'default' : 'outline'"
+                  class="uppercase"
                 >
                   {{ product.productType === 'physical' ? 'Producto físico' : 'Enlace externo' }}
                 </span>
               </div>
 
-              <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900">
+              <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
                 {{ product.name }}
               </h1>
 
-              <p class="text-2xl font-extrabold text-orange">
+              <p class="text-2xl font-extrabold text-primary">
                 {{ product.priceValue | currency: 'USD' : 'symbol' : '1.0-0' }}
               </p>
 
               @if (product.copy || product.description) {
-                <p class="text-gray-600 leading-relaxed">
+                <p class="text-muted-foreground leading-relaxed">
                   {{ product.description || product.copy }}
                 </p>
               }
 
-              <div class="mt-6" role="tablist" aria-label="Información del producto">
-                <div class="flex gap-6 border-b border-gray-200">
-                  <button
-                    type="button"
-                    role="tab"
-                    id="details-tab"
-                    aria-controls="details-panel"
-                    [attr.aria-selected]="activeTab() === 'details'"
-                    class="pb-2 text-sm font-extrabold transition-colors"
-                    [class.text-orange]="activeTab() === 'details'"
-                    [class.border-b-2]="activeTab() === 'details'"
-                    [class.border-orange]="activeTab() === 'details'"
-                    [class.text-gray-500]="activeTab() !== 'details'"
-                    (click)="activeTab.set('details')"
-                  >
-                    Detalle del producto
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    id="specifications-tab"
-                    aria-controls="specifications-panel"
-                    [attr.aria-selected]="activeTab() === 'specifications'"
-                    class="pb-2 text-sm font-extrabold transition-colors"
-                    [class.text-orange]="activeTab() === 'specifications'"
-                    [class.border-b-2]="activeTab() === 'specifications'"
-                    [class.border-orange]="activeTab() === 'specifications'"
-                    [class.text-gray-500]="activeTab() !== 'specifications'"
-                    (click)="activeTab.set('specifications')"
-                  >
-                    Especificaciones
-                  </button>
+              <div
+                class="mt-6"
+                hlmTabs="product-info"
+                [tab]="activeTab()"
+                (tabActivated)="activeTab.set($event)"
+                aria-label="Información del producto"
+              >
+                <div hlmTabsList variant="line" class="w-full justify-start">
+                  <button type="button" hlmTabsTrigger="details">Detalle del producto</button>
+                  <button type="button" hlmTabsTrigger="specifications">Especificaciones</button>
                 </div>
                 <div
-                  id="details-panel"
-                  role="tabpanel"
-                  aria-labelledby="details-tab"
-                  class="py-4 text-gray-600 leading-relaxed whitespace-pre-line"
-                  [class.hidden]="activeTab() !== 'details'"
+                  hlmTabsContent="details"
+                  class="py-4 text-muted-foreground leading-relaxed whitespace-pre-line"
                 >
                   {{ product.details || 'Sin detalle adicional.' }}
                 </div>
                 <div
-                  id="specifications-panel"
-                  role="tabpanel"
-                  aria-labelledby="specifications-tab"
-                  class="py-4 text-gray-600 leading-relaxed whitespace-pre-line"
-                  [class.hidden]="activeTab() !== 'specifications'"
+                  hlmTabsContent="specifications"
+                  class="py-4 text-muted-foreground leading-relaxed whitespace-pre-line"
                 >
                   {{ product.specifications || 'Sin especificaciones.' }}
                 </div>
@@ -140,9 +134,9 @@ import { ProductGalleryComponent } from './product-gallery.component';
 
               <div class="flex flex-wrap gap-3 pt-2">
                 @if (product.productType === 'physical') {
-                  <app-button
-                    variant="primary"
+                  <button
                     type="button"
+                    hlmBtn
                     size="lg"
                     [disabled]="addingIds().has(product.id)"
                     (click)="addToCart(product)"
@@ -152,10 +146,11 @@ import { ProductGalleryComponent } from './product-gallery.component';
                     } @else {
                       Agregar al carrito
                     }
-                  </app-button>
+                  </button>
                 } @else {
                   <a
-                    class="inline-flex items-center justify-center gap-2 rounded-xl font-bold transition-all duration-200 ease-smooth active:scale-95 bg-orange text-white hover:bg-orange-dark shadow-lg px-8 py-4 text-lg"
+                    hlmBtn
+                    size="lg"
                     [href]="product.affiliateUrl"
                     target="_blank"
                     rel="noreferrer"
@@ -163,20 +158,20 @@ import { ProductGalleryComponent } from './product-gallery.component';
                     Ver en tienda
                   </a>
                 }
-                <app-button variant="secondary" type="button" routerLink="/tienda">
+                <button type="button" hlmBtn variant="outline" routerLink="/tienda">
                   Seguir comprando
-                </app-button>
+                </button>
               </div>
 
               @if (product.shippingNote) {
-                <p class="text-sm text-gray-500">{{ product.shippingNote }}</p>
+                <p class="text-sm text-muted-foreground">{{ product.shippingNote }}</p>
               }
             </div>
           </div>
 
           @if (product.relatedProducts?.length) {
             <div class="mt-16">
-              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-orange mb-6">
+              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-primary mb-6">
                 Productos relacionados
               </h2>
               <app-carousel [items]="product.relatedProducts ?? []">
@@ -195,26 +190,15 @@ import { ProductGalleryComponent } from './product-gallery.component';
             </div>
           }
         } @else {
-          <div class="p-10 md:p-14 rounded-3xl bg-orange/5 border border-orange/10 text-center">
-            <svg
-              class="w-14 h-14 mx-auto text-orange mb-4"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
-              />
-            </svg>
-            <h2 class="text-xl md:text-2xl font-extrabold text-orange mb-2">
+          <div hlmCard class="text-center">
+            <ng-icon hlmIcon name="lucideAlertCircle" class="w-14 h-14 mx-auto text-primary mb-4" />
+            <h2 class="text-xl md:text-2xl font-extrabold text-primary mb-2">
               Producto no encontrado
             </h2>
-            <p class="text-gray-600 text-sm md:text-base mb-6 max-w-md mx-auto">
+            <p class="text-muted-foreground text-sm md:text-base mb-6 max-w-md mx-auto">
               El producto que buscas no existe o ya no está disponible.
             </p>
-            <app-button variant="primary" type="button" routerLink="/tienda">
-              Volver a la tienda
-            </app-button>
+            <button type="button" hlmBtn routerLink="/tienda">Volver a la tienda</button>
           </div>
         }
       </div>
@@ -227,7 +211,7 @@ export class ProductDetailComponent {
   private readonly route = inject(ActivatedRoute);
 
   protected readonly addingIds = signal<Set<string>>(new Set());
-  protected readonly activeTab = signal<'details' | 'specifications'>('details');
+  protected readonly activeTab = signal<string>('details');
 
   protected readonly product = toSignal(
     this.route.data.pipe(map((data) => data['product'] as ProductPick | null)),

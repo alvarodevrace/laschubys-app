@@ -1,6 +1,10 @@
 import { Component, computed, inject, resource, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
+import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
+
 import { SeoService } from '../../core/services/seo.service';
 import { ContentService } from '../../core/services/content.service';
 import { CommentsComponent } from './components/comments.component';
@@ -10,46 +14,68 @@ import { ScrollRevealDirective, ParallaxDirective } from '../../shared/animation
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-blog-detail',
   standalone: true,
-  imports: [RouterLink, CommentsComponent, ScrollRevealDirective, ParallaxDirective],
+  imports: [
+    RouterLink,
+    CommentsComponent,
+    ScrollRevealDirective,
+    ParallaxDirective,
+    HlmButtonImports,
+    HlmSkeletonImports,
+    HlmBreadcrumbImports,
+  ],
   template: `
     @if (postResource.value(); as post) {
       <article>
         <section class="py-10 pb-6" appScrollReveal>
           <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <nav class="flex items-center gap-2 mb-4 text-sm text-gray-500" aria-label="Breadcrumb">
-              <a routerLink="/">Inicio</a>
-              <span>›</span>
-              <a routerLink="/blog">Blog</a>
-              <span>›</span>
-              <span class="truncate max-w-[200px] md:max-w-md">{{ post.title }}</span>
+            <nav class="mb-4" hlmBreadcrumb>
+              <ol hlmBreadcrumbList>
+                <li hlmBreadcrumbItem>
+                  <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
+                </li>
+                <li hlmBreadcrumbSeparator></li>
+                <li hlmBreadcrumbItem>
+                  <a hlmBreadcrumbLink [link]="['/blog']">Blog</a>
+                </li>
+                <li hlmBreadcrumbSeparator></li>
+                <li hlmBreadcrumbItem>
+                  <span hlmBreadcrumbPage class="truncate max-w-[200px] md:max-w-md">{{
+                    post.title
+                  }}</span>
+                </li>
+              </ol>
             </nav>
 
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">
+            <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
               {{ post.category }}
             </p>
             <h1
-              class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-orange mb-4"
+              class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-primary mb-4"
               appScrollReveal
               [y]="20"
             >
               {{ post.title }}
             </h1>
-            <p class="text-gray-500 max-w-2xl text-lg leading-relaxed" appScrollReveal [y]="20">
+            <p
+              class="text-muted-foreground max-w-2xl text-lg leading-relaxed"
+              appScrollReveal
+              [y]="20"
+            >
               {{ post.excerpt }}
             </p>
 
-            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-6">
-              <span class="font-medium text-gray-700">{{ post.author }}</span>
-              <span class="text-gray-300">·</span>
+            <div class="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mt-6">
+              <span class="font-medium text-muted-foreground">{{ post.author }}</span>
+              <span class="text-muted-foreground">·</span>
               <span>{{ post.publishedAt }}</span>
-              <span class="text-gray-300">·</span>
+              <span class="text-muted-foreground">·</span>
               <span>{{ post.readTime }}</span>
             </div>
           </div>
         </section>
 
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-10" appScrollReveal [y]="60">
-          <div class="rounded-3xl overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.12)]">
+          <div class="rounded-3xl overflow-hidden shadow-xl">
             <img
               [src]="post.coverImage || '/images/cats/iris3.jpeg'"
               [alt]="post.title"
@@ -64,7 +90,7 @@ import { ScrollRevealDirective, ParallaxDirective } from '../../shared/animation
           <div class="prose prose-lg max-w-none">
             @for (paragraph of post.content; track $index) {
               <p
-                class="text-gray-700 leading-[1.8] text-base md:text-lg mb-6"
+                class="text-muted-foreground leading-[1.8] text-base md:text-lg mb-6"
                 appScrollReveal
                 [y]="30"
                 [delay]="0.05 * $index"
@@ -85,30 +111,27 @@ import { ScrollRevealDirective, ParallaxDirective } from '../../shared/animation
         </section>
       </article>
     } @else if (postResource.isLoading()) {
-      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div class="h-8 w-32 bg-gray-200 rounded animate-pulse mb-4"></div>
-        <div class="h-12 w-3/4 bg-gray-200 rounded animate-pulse mb-4"></div>
-        <div class="h-6 w-1/2 bg-gray-200 rounded animate-pulse mb-8"></div>
-        <div class="aspect-video bg-gray-200 rounded-3xl animate-pulse mb-10"></div>
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-4">
+        <hlm-skeleton class="h-8 w-32" />
+        <hlm-skeleton class="h-12 w-3/4" />
+        <hlm-skeleton class="h-6 w-1/2" />
+        <hlm-skeleton class="aspect-video rounded-3xl w-full" />
         <div class="max-w-3xl space-y-4">
           @for (s of [1, 2, 3, 4]; track s) {
-            <div class="h-4 w-full bg-gray-200 rounded animate-pulse"></div>
+            <hlm-skeleton class="h-4 w-full" />
           }
         </div>
       </section>
     } @else {
       <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">404</p>
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 mb-3">
+        <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">404</p>
+        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-3">
           Post no encontrado
         </h1>
-        <p class="text-gray-500 mb-6">No encontramos este artículo en la migración actual.</p>
-        <a
-          routerLink="/blog"
-          class="inline-flex items-center justify-center min-h-12 px-7 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-        >
-          Volver al blog
-        </a>
+        <p class="text-muted-foreground mb-6">
+          No encontramos este artículo en la migración actual.
+        </p>
+        <a hlmBtn routerLink="/blog">Volver al blog</a>
       </section>
     }
   `,

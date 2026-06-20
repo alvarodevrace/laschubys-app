@@ -1,58 +1,54 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { provideIcons } from '@ng-icons/core';
+import { lucideArrowLeft } from '@ng-icons/lucide';
+
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [
+    RouterLink,
+    RouterOutlet,
+    HlmButtonImports,
+    HlmIconImports,
+    HlmTabs,
+    HlmTabsList,
+    HlmTabsTrigger,
+  ],
+  providers: [provideIcons({ lucideArrowLeft })],
   template: `
-    <div class="min-h-screen bg-gray-50">
+    <div class="min-h-screen bg-surface">
       <!-- Header admin -->
-      <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header class="bg-white border-b border-border sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
-            <a routerLink="/" class="text-gray-400 hover:text-orange transition-colors">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="w-5 h-5"
-              >
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
+            <a routerLink="/" hlmBtn variant="ghost" size="icon-sm">
+              <ng-icon hlmIcon name="lucideArrowLeft" class="w-5 h-5" />
             </a>
-            <div class="w-px h-5 bg-gray-200"></div>
-            <span class="text-xs font-extrabold uppercase tracking-widest text-orange"
+            <div class="w-px h-5 bg-border"></div>
+            <span class="text-xs font-extrabold uppercase tracking-widest text-primary"
               >Panel admin</span
             >
-            <span class="text-gray-300">·</span>
-            <span class="text-sm font-semibold text-gray-700">Las Chubys</span>
+            <span class="text-muted-foreground">·</span>
+            <span class="text-sm font-semibold text-muted-foreground">Las Chubys</span>
           </div>
         </div>
+
         <!-- Tabs -->
         <div class="max-w-7xl mx-auto px-4">
-          <nav class="flex gap-1 -mb-px">
-            <a
-              routerLink="posts"
-              routerLinkActive="border-orange text-orange"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-800 transition-colors"
-            >
-              Blog posts
-            </a>
-            <a
-              routerLink="products"
-              routerLinkActive="border-orange text-orange"
-              [routerLinkActiveOptions]="{ exact: false }"
-              class="px-5 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-500 hover:text-gray-800 transition-colors"
-            >
-              Productos
-            </a>
-          </nav>
+          <div hlmTabs [tab]="activeTab()" class="w-full">
+            <div hlmTabsList variant="line" class="w-full justify-start">
+              <button hlmTabsTrigger="posts" (click)="navigate('/admin/posts')">Blog posts</button>
+              <button hlmTabsTrigger="products" (click)="navigate('/admin/products')">
+                Productos
+              </button>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -62,4 +58,15 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     </div>
   `,
 })
-export class AdminLayoutComponent {}
+export class AdminLayoutComponent {
+  private readonly router = inject(Router);
+  protected readonly activeTab = computed<'posts' | 'products'>(() => {
+    const url = this.router.url;
+    if (url.startsWith('/admin/products')) return 'products';
+    return 'posts';
+  });
+
+  protected navigate(path: string) {
+    void this.router.navigate([path]);
+  }
+}

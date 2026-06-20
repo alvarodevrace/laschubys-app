@@ -10,13 +10,20 @@ import {
   afterNextRender,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCat, lucideChevronLeft, lucideChevronRight, lucideUser } from '@ng-icons/lucide';
+
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmDialogImports } from '@spartan-ng/helm/dialog';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
 
 import { marqueeItems, personas } from '../../core/content/site-content';
 import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 import { CartService } from '../../core/services/cart.service';
 import { ProductPick } from '../../core/models/content.model';
-import { ButtonComponent } from '../../shared/ui/button/button.component';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 import { PhotoGalleryComponent } from '../../shared/ui/photo-gallery/photo-gallery.component';
 import { SectionShellComponent } from '../../shared/ui/section-shell/section-shell.component';
@@ -33,7 +40,6 @@ import {
   standalone: true,
   imports: [
     RouterLink,
-    ButtonComponent,
     CarouselComponent,
     PhotoGalleryComponent,
     SectionShellComponent,
@@ -41,11 +47,17 @@ import {
     ScrollRevealDirective,
     StaggerChildrenDirective,
     TiltCardDirective,
+    HlmButtonImports,
+    HlmIconImports,
+    HlmBadgeImports,
+    HlmCardImports,
+    HlmDialogImports,
   ],
+  providers: [provideIcons({ lucideCat, lucideChevronLeft, lucideChevronRight, lucideUser })],
   template: `
     <section
       #sliderSection
-      class="group relative overflow-hidden bg-[#fff4e8]"
+      class="group relative overflow-hidden bg-surface"
       (mouseenter)="pauseAutoPlay()"
       (mouseleave)="resumeAutoPlay()"
     >
@@ -68,31 +80,36 @@ import {
       ></div>
 
       <button
+        hlmBtn
+        variant="outline"
+        size="icon-lg"
         type="button"
-        class="hidden md:grid opacity-0 group-hover:opacity-100 absolute left-3 top-1/2 -translate-y-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+        class="hidden md:grid opacity-0 group-hover:opacity-100 absolute left-3 top-1/2 -translate-y-1/2"
         (click)="prevSlide()"
         aria-label="Banner anterior"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
+        <ng-icon hlmIcon name="lucideChevronLeft" class="w-6 h-6" />
       </button>
       <button
+        hlmBtn
+        variant="outline"
+        size="icon-lg"
         type="button"
-        class="hidden md:grid opacity-0 group-hover:opacity-100 absolute right-3 top-1/2 -translate-y-1/2 w-12 h-12 place-items-center rounded-full bg-white/90 text-orange shadow-lg hover:bg-white hover:scale-105 transition-all duration-300"
+        class="hidden md:grid opacity-0 group-hover:opacity-100 absolute right-3 top-1/2 -translate-y-1/2"
         (click)="nextSlide()"
         aria-label="Banner siguiente"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
+        <ng-icon hlmIcon name="lucideChevronRight" class="w-6 h-6" />
       </button>
 
       <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
         @for (photo of bannerPhotos; track photo.src + $index) {
           <button
+            hlmBtn
+            variant="ghost"
+            size="icon"
             type="button"
-            class="grid place-items-center w-10 h-10 rounded-full transition-transform duration-200 hover:scale-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange"
+            class="grid place-items-center"
             (click)="goToSlide($index)"
             [attr.aria-label]="'Ver banner ' + ($index + 1)"
             [attr.aria-current]="currentSlide() === $index ? 'true' : null"
@@ -103,8 +120,8 @@ import {
               [class.h-3]="currentSlide() === $index"
               [class.w-2]="currentSlide() !== $index"
               [class.h-2]="currentSlide() !== $index"
-              [class.bg-orange]="currentSlide() === $index"
-              [class.bg-white/80]="currentSlide() !== $index"
+              [class.bg-primary]="currentSlide() === $index"
+              [class.bg-background/80]="currentSlide() !== $index"
               [class.ring-2]="currentSlide() === $index"
               [class.ring-white]="currentSlide() === $index"
               [class.motion-safe:animate-pulse]="currentSlide() === $index"
@@ -114,11 +131,11 @@ import {
       </div>
     </section>
 
-    <section class="py-2.5 overflow-hidden bg-[#fff4e8]">
+    <section class="py-2.5 overflow-hidden bg-surface">
       <app-marquee [speed]="'25s'" [pauseOnHover]="true" [fadeEdges]="true">
         @for (item of promoLoop; track item + $index) {
           <span
-            class="text-xs font-bold text-gray-500 uppercase tracking-wide whitespace-nowrap px-5"
+            class="text-xs font-bold text-muted-foreground uppercase tracking-wide whitespace-nowrap px-5"
             >{{ item }}</span
           >
         }
@@ -131,19 +148,17 @@ import {
           <a
             routerLink="/tienda"
             [queryParams]="{ audience: 'michis' }"
-            class="group flex items-center justify-center gap-3 min-h-[80px] md:min-h-[96px] px-8 rounded-full border-2 border-orange/30 bg-white text-orange shadow-sm hover:bg-orange hover:text-white hover:border-orange hover:shadow-[0_16px_40px_rgba(255,122,26,0.22)] hover:-translate-y-1 transition-all duration-300"
+            hlmBtn
+            variant="outline"
+            size="lg"
+            class="group flex items-center justify-center gap-3"
             appScrollReveal
           >
-            <svg
+            <ng-icon
+              hlmIcon
+              name="lucideCat"
               class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2.5-9c.83 0 1.5-.67 1.5-1.5S10.33 8 9.5 8 8 8.67 8 9.5 8.67 11 9.5 11zm5 0c.83 0 1.5-.67 1.5-1.5S15.33 8 14.5 8 13 8.67 13 9.5s.67 1.5 1.5 1.5zm-7.5 3c.94 2.34 3.27 4 6 4s5.06-1.66 6-4H7z"
-              />
-            </svg>
+            />
             <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
               >PARA MICHIS</span
             >
@@ -151,20 +166,18 @@ import {
           <a
             routerLink="/tienda"
             [queryParams]="{ audience: 'michi-lovers' }"
-            class="group flex items-center justify-center gap-3 min-h-[80px] md:min-h-[96px] px-8 rounded-full border-2 border-orange/30 bg-white text-orange shadow-sm hover:bg-orange hover:text-white hover:border-orange hover:shadow-[0_16px_40px_rgba(255,122,26,0.22)] hover:-translate-y-1 transition-all duration-300"
+            hlmBtn
+            variant="outline"
+            size="lg"
+            class="group flex items-center justify-center gap-3"
             appScrollReveal
             [delay]="0.1"
           >
-            <svg
+            <ng-icon
+              hlmIcon
+              name="lucideUser"
               class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
-              />
-            </svg>
+            />
             <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
               >PARA MICHILOVERS</span
             >
@@ -176,16 +189,12 @@ import {
     <app-section-shell variant="warm">
       <div class="flex items-end justify-between gap-4 mb-6">
         <div>
-          <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Tienda</p>
-          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">Tienda</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
             Nuestros productos
           </h2>
         </div>
-        <a
-          class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
-          routerLink="/tienda"
-          >Ver todo →</a
-        >
+        <a hlmBtn variant="link" routerLink="/tienda">Ver todo →</a>
       </div>
 
       @defer (on viewport) {
@@ -196,18 +205,11 @@ import {
               appScrollReveal
               [delay]="0.05"
             >
-              <article
-                class="relative h-full rounded-2xl bg-white border border-gray-200 overflow-hidden transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
-                appTiltCard
-                [max]="8"
-                [scale]="1.02"
-              >
-                <div
-                  class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-orange text-white text-xs font-extrabold uppercase tracking-wide z-10"
-                >
+              <article hlmCard class="relative h-full !p-0" appTiltCard [max]="8" [scale]="1.02">
+                <span hlmBadge class="absolute top-3 left-3 z-10">
                   {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
-                </div>
-                <div class="relative aspect-square overflow-hidden bg-gray-100">
+                </span>
+                <div class="relative aspect-square overflow-hidden bg-muted">
                   <img
                     [src]="product.images[0] || '/images/cats/iris4.jpeg'"
                     [alt]="product.name"
@@ -216,24 +218,16 @@ import {
                   />
                 </div>
                 <div class="p-3.5 pb-2">
-                  <p class="text-sm font-bold leading-snug text-gray-900 mb-1">
+                  <p class="text-sm font-bold leading-snug text-foreground mb-1">
                     {{ product.name }}
                   </p>
-                  <p class="text-sm font-extrabold text-orange">{{ product.price }}</p>
+                  <p class="text-sm font-extrabold text-primary">{{ product.price }}</p>
                 </div>
                 <div class="flex gap-2 px-3.5 pb-3.5">
-                  <app-button
-                    variant="secondary"
-                    size="md"
-                    type="button"
-                    (click)="openPreview(product)"
-                  >
+                  <button hlmBtn variant="outline" type="button" (click)="openPreview(product)">
                     Ver
-                  </app-button>
-                  <a
-                    class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border border-transparent bg-orange text-white cursor-pointer transition-all duration-200 hover:bg-orange-dark hover:-translate-y-px hover:shadow-[0_8px_20px_rgba(255,122,26,0.3)]"
-                    [routerLink]="['/tienda']"
-                    [queryParams]="{ product: product.id }"
+                  </button>
+                  <a hlmBtn [routerLink]="['/tienda']" [queryParams]="{ product: product.id }"
                     >Comprar</a
                   >
                 </div>
@@ -257,16 +251,12 @@ import {
     <app-section-shell variant="warm">
       <div class="flex items-end justify-between gap-4 mb-6">
         <div>
-          <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">Blog</p>
-          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">Blog</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
             Historias y consejos
           </h2>
         </div>
-        <a
-          class="text-orange font-bold text-sm hover:text-orange-dark transition-colors duration-200"
-          routerLink="/blog"
-          >Ver más →</a
-        >
+        <a hlmBtn variant="link" routerLink="/blog">Ver más →</a>
       </div>
 
       @defer (on viewport) {
@@ -278,13 +268,14 @@ import {
               [delay]="0.05"
             >
               <a
-                class="group grid gap-2 h-full rounded-2xl overflow-hidden bg-white border border-gray-200 transition-shadow duration-200 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                hlmCard
+                class="group h-full !gap-2 !p-0"
                 [routerLink]="['/blog', post.slug]"
                 appTiltCard
                 [max]="8"
                 [scale]="1.02"
               >
-                <div class="aspect-video overflow-hidden bg-gray-100">
+                <div class="aspect-video overflow-hidden bg-muted">
                   <img
                     [src]="post.coverImage || '/images/cats/iris2.jpeg'"
                     [alt]="post.title"
@@ -292,13 +283,17 @@ import {
                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                 </div>
-                <p class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-orange">
+                <p
+                  class="mx-3.5 mt-2.5 text-xs font-extrabold uppercase tracking-wide text-primary"
+                >
                   {{ post.category }}
                 </p>
-                <h3 class="mx-3.5 text-base font-bold leading-snug text-gray-900">
+                <h3 class="mx-3.5 text-base font-bold leading-snug text-foreground">
                   {{ post.title }}
                 </h3>
-                <p class="text-sm text-gray-600 line-clamp-3 mx-3.5 mb-3.5">{{ post.excerpt }}</p>
+                <p class="text-sm text-muted-foreground line-clamp-3 mx-3.5 mb-3.5">
+                  {{ post.excerpt }}
+                </p>
               </a>
             </div>
           </ng-template>
@@ -309,41 +304,24 @@ import {
     </app-section-shell>
 
     @if (selectedProduct(); as product) {
-      <div
-        class="fixed inset-0 grid place-items-center p-4 z-[5000] bg-black/50"
-        role="button"
-        tabindex="0"
-        aria-label="Cerrar vista previa"
-        (click)="closePreview()"
-        (keydown.escape)="closePreview()"
-      >
-        <article
-          class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-[32px] bg-white"
-          role="presentation"
-          tabindex="-1"
-          (click)="$event.stopPropagation()"
-          (keydown)="$event.stopPropagation()"
-        >
-          <img [src]="product.images[0] || '/images/cats/iris4.jpeg'" [alt]="product.name" />
-          <div class="grid content-start gap-3">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-1">
-              {{ product.tag }}
-            </p>
-            <h2>{{ product.name }}</h2>
-            <p>{{ product.description || product.copy }}</p>
-            <div class="flex gap-3 flex-wrap">
-              <app-button type="button" size="md" (click)="addToCart(product)">
-                Agregar
-              </app-button>
-              <a
-                class="inline-flex items-center justify-center min-h-12 px-6 rounded-full font-extrabold text-sm tracking-wide border cursor-pointer transition-all duration-200 bg-orange/[0.08] border-orange/[0.16] text-[#e06300] hover:bg-orange/[0.14] hover:border-orange/[0.28]"
-                routerLink="/tienda"
-                >Ver catálogo</a
-              >
+      <hlm-dialog [state]="'open'" (stateChanged)="onPreviewStateChange($event)">
+        <hlm-dialog-content *hlmDialogPortal class="sm:max-w-4xl p-0 overflow-hidden">
+          <article class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white">
+            <img [src]="product.images[0] || '/images/cats/iris4.jpeg'" [alt]="product.name" />
+            <div class="grid content-start gap-3">
+              <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
+                {{ product.tag }}
+              </p>
+              <h2>{{ product.name }}</h2>
+              <p>{{ product.description || product.copy }}</p>
+              <div class="flex gap-3 flex-wrap">
+                <button hlmBtn type="button" (click)="addToCart(product)">Agregar</button>
+                <a hlmBtn variant="outline" routerLink="/tienda">Ver catálogo</a>
+              </div>
             </div>
-          </div>
-        </article>
-      </div>
+          </article>
+        </hlm-dialog-content>
+      </hlm-dialog>
     }
   `,
 })
@@ -509,5 +487,11 @@ export class HomeComponent {
 
   protected closePreview() {
     this.selectedProduct.set(null);
+  }
+
+  protected onPreviewStateChange(state: 'open' | 'closed') {
+    if (state === 'closed') {
+      this.closePreview();
+    }
   }
 }

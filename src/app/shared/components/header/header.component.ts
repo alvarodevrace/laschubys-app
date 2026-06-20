@@ -3,17 +3,40 @@ import {
   afterNextRender,
   Component,
   computed,
+  ChangeDetectionStrategy,
   DestroyRef,
-  effect,
   inject,
   PLATFORM_ID,
   signal,
-  ChangeDetectionStrategy,
 } from '@angular/core';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { filter } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LucideAngularModule } from 'lucide-angular';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideBookOpen,
+  lucideCat,
+  lucideChevronDown,
+  lucideHeart,
+  lucideLayoutGrid,
+  lucideLogOut,
+  lucideMail,
+  lucideMenu,
+  lucideSearch,
+  lucideShoppingCart,
+  lucideSparkles,
+  lucideStore,
+  lucideUserRound,
+  lucideUsers,
+  lucideX,
+} from '@ng-icons/lucide';
+
+import { HlmAccordionImports } from '@spartan-ng/helm/accordion';
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmDropdownMenuImports } from '@spartan-ng/helm/dropdown-menu';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
+import { HlmNavigationMenuImports } from '@spartan-ng/helm/navigation-menu';
+import { HlmSheetImports } from '@spartan-ng/helm/sheet';
 
 import { AuthService } from '../../../core/auth/auth.service';
 import { socialChannels } from '../../../core/content/site-content';
@@ -24,6 +47,8 @@ interface NavChild {
   href: string;
   icon: string;
   testId: string;
+  queryParams?: Record<string, string>;
+  fragment?: string;
 }
 
 interface NavItem {
@@ -39,432 +64,361 @@ interface NavItem {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    HlmNavigationMenuImports,
+    HlmButtonImports,
+    HlmIconImports,
+    HlmInputGroupImports,
+    HlmBadgeImports,
+    HlmSheetImports,
+    HlmDropdownMenuImports,
+    HlmAccordionImports,
+  ],
+  providers: [
+    provideIcons({
+      lucideBookOpen,
+      lucideCat,
+      lucideChevronDown,
+      lucideHeart,
+      lucideLayoutGrid,
+      lucideLogOut,
+      lucideMail,
+      lucideMenu,
+      lucideSearch,
+      lucideShoppingCart,
+      lucideSparkles,
+      lucideStore,
+      lucideUserRound,
+      lucideUsers,
+      lucideX,
+    }),
+  ],
   template: `
-    <!-- Header pill flotante estilo Exodus -->
     <header
-      class="fixed top-3 left-1/2 -translate-x-1/2 z-[1000] w-[calc(100%-1.5rem)] max-w-5xl"
+      class="fixed top-3 left-0 right-0 mx-auto z-50 w-[calc(100%-1.5rem)] max-w-6xl"
       [class.animate-in]="isVisible()"
       data-testid="header-pill"
     >
       <div
-        class="rounded-full bg-white/45 backdrop-blur-xl border border-white/60 shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_10px_40px_-12px_rgba(20,19,19,0.18)] px-2 sm:px-3 py-1.5 flex items-center gap-2 sm:gap-3"
+        class="rounded-full border px-3 py-1 shadow-lg transition-colors duration-300 backdrop-blur-xl"
+        [class.bg-background/80]="!isScrolled()"
+        [class.bg-background]="isScrolled()"
       >
-        <!-- Izquierda: hamburger + logo -->
-        <div class="flex items-center gap-1 sm:gap-2 flex-1">
-          <button
-            class="lg:hidden w-9 h-9 inline-flex items-center justify-center rounded-full text-gray-700 hover:text-orange hover:bg-orange-50 transition-colors"
-            type="button"
-            (click)="toggleMobileMenu()"
-            aria-label="Abrir menú"
-            [attr.aria-expanded]="isMenuOpen()"
-            data-testid="header-menu-toggle"
-          >
-            <lucide-icon name="menu" class="w-[18px] h-[18px]" />
-          </button>
-
-          <a
-            routerLink="/"
-            aria-label="Inicio Las Chubys"
-            class="flex items-center gap-2 px-1.5 py-1 rounded-full hover:bg-white/40 transition-colors"
-          >
+        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+          <!-- Logo -->
+          <a routerLink="/" class="flex items-center justify-start ml-15 mt-3">
             <img
-              src="/brand/logoTitulo.png?v=4"
+              src="/brand/logoLasChubys.png?v=1"
               alt="Las Chubys"
-              class="h-8 sm:h-9 w-auto"
+              width="120"
+              height="80"
               loading="eager"
+              class="h-20 w-auto scale-[1.9] origin-center drop-shadow-sm"
             />
           </a>
-        </div>
 
-        <!-- Centro: navegación desktop -->
-        <nav
-          class="hidden lg:flex items-center justify-center gap-0.5 flex-shrink-0"
-          aria-label="Categorías"
-        >
-          @for (item of navItems; track item.testId) {
-            @if (item.children) {
-              <div class="relative group">
-                <button
-                  class="inline-flex items-center gap-1 px-3.5 py-2 text-sm font-semibold text-gray-700 rounded-full hover:bg-white/50 hover:text-orange transition-colors"
-                  type="button"
-                  [attr.aria-expanded]="isOpen(item.testId)"
-                  (mouseenter)="openDropdown(item.testId)"
-                  (mouseleave)="scheduleClose(item.testId)"
-                  (click)="toggleDropdown(item.testId)"
-                  [attr.data-testid]="item.testId"
-                >
-                  @if (item.icon) {
-                    <lucide-icon [name]="item.icon" class="w-4 h-4" />
+          <!-- Desktop nav -->
+          <nav hlmNavigationMenu class="hidden lg:flex justify-center">
+            <ul hlmNavigationMenuList>
+              @for (item of navItems; track item.testId) {
+                <li hlmNavigationMenuItem>
+                  @if (item.children) {
+                    <button hlmNavigationMenuTrigger [attr.data-testid]="item.testId">
+                      @if (item.icon) {
+                        <ng-icon [name]="iconName(item.icon)" hlmIcon />
+                      }
+                      <span>{{ item.label }}</span>
+                    </button>
+
+                    <ng-template hlmNavigationMenuPortal>
+                      <hlm-navigation-menu-content>
+                        <div class="grid gap-4 p-2" [class.grid-cols-[1fr_140px]]="item.featured">
+                          <ul class="flex flex-col gap-1 min-w-[200px]">
+                            @for (child of item.children; track child.testId) {
+                              <li>
+                                <a
+                                  hlmNavigationMenuLink
+                                  [routerLink]="[child.href]"
+                                  [queryParams]="child.queryParams ?? null"
+                                  [fragment]="child.fragment"
+                                  [attr.data-testid]="child.testId"
+                                >
+                                  <ng-icon [name]="iconName(child.icon)" hlmIcon />
+                                  <span>{{ child.label }}</span>
+                                </a>
+                              </li>
+                            }
+                          </ul>
+
+                          @if (item.featured) {
+                            <a
+                              [routerLink]="item.featured.href"
+                              class="relative overflow-hidden rounded-lg group/feat"
+                            >
+                              <img
+                                [src]="item.featured.image"
+                                [alt]="item.featured.title"
+                                class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/feat:scale-105"
+                                loading="lazy"
+                              />
+                              <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
+                              ></div>
+                              <span
+                                class="absolute bottom-2 left-2 right-2 text-xs font-bold text-white leading-tight"
+                              >
+                                {{ item.featured.title }}
+                              </span>
+                            </a>
+                          }
+                        </div>
+                      </hlm-navigation-menu-content>
+                    </ng-template>
+                  } @else {
+                    <a
+                      hlmNavigationMenuLink
+                      [routerLink]="item.href"
+                      routerLinkActive
+                      #rla="routerLinkActive"
+                      [active]="rla.isActive"
+                      [attr.data-testid]="item.testId"
+                    >
+                      @if (item.icon) {
+                        <ng-icon [name]="iconName(item.icon)" hlmIcon />
+                      }
+                      <span>{{ item.label }}</span>
+                    </a>
                   }
-                  <span>{{ item.label }}</span>
-                  <lucide-icon name="chevron-down" class="w-3.5 h-3.5 opacity-70" />
+                </li>
+              }
+            </ul>
+          </nav>
+
+          <!-- Right actions: account, cart -->
+          <div class="flex items-center justify-end gap-1">
+            <div class="hidden sm:block">
+              @if (user(); as currentUser) {
+                <button
+                  hlmBtn
+                  variant="ghost"
+                  size="sm"
+                  type="button"
+                  [hlmDropdownMenuTrigger]="userMenuTpl"
+                >
+                  <ng-icon hlmIcon name="lucideUserRound" />
+                  <span class="max-w-[80px] truncate hidden lg:inline">
+                    {{ firstName() }}
+                  </span>
+                  <ng-icon hlmIcon name="lucideChevronDown" />
                 </button>
 
-                <div
-                  class="absolute top-full left-1/2 -translate-x-1/2 pt-2 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-200 ease-out"
-                  (mouseenter)="openDropdown(item.testId)"
-                  (mouseleave)="scheduleClose(item.testId)"
+                <ng-template #userMenuTpl>
+                  <hlm-dropdown-menu class="w-52">
+                    <div hlmDropdownMenuLabel>{{ currentUser.name }}</div>
+                    @if (currentUser.role === 'admin') {
+                      <a hlmDropdownMenuItem routerLink="/admin">
+                        <ng-icon hlmIcon name="lucideLayoutGrid" />
+                        <span>Panel admin</span>
+                      </a>
+                    }
+                    <button hlmDropdownMenuItem (click)="logout()">
+                      <ng-icon hlmIcon name="lucideLogOut" />
+                      <span>Cerrar sesión</span>
+                    </button>
+                  </hlm-dropdown-menu>
+                </ng-template>
+              } @else {
+                <a
+                  hlmBtn
+                  variant="ghost"
+                  size="icon"
+                  routerLink="/auth/login"
+                  aria-label="Mi cuenta"
                 >
-                  <div
-                    class="rounded-3xl bg-white/90 backdrop-blur-xl border border-white/70 shadow-[0_20px_50px_-15px_rgba(20,19,19,0.2)] p-4 min-w-[280px]"
-                    [class.w-[420px]]="item.featured"
-                  >
-                    <div
-                      [class.grid]="item.featured"
-                      [class.grid-cols-[1fr,140px]]="item.featured"
-                      class="gap-4"
-                    >
-                      <div class="flex flex-col gap-1">
+                  <ng-icon hlmIcon name="lucideUserRound" />
+                </a>
+              }
+            </div>
+
+            <button
+              hlmBtn
+              variant="ghost"
+              class="relative"
+              type="button"
+              (click)="openCart()"
+              aria-label="Carrito de compras"
+            >
+              <ng-icon hlmIcon name="lucideShoppingCart" />
+              <span class="hidden sm:inline">Carrito</span>
+              @if (count() > 0) {
+                <span
+                  hlmBadge
+                  class="absolute -top-1 -right-1 size-5 p-0 flex items-center justify-center"
+                >
+                  {{ count() }}
+                </span>
+              }
+            </button>
+
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon"
+              class="lg:hidden"
+              type="button"
+              (click)="openMobileMenu()"
+              aria-label="Abrir menú"
+              [attr.aria-expanded]="isMenuOpen()"
+              data-testid="header-menu-toggle"
+            >
+              <ng-icon hlmIcon name="lucideMenu" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Menú móvil drawer -->
+    <hlm-sheet [state]="isMenuOpen() ? 'open' : 'closed'" (closed)="closeMobileMenu()" side="left">
+      <ng-template hlmSheetPortal>
+        <hlm-sheet-content side="left" class="w-full max-w-sm p-0">
+          <div class="flex items-center justify-between p-4 border-b">
+            <a routerLink="/" (click)="closeMobileMenu()">
+              <img
+                src="/brand/logoLasChubys.png?v=1"
+                alt="Las Chubys"
+                width="100"
+                height="67"
+                class="h-16 w-auto scale-[1.6] origin-center drop-shadow-sm"
+              />
+            </a>
+            <button
+              hlmBtn
+              variant="ghost"
+              size="icon"
+              type="button"
+              hlmSheetClose
+              aria-label="Cerrar menú"
+              data-testid="mobile-menu-close"
+            >
+              <ng-icon hlmIcon name="lucideX" />
+            </button>
+          </div>
+
+          <nav class="flex flex-col p-2 overflow-y-auto">
+            <hlm-accordion type="single">
+              @for (item of navItems; track item.testId) {
+                @if (item.children) {
+                  <hlm-accordion-item>
+                    <hlm-accordion-trigger>
+                      <span class="flex items-center gap-3">
+                        @if (item.icon) {
+                          <ng-icon [name]="iconName(item.icon)" hlmIcon />
+                        }
+                        <span>{{ item.label }}</span>
+                      </span>
+                    </hlm-accordion-trigger>
+                    <hlm-accordion-content>
+                      <div class="flex flex-col gap-1 pl-8">
                         @for (child of item.children; track child.testId) {
                           <a
-                            [routerLink]="child.href"
-                            class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-700 hover:bg-orange-50 hover:text-orange transition-colors"
+                            hlmBtn
+                            variant="ghost"
+                            class="justify-start"
+                            [routerLink]="[child.href]"
+                            [queryParams]="child.queryParams ?? null"
+                            [fragment]="child.fragment"
+                            (click)="closeMobileMenu()"
                             [attr.data-testid]="child.testId"
                           >
-                            <lucide-icon [name]="child.icon" class="w-4 h-4 flex-shrink-0" />
+                            <ng-icon [name]="iconName(child.icon)" hlmIcon />
                             <span>{{ child.label }}</span>
                           </a>
                         }
                       </div>
-
-                      @if (item.featured) {
-                        <a
-                          [routerLink]="item.featured.href"
-                          class="relative overflow-hidden rounded-2xl group/feat"
-                        >
-                          <img
-                            [src]="item.featured.image"
-                            [alt]="item.featured.title"
-                            class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/feat:scale-105"
-                            loading="lazy"
-                          />
-                          <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
-                          ></div>
-                          <span
-                            class="absolute bottom-2 left-2 right-2 text-xs font-bold text-white leading-tight"
-                          >
-                            {{ item.featured.title }}
-                          </span>
-                        </a>
-                      }
-                    </div>
-                  </div>
-                </div>
-              </div>
-            } @else {
-              <a
-                [routerLink]="item.href"
-                routerLinkActive="is-active"
-                class="inline-flex items-center gap-1 px-3.5 py-2 text-sm font-semibold text-gray-700 rounded-full hover:bg-white/50 hover:text-orange transition-colors"
-                [attr.data-testid]="item.testId"
-              >
-                @if (item.icon) {
-                  <lucide-icon [name]="item.icon" class="w-4 h-4" />
-                }
-                <span>{{ item.label }}</span>
-              </a>
-            }
-          }
-        </nav>
-
-        <!-- Derecha: búsqueda, usuario, carrito -->
-        <div class="flex items-center justify-end gap-0.5 sm:gap-1 flex-1">
-          <!-- Buscador desktop -->
-          <form
-            class="hidden md:flex items-center relative"
-            role="search"
-            (submit)="submitSearch(); $event.preventDefault()"
-            data-testid="header-search-form"
-          >
-            <input
-              #searchInputHeader
-              type="search"
-              name="q"
-              placeholder="Buscar..."
-              autocomplete="off"
-              aria-label="Buscar productos"
-              [value]="searchQuery()"
-              (input)="searchQuery.set(searchInputHeader.value)"
-              (focus)="isSearchExpanded.set(true)"
-              (blur)="isSearchExpanded.set(false)"
-              class="w-28 focus:w-44 lg:focus:w-56 h-9 pl-9 pr-3 rounded-full bg-white/50 border border-white/60 text-sm placeholder:text-gray-400 outline-none transition-all duration-200 focus:bg-white/80 focus:border-orange/30"
-              data-testid="header-search-input"
-            />
-            <lucide-icon
-              name="search"
-              class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none"
-            />
-            <button
-              type="submit"
-              aria-label="Buscar"
-              class="absolute right-1 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-orange text-white inline-flex items-center justify-center opacity-0 focus:opacity-100 hover:opacity-100 transition-opacity"
-            >
-              <lucide-icon name="search" class="w-3.5 h-3.5" />
-            </button>
-          </form>
-
-          <!-- Búsqueda móvil -->
-          <button
-            class="md:hidden w-9 h-9 inline-flex items-center justify-center rounded-full text-gray-700 hover:text-orange hover:bg-orange-50 transition-colors"
-            type="button"
-            (click)="toggleMobileSearch()"
-            aria-label="Buscar"
-          >
-            <lucide-icon name="search" class="w-[18px] h-[18px]" />
-          </button>
-
-          <!-- Usuario -->
-          <div class="relative hidden sm:block">
-            @if (user(); as currentUser) {
-              <button
-                class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm font-semibold text-gray-700 hover:bg-white/50 hover:text-orange transition-colors"
-                type="button"
-                (click)="toggleUserMenu()"
-                [attr.aria-expanded]="isUserMenuOpen()"
-              >
-                <lucide-icon name="user-round" class="w-4 h-4" />
-                <span class="max-w-[80px] truncate hidden lg:inline">{{ firstName() }}</span>
-              </button>
-            } @else {
-              <a
-                class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm font-semibold text-gray-700 hover:bg-white/50 hover:text-orange transition-colors"
-                routerLink="/auth/login"
-              >
-                <lucide-icon name="user-round" class="w-4 h-4" />
-                <span class="hidden lg:inline">Mi Cuenta</span>
-              </a>
-            }
-
-            <!-- Menú usuario -->
-            @if (isUserMenuOpen()) {
-              <div
-                class="absolute top-full right-0 mt-2 w-52 rounded-2xl bg-white/95 backdrop-blur-xl border border-white/70 shadow-[0_20px_50px_-15px_rgba(20,19,19,0.2)] p-2 origin-top-right"
-              >
-                @if (user(); as currentUser) {
-                  <div class="px-3 py-2 text-sm font-bold text-gray-900 truncate">
-                    {{ currentUser.name }}
-                  </div>
-                  @if (currentUser.role === 'admin') {
-                    <a
-                      routerLink="/admin"
-                      (click)="isUserMenuOpen.set(false)"
-                      class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-orange-50 hover:text-orange transition-colors"
-                    >
-                      <lucide-icon name="layout-grid" class="w-4 h-4" />
-                      <span>Panel admin</span>
-                    </a>
-                  }
-                  <button
-                    type="button"
-                    (click)="logout()"
-                    class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold text-gray-700 hover:bg-orange-50 hover:text-orange transition-colors text-left"
+                    </hlm-accordion-content>
+                  </hlm-accordion-item>
+                } @else {
+                  <a
+                    hlmBtn
+                    variant="ghost"
+                    class="justify-start"
+                    [routerLink]="item.href"
+                    (click)="closeMobileMenu()"
+                    [attr.data-testid]="item.testId"
                   >
-                    <lucide-icon name="log-out" class="w-4 h-4" />
-                    <span>Cerrar sesión</span>
-                  </button>
-                }
-              </div>
-            }
-          </div>
-
-          <!-- Carrito -->
-          <button
-            class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-sm font-semibold text-gray-700 hover:bg-white/50 hover:text-orange transition-colors relative"
-            type="button"
-            (click)="openCart()"
-            aria-label="Carrito de compras"
-          >
-            <lucide-icon name="shopping-cart" class="w-[18px] h-[18px]" />
-            <span class="hidden sm:inline">Carrito</span>
-            @if (count() > 0) {
-              <span
-                class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-orange text-white text-[10px] font-extrabold"
-              >
-                {{ count() }}
-              </span>
-            }
-          </button>
-        </div>
-      </div>
-
-      <!-- Buscador móvil expandido -->
-      @if (isMobileSearchOpen()) {
-        <div
-          class="mt-2 rounded-2xl bg-white/80 backdrop-blur-xl border border-white/60 shadow-lg p-2 lg:hidden"
-        >
-          <form
-            class="flex items-center gap-2"
-            role="search"
-            (submit)="submitSearch(); $event.preventDefault()"
-          >
-            <lucide-icon name="search" class="w-5 h-5 text-gray-500 ml-2" />
-            <input
-              #searchInputMobile
-              type="search"
-              name="q"
-              placeholder="Buscar productos para los michis..."
-              autocomplete="off"
-              aria-label="Buscar productos"
-              [value]="searchQuery()"
-              (input)="searchQuery.set(searchInputMobile.value)"
-              class="flex-1 h-10 bg-transparent border-0 outline-none text-sm placeholder:text-gray-400"
-            />
-            <button
-              type="submit"
-              class="px-4 h-10 rounded-full bg-orange text-white text-sm font-semibold"
-            >
-              Buscar
-            </button>
-          </form>
-        </div>
-      }
-    </header>
-
-    <!-- Menú móvil drawer -->
-    <div
-      class="fixed inset-0 z-[3000] lg:hidden transition-[opacity,visibility] duration-200"
-      [class.pointer-events-none]="!isMenuOpen()"
-      [class.opacity-0]="!isMenuOpen()"
-      [class.invisible]="!isMenuOpen()"
-      [attr.aria-hidden]="!isMenuOpen()"
-    >
-      <button
-        class="absolute inset-0 border-0 bg-[rgba(14,11,10,0.52)]"
-        type="button"
-        (click)="closeMobileMenu()"
-        aria-label="Cerrar menú"
-        data-testid="mobile-menu-backdrop"
-      ></button>
-      <div
-        class="absolute top-0 left-0 bottom-0 w-full max-w-sm bg-white flex flex-col transition-transform duration-200 ease-out"
-        [class.-translate-x-full]="!isMenuOpen()"
-        [class.translate-x-0]="isMenuOpen()"
-      >
-        <div class="flex items-center justify-between p-4 border-b border-gray-100">
-          <a class="block" routerLink="/" (click)="closeMobileMenu()">
-            <img
-              src="/brand/logoTitulo.png?v=4"
-              alt="Las Chubys"
-              width="60"
-              height="40"
-              class="h-10 w-auto"
-            />
-          </a>
-          <button
-            class="min-w-11 min-h-11 inline-flex items-center justify-center text-gray-500 hover:text-orange transition-colors"
-            type="button"
-            (click)="closeMobileMenu()"
-            aria-label="Cerrar menú"
-            data-testid="mobile-menu-close"
-          >
-            <lucide-icon name="x" class="w-5 h-5" />
-          </button>
-        </div>
-
-        <nav class="flex flex-col p-2 overflow-y-auto">
-          @for (item of navItems; track item.testId) {
-            @if (item.children) {
-              <div class="flex flex-col">
-                <button
-                  type="button"
-                  (click)="toggleMobileChild(item.testId)"
-                  class="flex items-center min-h-11 gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                >
-                  @if (item.icon) {
-                    <lucide-icon [name]="item.icon" class="w-5 h-5 flex-shrink-0" />
-                  }
-                  <span>{{ item.label }}</span>
-                  <lucide-icon
-                    name="chevron-down"
-                    class="w-4 h-4 ml-auto transition-transform"
-                    [class.rotate-180]="isMobileChildOpen(item.testId)"
-                  />
-                </button>
-                @if (isMobileChildOpen(item.testId)) {
-                  <div class="pl-11 pr-2 pb-1 flex flex-col gap-1">
-                    @for (child of item.children; track child.testId) {
-                      <a
-                        [routerLink]="child.href"
-                        (click)="closeMobileMenu()"
-                        class="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-orange transition-colors"
-                        [attr.data-testid]="child.testId"
-                      >
-                        <lucide-icon [name]="child.icon" class="w-4 h-4 flex-shrink-0" />
-                        <span>{{ child.label }}</span>
-                      </a>
+                    @if (item.icon) {
+                      <ng-icon [name]="iconName(item.icon)" hlmIcon />
                     }
-                  </div>
+                    <span>{{ item.label }}</span>
+                  </a>
                 }
+              }
+            </hlm-accordion>
+          </nav>
+
+          <div class="mt-auto p-4 border-t">
+            @if (user(); as currentUser) {
+              <div class="flex flex-col gap-2">
+                <span class="text-sm font-bold px-4 py-2">
+                  {{ currentUser.name }}
+                </span>
+                @if (currentUser.role === 'admin') {
+                  <a
+                    hlmBtn
+                    variant="ghost"
+                    class="justify-start"
+                    routerLink="/admin"
+                    (click)="closeMobileMenu()"
+                    data-testid="mobile-admin-link"
+                  >
+                    <ng-icon hlmIcon name="lucideLayoutGrid" />
+                    <span>Panel admin</span>
+                  </a>
+                }
+                <button
+                  hlmBtn
+                  variant="ghost"
+                  class="justify-start"
+                  type="button"
+                  (click)="logout()"
+                  data-testid="mobile-logout-btn"
+                >
+                  <ng-icon hlmIcon name="lucideLogOut" />
+                  <span>Cerrar sesión</span>
+                </button>
               </div>
             } @else {
               <a
-                class="flex items-center min-h-11 gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                [routerLink]="item.href"
+                hlmBtn
+                variant="ghost"
+                class="justify-start"
+                routerLink="/auth/login"
                 (click)="closeMobileMenu()"
-                [attr.data-testid]="item.testId"
+                data-testid="mobile-login-link"
               >
-                @if (item.icon) {
-                  <lucide-icon [name]="item.icon" class="w-5 h-5 flex-shrink-0" />
-                }
-                <span>{{ item.label }}</span>
+                <ng-icon hlmIcon name="lucideUserRound" />
+                <span>Ingresar</span>
               </a>
             }
-          }
-        </nav>
 
-        <div class="mt-auto p-4 border-t border-gray-100">
-          @if (user(); as currentUser) {
-            <div class="flex flex-col gap-2">
-              <span class="text-sm font-bold text-gray-900 px-4 py-2">{{ currentUser.name }}</span>
-              @if (currentUser.role === 'admin') {
+            <div class="flex gap-3 mt-4 px-4">
+              @for (channel of socialChannels.slice(0, 2); track channel.name) {
                 <a
-                  class="flex items-center min-h-11 gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                  routerLink="/admin"
-                  (click)="closeMobileMenu()"
-                  data-testid="mobile-admin-link"
+                  [href]="channel.href"
+                  class="text-xs text-muted-foreground hover:text-primary transition-colors"
+                  rel="noreferrer"
+                  target="_blank"
+                  >{{ channel.name }}</a
                 >
-                  <lucide-icon name="layout-grid" class="w-5 h-5 flex-shrink-0" />
-                  <span>Panel admin</span>
-                </a>
               }
-              <button
-                class="flex items-center min-h-11 gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-                type="button"
-                (click)="logout()"
-                data-testid="mobile-logout-btn"
-              >
-                <lucide-icon name="log-out" class="w-5 h-5 flex-shrink-0" />
-                <span>Cerrar sesión</span>
-              </button>
             </div>
-          } @else {
-            <a
-              class="flex items-center min-h-11 gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700 hover:bg-gray-50 hover:text-orange transition-colors"
-              routerLink="/auth/login"
-              (click)="closeMobileMenu()"
-              data-testid="mobile-login-link"
-            >
-              <lucide-icon name="user-round" class="w-5 h-5 flex-shrink-0" />
-              <span>Ingresar</span>
-            </a>
-          }
-
-          <div class="flex gap-3 mt-4 px-4">
-            @for (channel of socialChannels.slice(0, 2); track channel.name) {
-              <a
-                [href]="channel.href"
-                class="text-xs text-gray-500 hover:text-orange transition-colors"
-                rel="noreferrer"
-                target="_blank"
-                >{{ channel.name }}</a
-              >
-            }
           </div>
-        </div>
-      </div>
-    </div>
+        </hlm-sheet-content>
+      </ng-template>
+    </hlm-sheet>
   `,
   styles: [
     `
@@ -474,7 +428,7 @@ interface NavItem {
 
       header {
         opacity: 1;
-        transform: translateX(-50%) translateY(0);
+        transform: translateY(0);
       }
 
       header.animate-in {
@@ -484,17 +438,12 @@ interface NavItem {
       @keyframes header-in {
         from {
           opacity: 0;
-          transform: translateX(-50%) translateY(-12px);
+          transform: translateY(-12px);
         }
         to {
           opacity: 1;
-          transform: translateX(-50%) translateY(0);
+          transform: translateY(0);
         }
-      }
-
-      .is-active {
-        color: var(--orange, #ff7a1a);
-        background-color: rgba(255, 122, 26, 0.08);
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -502,7 +451,7 @@ interface NavItem {
         header.animate-in {
           animation: none;
           opacity: 1;
-          transform: translateX(-50%) translateY(0);
+          transform: translateY(0);
         }
       }
     `,
@@ -513,7 +462,6 @@ export class HeaderComponent {
   private readonly cart = inject(CartService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly router = inject(Router);
 
   protected readonly socialChannels = socialChannels;
   protected readonly user = this.auth.user;
@@ -521,54 +469,56 @@ export class HeaderComponent {
   protected readonly firstName = computed(() => this.user()?.name.split(' ')[0] || '');
 
   protected readonly isMenuOpen = signal(false);
-  protected readonly isUserMenuOpen = signal(false);
-  protected readonly isMobileSearchOpen = signal(false);
-  protected readonly isSearchExpanded = signal(false);
   protected readonly isVisible = signal(false);
-  protected readonly searchQuery = signal('');
-  protected readonly currentUrl = signal(this.router.url);
-
-  private readonly openDropdowns = signal<Record<string, boolean>>({});
-  private readonly dropdownTimers = new Map<string, ReturnType<typeof setTimeout>>();
-  private readonly mobileOpenChildren = signal<Record<string, boolean>>({});
+  protected readonly isScrolled = signal(false);
 
   protected readonly navItems: NavItem[] = [
     {
       label: 'Tienda',
       testId: 'header-nav-tienda',
-      icon: 'store',
+      icon: 'lucideStore',
       children: [
         {
           label: 'Alimentos',
-          href: '/tienda?categoria=alimentos',
-          icon: 'cat',
+          href: '/tienda',
+          queryParams: { categoria: 'alimentos' },
+          icon: 'lucideCat',
           testId: 'header-nav-tienda-alimentos',
         },
         {
           label: 'Arenas',
-          href: '/tienda?categoria=arenas',
-          icon: 'sparkles',
+          href: '/tienda',
+          queryParams: { categoria: 'arenas' },
+          icon: 'lucideSparkles',
           testId: 'header-nav-tienda-arenas',
         },
         {
           label: 'Juguetes',
-          href: '/tienda?categoria=juguetes',
-          icon: 'heart',
+          href: '/tienda',
+          queryParams: { categoria: 'juguetes' },
+          icon: 'lucideHeart',
           testId: 'header-nav-tienda-juguetes',
         },
         {
           label: 'Accesorios',
-          href: '/tienda?categoria=accesorios',
-          icon: 'layout-grid',
+          href: '/tienda',
+          queryParams: { categoria: 'accesorios' },
+          icon: 'lucideLayoutGrid',
           testId: 'header-nav-tienda-accesorios',
         },
         {
           label: 'Higiene',
-          href: '/tienda?categoria=higiene',
-          icon: 'sparkles',
+          href: '/tienda',
+          queryParams: { categoria: 'higiene' },
+          icon: 'lucideSparkles',
           testId: 'header-nav-tienda-higiene',
         },
-        { label: 'Ver todo', href: '/tienda', icon: 'store', testId: 'header-nav-tienda-todo' },
+        {
+          label: 'Ver todo',
+          href: '/tienda',
+          icon: 'lucideStore',
+          testId: 'header-nav-tienda-todo',
+        },
       ],
       featured: {
         image: '/images/cats/iris4.jpeg',
@@ -576,128 +526,93 @@ export class HeaderComponent {
         href: '/tienda',
       },
     },
-    { label: 'Servicios', href: '/servicios', icon: 'book-open', testId: 'header-nav-servicios' },
+    {
+      label: 'Servicios',
+      href: '/servicios',
+      icon: 'lucideBookOpen',
+      testId: 'header-nav-servicios',
+    },
     {
       label: 'Nosotras',
       testId: 'header-nav-about',
-      icon: 'users',
+      icon: 'lucideUsers',
       children: [
         {
           label: 'Sobre nosotras',
           href: '/about',
-          icon: 'heart',
+          icon: 'lucideHeart',
           testId: 'header-nav-about-nosotras',
         },
         {
           label: 'Nuestro equipo',
-          href: '/about#equipo',
-          icon: 'users',
+          href: '/about',
+          fragment: 'equipo',
+          icon: 'lucideUsers',
           testId: 'header-nav-about-equipo',
         },
-        { label: 'Contacto', href: '/contact', icon: 'mail', testId: 'header-nav-about-contact' },
+        {
+          label: 'Contacto',
+          href: '/contact',
+          icon: 'lucideMail',
+          testId: 'header-nav-about-contact',
+        },
       ],
     },
-    { label: 'Blog', href: '/blog', icon: 'book-open', testId: 'header-nav-blog' },
-    { label: 'Contacto', href: '/contact', icon: 'mail', testId: 'header-nav-contact' },
-    { label: 'Media Kit', href: '/media-kit', icon: 'sparkles', testId: 'header-nav-media-kit' },
+    {
+      label: 'Blog',
+      href: '/blog',
+      icon: 'lucideBookOpen',
+      testId: 'header-nav-blog',
+    },
+    {
+      label: 'Contacto',
+      href: '/contact',
+      icon: 'lucideMail',
+      testId: 'header-nav-contact',
+    },
+    {
+      label: 'Media Kit',
+      href: '/media-kit',
+      icon: 'lucideSparkles',
+      testId: 'header-nav-media-kit',
+    },
   ];
 
   constructor() {
-    this.router.events
-      .pipe(
-        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((event) => {
-        this.currentUrl.set(event.urlAfterRedirects);
-      });
-
     if (isPlatformBrowser(this.platformId)) {
       afterNextRender(() => {
         this.isVisible.set(true);
-      });
-
-      effect(() => {
-        const body = document.body;
-        if (this.isMenuOpen()) {
-          body.style.overflow = 'hidden';
-        } else {
-          body.style.overflow = '';
-        }
+        const onScroll = () => this.isScrolled.set(window.scrollY > 40);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        this.destroyRef.onDestroy(() => window.removeEventListener('scroll', onScroll));
       });
     }
-  }
-
-  protected isOpen(testId: string): boolean {
-    return this.openDropdowns()[testId] ?? false;
-  }
-
-  protected openDropdown(testId: string) {
-    const timer = this.dropdownTimers.get(testId);
-    if (timer) {
-      clearTimeout(timer);
-      this.dropdownTimers.delete(testId);
-    }
-    this.openDropdowns.update((state) => ({ ...state, [testId]: true }));
-  }
-
-  protected scheduleClose(testId: string) {
-    const timer = setTimeout(() => {
-      this.openDropdowns.update((state) => ({ ...state, [testId]: false }));
-      this.dropdownTimers.delete(testId);
-    }, 120);
-    this.dropdownTimers.set(testId, timer);
-  }
-
-  protected toggleDropdown(testId: string) {
-    this.openDropdowns.update((state) => ({ ...state, [testId]: !state[testId] }));
-  }
-
-  protected isMobileChildOpen(testId: string): boolean {
-    return this.mobileOpenChildren()[testId] ?? false;
-  }
-
-  protected toggleMobileChild(testId: string) {
-    this.mobileOpenChildren.update((state) => ({ ...state, [testId]: !state[testId] }));
-  }
-
-  protected toggleMobileSearch() {
-    this.isMobileSearchOpen.update((open) => !open);
   }
 
   protected openCart() {
     this.cart.open();
     this.closeMobileMenu();
-    this.isUserMenuOpen.set(false);
   }
 
-  protected toggleMobileMenu() {
-    this.isMenuOpen.update((open) => !open);
+  protected openMobileMenu() {
+    this.isMenuOpen.set(true);
   }
 
   protected closeMobileMenu() {
     this.isMenuOpen.set(false);
-    this.isMobileSearchOpen.set(false);
-  }
-
-  protected toggleUserMenu() {
-    this.isUserMenuOpen.update((open) => !open);
   }
 
   protected async logout() {
     await this.auth.logout();
-    this.isUserMenuOpen.set(false);
-    this.isMenuOpen.set(false);
+    this.closeMobileMenu();
   }
 
-  protected async submitSearch() {
-    const q = this.searchQuery().trim();
-    await this.router.navigate(['/tienda'], {
-      queryParams: q ? { q } : {},
-    });
-
-    this.closeMobileMenu();
-    this.isUserMenuOpen.set(false);
-    this.isMobileSearchOpen.set(false);
+  protected iconName(name: string): string {
+    if (name.startsWith('lucide')) return name;
+    return ('lucide' +
+      name.replace(/(^|-)([a-z])/g, (_: string, _sep: string, letter: string) =>
+        letter.toUpperCase(),
+      )) as string;
   }
 }

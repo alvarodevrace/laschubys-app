@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-1" data-testid="input">
   @if (label()) {
-    <label [attr.for]="id()" class="text-gray-500 text-sm">{{ label() }}</label>
+    <label [attr.for]="id()" class="text-muted-foreground text-sm">{{ label() }}</label>
   }
 
   @switch (type()) {
@@ -9,14 +9,14 @@
         [id]="id()"
         [placeholder]="placeholder()"
         [required]="required()"
-        class="rounded-2xl border border-gray-200 bg-white min-h-24 px-4 py-3 focus:ring-2 focus:ring-orange/20 focus:border-orange outline-none transition-all resize-none"
+        class="rounded-2xl border border-border bg-white min-h-24 px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
       ></textarea>
     }
     @case ('select') {
       <select
         [id]="id()"
         [required]="required()"
-        class="rounded-2xl border border-gray-200 bg-white min-h-12 px-4 focus:ring-2 focus:ring-orange/20 focus:border-orange outline-none transition-all appearance-none"
+        class="rounded-2xl border border-border bg-white min-h-12 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all appearance-none"
       >
         @if (placeholder()) {
           <option value="" disabled selected>{{ placeholder() }}</option>
@@ -32,7 +32,7 @@
         [type]="type()"
         [placeholder]="placeholder()"
         [required]="required()"
-        class="rounded-2xl border border-gray-200 bg-white min-h-12 px-4 focus:ring-2 focus:ring-orange/20 focus:border-orange outline-none transition-all"
+        class="rounded-2xl border border-border bg-white min-h-12 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
       />
     }
   }

@@ -1,13 +1,16 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-  computed,
-  OnInit,
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideX } from '@ng-icons/lucide';
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmInput } from '@spartan-ng/helm/input';
+import { HlmLabel } from '@spartan-ng/helm/label';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
+import { HlmTextarea } from '@spartan-ng/helm/textarea';
+
 import { AdminService, AdminPost } from '../../../core/services/admin.service';
 import { ImageUploaderComponent } from '../shared/image-uploader.component';
 
@@ -15,30 +18,29 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-admin-post-form',
   standalone: true,
-  imports: [FormsModule, RouterLink, ImageUploaderComponent],
+  imports: [
+    FormsModule,
+    RouterLink,
+    HlmAlertImports,
+    HlmButton,
+    HlmIconImports,
+    HlmInput,
+    HlmLabel,
+    HlmSpinnerImports,
+    HlmTextarea,
+    ImageUploaderComponent,
+  ],
+  providers: [provideIcons({ lucideChevronLeft, lucideX })],
   template: `
     <div class="max-w-3xl mx-auto">
       <!-- Header -->
       <div class="flex items-center gap-3 mb-8">
-        <a
-          routerLink="/admin/posts"
-          class="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5"
-          >
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
+        <a routerLink="/admin/posts" hlmBtn variant="ghost" size="icon-sm">
+          <ng-icon hlmIcon name="lucideChevronLeft" />
         </a>
         <div>
-          <p class="text-xs font-extrabold uppercase tracking-widest text-orange">Blog</p>
-          <h1 class="text-2xl font-extrabold text-gray-900">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-primary">Blog</p>
+          <h1 class="text-2xl font-extrabold text-foreground">
             {{ isEdit() ? 'Editar post' : 'Nuevo post' }}
           </h1>
         </div>
@@ -46,88 +48,80 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
 
       @if (loadingPost()) {
         <div class="flex items-center justify-center py-20">
-          <div
-            class="w-6 h-6 border-2 border-orange border-t-transparent rounded-full animate-spin"
-          ></div>
+          <hlm-spinner />
         </div>
       } @else {
         <form (ngSubmit)="submit()" #f="ngForm" class="space-y-5">
           <!-- Título -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-              >Título *</label
-            >
+          <div class="grid gap-1.5">
+            <label hlmLabel for="post-title">Título *</label>
             <input
+              hlmInput
+              id="post-title"
               name="title"
               [(ngModel)]="form.title"
               required
               placeholder="El título del artículo"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
             />
           </div>
 
           <!-- Slug -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-              >Slug *</label
-            >
+          <div class="grid gap-1.5">
+            <label hlmLabel for="post-slug">Slug *</label>
             <input
+              hlmInput
+              id="post-slug"
               name="slug"
               [(ngModel)]="form.slug"
               required
               placeholder="mi-articulo-del-blog"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+              class="font-mono"
             />
-            <p class="text-xs text-gray-400 mt-1">Solo letras minúsculas, números y guiones</p>
+            <p class="text-xs text-muted-foreground">Solo letras minúsculas, números y guiones</p>
           </div>
 
           <!-- Categoría + Autor -->
           <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-                >Categoría</label
-              >
+            <div class="grid gap-1.5">
+              <label hlmLabel for="post-category">Categoría</label>
               <input
+                hlmInput
+                id="post-category"
                 name="category"
                 [(ngModel)]="form.category"
                 placeholder="Blog, Salud, Tips..."
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
               />
             </div>
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-                >Autor *</label
-              >
+            <div class="grid gap-1.5">
+              <label hlmLabel for="post-author">Autor *</label>
               <input
+                hlmInput
+                id="post-author"
                 name="author"
                 [(ngModel)]="form.author"
                 required
                 placeholder="Nombre del autor"
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
               />
             </div>
           </div>
 
           <!-- Resumen -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-              >Resumen (excerpt)</label
-            >
+          <div class="grid gap-1.5">
+            <label hlmLabel for="post-excerpt">Resumen (excerpt)</label>
             <textarea
+              hlmTextarea
+              id="post-excerpt"
               name="excerpt"
               [(ngModel)]="form.excerpt"
               rows="2"
               placeholder="Descripción corta del artículo..."
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
             ></textarea>
           </div>
 
           <!-- Imagen portada + Tiempo lectura -->
           <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-                >Imagen portada</label
-              >
+            <div class="grid gap-1.5">
+              <label hlmLabel>Imagen portada</label>
               <app-image-uploader
                 [images]="coverImageArray()"
                 [multiple]="false"
@@ -135,44 +129,36 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
               >
               </app-image-uploader>
             </div>
-            <div>
-              <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-                >Tiempo de lectura</label
-              >
+            <div class="grid gap-1.5">
+              <label hlmLabel for="post-read-time">Tiempo de lectura</label>
               <input
+                hlmInput
+                id="post-read-time"
                 name="read_time"
                 [(ngModel)]="form.read_time"
                 placeholder="5 min"
-                class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
               />
             </div>
           </div>
 
           <!-- Fecha publicación -->
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1.5"
-              >Fecha publicación</label
-            >
+          <div class="grid gap-1.5">
+            <label hlmLabel for="post-published">Fecha publicación</label>
             <input
+              hlmInput
+              id="post-published"
               name="published_at"
               type="datetime-local"
               [(ngModel)]="form.published_at"
-              class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
             />
-            <p class="text-xs text-gray-400 mt-1">Dejar vacío para guardar como borrador</p>
+            <p class="text-xs text-muted-foreground">Dejar vacío para guardar como borrador</p>
           </div>
 
           <!-- Contenido (párrafos) -->
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="text-xs font-bold uppercase tracking-wide text-gray-500"
-                >Contenido</label
-              >
-              <button
-                type="button"
-                (click)="addParagraph()"
-                class="text-xs text-orange font-bold hover:underline"
-              >
+          <div class="grid gap-1.5">
+            <div class="flex items-center justify-between">
+              <label hlmLabel>Contenido</label>
+              <button type="button" hlmBtn variant="ghost" size="sm" (click)="addParagraph()">
                 + Añadir párrafo
               </button>
             </div>
@@ -180,34 +166,28 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
               @for (p of form.content; track $index) {
                 <div class="flex gap-2">
                   <textarea
+                    hlmTextarea
+                    [id]="'post-content-' + $index"
                     [name]="'content_' + $index"
                     [(ngModel)]="form.content[$index]"
                     rows="3"
                     [placeholder]="'Párrafo ' + ($index + 1)"
-                    class="flex-1 px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition"
+                    class="flex-1"
                   ></textarea>
                   <button
                     type="button"
+                    hlmBtn
+                    variant="ghost"
+                    size="icon-sm"
                     (click)="removeParagraph($index)"
-                    class="p-2 self-start rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    class="self-start text-muted-foreground hover:text-red-500"
                   >
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="w-4 h-4"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
+                    <ng-icon hlmIcon name="lucideX" />
                   </button>
                 </div>
               }
               @if (!form.content.length) {
-                <p class="text-sm text-gray-400 py-2">
+                <p class="text-sm text-muted-foreground py-2">
                   Sin párrafos. Haz clic en "+ Añadir párrafo"
                 </p>
               }
@@ -216,24 +196,15 @@ import { ImageUploaderComponent } from '../shared/image-uploader.component';
 
           <!-- Error -->
           @if (error()) {
-            <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-              {{ error() }}
+            <div hlmAlert variant="destructive">
+              <div hlmAlertDescription>{{ error() }}</div>
             </div>
           }
 
           <!-- Actions -->
           <div class="flex gap-3 pt-2">
-            <a
-              routerLink="/admin/posts"
-              class="flex-1 text-center px-5 py-3 rounded-xl border border-gray-200 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition-colors"
-            >
-              Cancelar
-            </a>
-            <button
-              type="submit"
-              [disabled]="saving() || f.invalid"
-              class="flex-1 px-5 py-3 rounded-xl bg-orange text-white text-sm font-bold hover:bg-orange-dark transition-colors disabled:opacity-50"
-            >
+            <a routerLink="/admin/posts" hlmBtn variant="outline" class="flex-1">Cancelar</a>
+            <button type="submit" hlmBtn class="flex-1" [disabled]="saving() || f.invalid">
               {{ saving() ? 'Guardando...' : isEdit() ? 'Guardar cambios' : 'Crear post' }}
             </button>
           </div>
@@ -304,6 +275,7 @@ export class AdminPostFormComponent implements OnInit {
   }
 
   protected async submit() {
+    if (this.saving()) return;
     this.saving.set(true);
     this.error.set(null);
     try {
@@ -326,7 +298,7 @@ export class AdminPostFormComponent implements OnInit {
       } else {
         await this.admin.createPost(payload);
       }
-      this.router.navigate(['/admin/posts']);
+      await this.router.navigate(['/admin/posts']);
     } catch (e: any) {
       this.error.set(e.message ?? 'Error guardando');
     } finally {

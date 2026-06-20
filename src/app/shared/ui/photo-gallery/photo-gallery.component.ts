@@ -18,8 +18,8 @@ export interface GalleryPhoto {
     <section class="py-12 md:py-20 bg-white">
       <div class="max-w-6xl mx-auto px-4">
         <div class="mb-8 md:mb-10">
-          <p class="text-xs font-extrabold uppercase tracking-widest text-orange mb-2">Galería</p>
-          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-900">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">Galería</p>
+          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
             Momentos Las Chubys
           </h2>
         </div>
@@ -29,7 +29,7 @@ export interface GalleryPhoto {
         >
           @for (photo of photos; track photo.src) {
             <div
-              class="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-gray-100 shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1"
+              class="group relative overflow-hidden rounded-2xl md:rounded-3xl bg-muted shadow-sm hover:shadow-[0_20px_50px_rgba(0,0,0,0.12)] transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-1"
               [class.col-span-2]="photo.size === 'wide' || photo.size === 'large'"
               [class.row-span-2]="photo.size === 'large'"
             >

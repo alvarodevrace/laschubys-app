@@ -2,17 +2,29 @@ import { Component, inject, input, model, signal, ChangeDetectionStrategy } from
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmTextareaImports } from '@spartan-ng/helm/textarea';
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
+
 import { AuthService } from '../../../core/auth/auth.service';
 import { BlogComment } from '../../../core/models/content.model';
 import { ContentService } from '../../../core/services/content.service';
-import { ButtonComponent } from '../../../shared/ui/button/button.component';
 import { StaggerChildrenDirective } from '../../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-comments',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ButtonComponent, StaggerChildrenDirective],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    StaggerChildrenDirective,
+    HlmButtonImports,
+    HlmCardImports,
+    HlmTextareaImports,
+    HlmAlertImports,
+  ],
   template: `
     <section class="grid gap-6 mt-12">
       <div class="flex justify-between items-center gap-4">
@@ -20,18 +32,20 @@ import { StaggerChildrenDirective } from '../../../shared/animations';
         <span>{{ comments().length }}</span>
       </div>
 
-      <div class="grid gap-4" appStaggerChildren [staggerDelay]="0.08" childSelector="article">
+      <div class="grid gap-4" appStaggerChildren [staggerDelay]="0.08" childSelector="hlm-card">
         @if (comments().length === 0) {
           <p class="m-0 leading-relaxed">Todavía no hay comentarios públicos en este post.</p>
         } @else {
           @for (comment of comments(); track comment.id ?? comment.date) {
-            <article class="p-4 rounded-2xl bg-gray-50 border border-gray-200">
-              <div class="flex justify-between gap-4 mb-1.5 text-gray-500 text-sm">
-                <strong>{{ comment.author }}</strong>
-                <span>{{ comment.date }}</span>
+            <hlm-card size="sm">
+              <div hlmCardContent class="py-4">
+                <div class="flex justify-between gap-4 mb-1.5 text-muted-foreground text-sm">
+                  <strong>{{ comment.author }}</strong>
+                  <span>{{ comment.date }}</span>
+                </div>
+                <p class="m-0 leading-relaxed">{{ comment.body }}</p>
               </div>
-              <p class="m-0 leading-relaxed">{{ comment.body }}</p>
-            </article>
+            </hlm-card>
           }
         }
       </div>
@@ -49,29 +63,33 @@ import { StaggerChildrenDirective } from '../../../shared/animations';
         } @else {
           <form [formGroup]="commentForm" (ngSubmit)="submit()" class="grid gap-4">
             <textarea
+              hlmTextarea
               formControlName="body"
               rows="4"
               placeholder="Escribe algo digno de Iris y Rubi..."
-              class="w-full p-4 rounded-2xl border border-gray-200 resize-y min-h-[132px] bg-gray-50"
               data-testid="comment-textarea"
             ></textarea>
 
             @if (error()) {
-              <p class="m-0 leading-relaxed text-red-700">{{ error() }}</p>
+              <div hlmAlert variant="destructive">
+                <p hlmAlertDescription>{{ error() }}</p>
+              </div>
             }
 
             @if (success()) {
-              <p class="m-0 leading-relaxed text-green-700">{{ success() }}</p>
+              <div hlmAlert>
+                <p hlmAlertDescription>{{ success() }}</p>
+              </div>
             }
 
-            <app-button
+            <button
+              hlmBtn
               type="submit"
-              size="md"
               [disabled]="pending() || commentForm.invalid"
               data-testid="comment-submit-btn"
             >
               {{ pending() ? 'Enviando...' : 'Publicar comentario' }}
-            </app-button>
+            </button>
           </form>
         }
       </div>

@@ -12,7 +12,7 @@ type SectionVariant = 'white' | 'warm';
     <section
       class="py-10 md:py-16 transition-colors"
       [class.bg-white]="variant() === 'white'"
-      [class.bg-[#fff4e8]]="variant() === 'warm'"
+      [class.bg-surface]="variant() === 'warm'"
     >
       <div class="max-w-6xl mx-auto px-4">
         <ng-content></ng-content>

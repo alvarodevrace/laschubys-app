@@ -9,7 +9,7 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { ButtonComponent } from '../button/button.component';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { ParallaxDirective, ScrollRevealDirective, TextRevealDirective } from '../../animations';
 
 /**
@@ -23,7 +23,7 @@ import { ParallaxDirective, ScrollRevealDirective, TextRevealDirective } from '.
   selector: 'app-animated-hero',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ButtonComponent, ParallaxDirective, ScrollRevealDirective, TextRevealDirective],
+  imports: [HlmButtonImports, ParallaxDirective, ScrollRevealDirective, TextRevealDirective],
   template: `
     <section
       class="relative flex min-h-[70vh] h-[85vh] max-h-[900px] items-center justify-center overflow-hidden"
@@ -59,14 +59,9 @@ import { ParallaxDirective, ScrollRevealDirective, TextRevealDirective } from '.
 
         @if (ctaText()) {
           <div appScrollReveal [delay]="0.4">
-            <app-button
-              [variant]="'primary'"
-              [size]="'lg'"
-              [className]="'motion-safe:hover:-translate-y-1 motion-safe:transition-transform'"
-              (click)="onCtaClick()"
-            >
+            <button hlmBtn size="lg" (click)="onCtaClick()">
               {{ ctaText() }}
-            </app-button>
+            </button>
           </div>
         }
       </div>

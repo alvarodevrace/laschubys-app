@@ -7,6 +7,12 @@ import {
   signal,
   inject,
 } from '@angular/core';
+import { provideIcons } from '@ng-icons/core';
+import { lucideUpload, lucideX } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan-ng/helm/button';
+import { HlmCard } from '@spartan-ng/helm/card';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmSpinnerImports } from '@spartan-ng/helm/spinner';
 import { environment } from '../../../core/config/environment';
 import { ApiService } from '../../../core/services/api.service';
 
@@ -14,6 +20,8 @@ import { ApiService } from '../../../core/services/api.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-image-uploader',
   standalone: true,
+  providers: [provideIcons({ lucideUpload, lucideX })],
+  imports: [HlmButton, HlmCard, HlmIconImports, HlmSpinnerImports],
   template: `
     <div class="space-y-3">
       <!-- Thumbnails de imágenes ya subidas -->
@@ -24,25 +32,17 @@ import { ApiService } from '../../../core/services/api.service';
               <img
                 [src]="url"
                 alt="Imagen"
-                class="w-20 h-20 object-cover rounded-xl border border-gray-200"
+                class="w-20 h-20 object-cover rounded-xl border border-border"
               />
               <button
                 type="button"
+                hlmBtn
+                variant="destructive"
+                size="icon-xs"
                 (click)="remove(url)"
-                class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow"
+                class="absolute -top-1.5 -right-1.5"
               >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="w-3 h-3"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
+                <ng-icon hlmIcon name="lucideX" class="w-3 h-3" />
               </button>
             </div>
           }
@@ -60,40 +60,31 @@ import { ApiService } from '../../../core/services/api.service';
           [disabled]="uploading()"
         />
         <div
-          class="flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-dashed transition-colors"
+          hlmCard
+          class="flex items-center gap-3 px-4 py-3 border-2 border-dashed transition-colors cursor-pointer"
           [class]="
             uploading()
-              ? 'border-orange/40 bg-orange/5'
-              : 'border-gray-200 hover:border-orange/40 hover:bg-orange/5'
+              ? 'border-primary/40 bg-primary/5'
+              : 'border-border hover:border-primary/40 hover:bg-primary/5'
           "
         >
           @if (uploading()) {
-            <div
-              class="w-5 h-5 border-2 border-orange border-t-transparent rounded-full animate-spin flex-shrink-0"
-            ></div>
-            <span class="text-sm text-orange font-semibold"
+            <hlm-spinner class="w-5 h-5" />
+            <span class="text-sm text-primary font-semibold"
               >Subiendo
               {{ uploadingCount() > 1 ? uploadingCount() + ' imágenes' : 'imagen' }}...</span
             >
           } @else {
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="w-5 h-5 text-gray-400 flex-shrink-0"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <circle cx="8.5" cy="8.5" r="1.5" />
-              <polyline points="21 15 16 10 5 21" />
-            </svg>
+            <ng-icon
+              hlmIcon
+              name="lucideUpload"
+              class="w-5 h-5 text-muted-foreground flex-shrink-0"
+            />
             <div>
-              <p class="text-sm font-semibold text-gray-700">
+              <p class="text-sm font-semibold text-muted-foreground">
                 {{ images.length ? 'Añadir más imágenes' : 'Seleccionar imágenes' }}
               </p>
-              <p class="text-xs text-gray-400">JPG, PNG, WebP, GIF · máx. 5 MB c/u</p>
+              <p class="text-xs text-muted-foreground">JPG, PNG, WebP, GIF · máx. 5 MB c/u</p>
             </div>
           }
         </div>

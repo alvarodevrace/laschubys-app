@@ -1,6 +1,19 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideMinus,
+  lucidePlus,
+  lucideShoppingCart,
+  lucideTrash2,
+  lucideX,
+} from '@ng-icons/lucide';
+
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
+import { HlmSheetImports } from '@spartan-ng/helm/sheet';
 
 import { CartService } from '../../../core/services/cart.service';
 
@@ -8,7 +21,15 @@ import { CartService } from '../../../core/services/cart.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-cart-drawer',
   standalone: true,
-  imports: [CurrencyPipe, RouterLink],
+  imports: [
+    CurrencyPipe,
+    RouterLink,
+    HlmIconImports,
+    HlmButtonImports,
+    HlmCardImports,
+    HlmSheetImports,
+  ],
+  providers: [provideIcons({ lucideMinus, lucidePlus, lucideShoppingCart, lucideTrash2, lucideX })],
   templateUrl: './cart-drawer.component.html',
 })
 export class CartDrawerComponent {
