@@ -9,11 +9,7 @@ import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { SeoService } from '../../core/services/seo.service';
 import { ContentService } from '../../core/services/content.service';
 import { BlogPostCardComponent } from './components/blog-post-card.component';
-import {
-  ScrollRevealDirective,
-  StaggerChildrenDirective,
-  TiltCardDirective,
-} from '../../shared/animations';
+import { ScrollRevealDirective, StaggerChildrenDirective } from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,7 +20,6 @@ import {
     BlogPostCardComponent,
     ScrollRevealDirective,
     StaggerChildrenDirective,
-    TiltCardDirective,
     HlmButtonImports,
     HlmCardImports,
     HlmSkeletonImports,
@@ -78,12 +73,10 @@ import {
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
             appStaggerChildren
             [staggerDelay]="0.1"
-            childSelector="[appTiltCard]"
+            childSelector="app-blog-post-card"
           >
             @for (post of postsResource.value() ?? []; track post.slug) {
-              <div appTiltCard [scale]="1.03" class="h-full">
-                <app-blog-post-card [post]="post" />
-              </div>
+              <app-blog-post-card [post]="post" />
             }
           </div>
         } @else {

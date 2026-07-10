@@ -27,7 +27,6 @@ import {
   ScrollRevealDirective,
   StaggerChildrenDirective,
   TextRevealDirective,
-  TiltCardDirective,
 } from '../../shared/animations';
 
 @Component({
@@ -48,7 +47,6 @@ import {
     ScrollRevealDirective,
     StaggerChildrenDirective,
     TextRevealDirective,
-    TiltCardDirective,
   ],
   providers: [
     provideIcons({
@@ -89,13 +87,10 @@ import {
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
           <a
             hlmCard
-            class="flex items-center gap-4"
+            class="flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             href="https://wa.me/593960463743"
             target="_blank"
             rel="noreferrer"
-            appTiltCard
-            [max]="6"
-            [scale]="1.02"
           >
             <span
               class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-primary/[0.12] text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-white"
@@ -113,11 +108,8 @@ import {
           </a>
           <a
             hlmCard
-            class="flex items-center gap-4"
+            class="flex items-center gap-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             [href]="'mailto:' + siteMeta.email"
-            appTiltCard
-            [max]="6"
-            [scale]="1.02"
           >
             <span
               class="w-[52px] h-[52px] rounded-2xl inline-flex items-center justify-center flex-shrink-0 bg-primary/[0.12] text-primary transition-colors duration-200 group-hover:bg-primary group-hover:text-white"

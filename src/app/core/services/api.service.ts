@@ -39,6 +39,16 @@ export class ApiService {
     );
   }
 
+  patch<T>(url: string, body: unknown, waitMs = 15000) {
+    const targetUrl = this.resolveUrl(url);
+    return firstValueFrom(
+      this.http.patch<T>(targetUrl, body).pipe(
+        timeout(waitMs),
+        catchError((error) => this.handleError(error, targetUrl)),
+      ),
+    );
+  }
+
   postForm<T>(url: string, body: FormData, waitMs = 30000) {
     const targetUrl = this.resolveUrl(url);
     return firstValueFrom(

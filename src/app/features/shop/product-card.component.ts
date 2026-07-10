@@ -21,7 +21,7 @@ import { ProductPick } from '../../core/models/content.model';
   template: `
     <article
       hlmCard
-      class="group relative cursor-pointer"
+      class="group relative cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
       (click)="navigateToDetail()"
       [attr.data-product-slug]="product().slug"
       [attr.data-product-type]="product().productType"

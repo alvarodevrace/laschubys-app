@@ -12,7 +12,7 @@ import { BlogPost } from '../../../core/models/content.model';
   imports: [RouterLink, HlmCardImports],
   template: `
     <a
-      class="group flex flex-col h-full overflow-hidden"
+      class="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
       hlmCard
       [routerLink]="['/blog', post().slug]"
     >

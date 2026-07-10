@@ -28,7 +28,7 @@ import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
 import { HlmBadgeImports } from '@spartan-ng/helm/badge';
 import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
-import { StaggerChildrenDirective, TiltCardDirective } from '../../shared/animations';
+import { StaggerChildrenDirective } from '../../shared/animations';
 import { CategorySidebarComponent } from './category-sidebar.component';
 import { ProductCardComponent } from './product-card.component';
 
@@ -48,7 +48,6 @@ import { ProductCardComponent } from './product-card.component';
     CategorySidebarComponent,
     ProductCardComponent,
     StaggerChildrenDirective,
-    TiltCardDirective,
   ],
   providers: [
     provideIcons({ lucideAlertCircle, lucideLayoutGrid, lucideSearch, lucideCat, lucideHeart }),
@@ -167,7 +166,6 @@ import { ProductCardComponent } from './product-card.component';
                 >
                   @for (product of visibleProducts(); track product.id) {
                     <app-product-card
-                      appTiltCard
                       [product]="product"
                       [adding]="addingIds().has(product.id)"
                       (add)="addToCart($event)"

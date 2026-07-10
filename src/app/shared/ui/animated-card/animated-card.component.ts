@@ -8,7 +8,7 @@ import {
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
-import { ScrollRevealDirective, TiltCardDirective } from '../../animations';
+import { ScrollRevealDirective } from '../../animations';
 
 /**
  * Card wrapper with scroll-reveal and optional 3D tilt.
@@ -21,19 +21,15 @@ import { ScrollRevealDirective, TiltCardDirective } from '../../animations';
   selector: 'app-animated-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ScrollRevealDirective, TiltCardDirective],
+  imports: [ScrollRevealDirective],
   template: `
     @if (reveal()) {
       <div appScrollReveal [class]="computedClass()">
-        <div class="h-full w-full" appTiltCard [disabled]="!tilt()">
-          <ng-content />
-        </div>
+        <ng-content />
       </div>
     } @else {
       <div [class]="computedClass()">
-        <div class="h-full w-full" appTiltCard [disabled]="!tilt()">
-          <ng-content />
-        </div>
+        <ng-content />
       </div>
     }
   `,
@@ -46,7 +42,7 @@ export class AnimatedCardComponent {
   protected readonly computedClass = computed(() =>
     twMerge(
       clsx(
-        'bg-surface rounded-2xl motion-safe:transition-shadow motion-safe:duration-300 motion-safe:ease-out motion-safe:hover:shadow-2xl',
+        'bg-surface rounded-2xl motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-2xl',
         this.className(),
       ),
     ),
