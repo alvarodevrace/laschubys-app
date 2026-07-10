@@ -98,7 +98,7 @@ function proxyToApi(req: IncomingMessage, res: ServerResponse, overridePath?: st
 }
 
 function buildCspHeader(nonce: string, apiTarget: string): string {
-  // PUBLIC_SUPABASE_URL is injected at build time by Coolify.
+  // PUBLIC_SUPABASE_URL is injected at build time by Dokploy.
   const supabaseUrl = process.env['PUBLIC_SUPABASE_URL'] || 'https://db.alvarodevrace.tech';
   return [
     "default-src 'self'",

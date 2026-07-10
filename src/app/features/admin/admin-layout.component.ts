@@ -47,6 +47,9 @@ import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
               <button hlmTabsTrigger="products" (click)="navigate('/admin/products')">
                 Productos
               </button>
+              <button hlmTabsTrigger="social-metrics" (click)="navigate('/admin/social-metrics')">
+                Métricas sociales
+              </button>
             </div>
           </div>
         </div>
@@ -60,9 +63,10 @@ import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
 })
 export class AdminLayoutComponent {
   private readonly router = inject(Router);
-  protected readonly activeTab = computed<'posts' | 'products'>(() => {
+  protected readonly activeTab = computed<'posts' | 'products' | 'social-metrics'>(() => {
     const url = this.router.url;
     if (url.startsWith('/admin/products')) return 'products';
+    if (url.startsWith('/admin/social-metrics')) return 'social-metrics';
     return 'posts';
   });
 

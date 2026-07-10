@@ -11,7 +11,16 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
-import { lucideCat, lucideChevronLeft, lucideChevronRight, lucideUser } from '@ng-icons/lucide';
+import {
+  lucideCat,
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideCrown,
+  lucideHandshake,
+  lucideShoppingBag,
+  lucideShoppingCart,
+  lucideStar,
+} from '@ng-icons/lucide';
 
 import { HlmBadgeImports } from '@spartan-ng/helm/badge';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -31,7 +40,6 @@ import {
   MarqueeComponent,
   ScrollRevealDirective,
   StaggerChildrenDirective,
-  TiltCardDirective,
 } from '../../shared/animations';
 
 @Component({
@@ -46,14 +54,24 @@ import {
     MarqueeComponent,
     ScrollRevealDirective,
     StaggerChildrenDirective,
-    TiltCardDirective,
     HlmButtonImports,
     HlmIconImports,
     HlmBadgeImports,
     HlmCardImports,
     HlmDialogImports,
   ],
-  providers: [provideIcons({ lucideCat, lucideChevronLeft, lucideChevronRight, lucideUser })],
+  providers: [
+    provideIcons({
+      lucideCat,
+      lucideChevronLeft,
+      lucideChevronRight,
+      lucideCrown,
+      lucideHandshake,
+      lucideShoppingBag,
+      lucideShoppingCart,
+      lucideStar,
+    }),
+  ],
   template: `
     <section
       #sliderSection
@@ -142,45 +160,105 @@ import {
       </app-marquee>
     </section>
 
-    <section class="bg-white py-10 md:py-16">
-      <div class="max-w-4xl mx-auto px-4">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+    <section class="bg-[#FFF5F0] pt-20 pb-12 md:pt-24 md:pb-20">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-7">
+          <!-- Comité de Gatos Asociados -->
           <a
-            routerLink="/tienda"
-            [queryParams]="{ audience: 'michis' }"
-            hlmBtn
-            variant="outline"
-            size="lg"
-            class="group flex items-center justify-center gap-3"
+            routerLink="/auth/login"
+            class="group relative flex flex-col items-center text-center rounded-[2rem] border-2 border-primary/25 bg-[#FFFBF8] px-7 pb-8 pt-10 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-primary/50"
             appScrollReveal
           >
-            <ng-icon
-              hlmIcon
-              name="lucideCat"
-              class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
-            />
-            <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
-              >PARA MICHIS</span
+            <span
+              class="absolute -top-10 left-1/2 z-10 inline-flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full bg-primary text-foreground shadow-md"
             >
+              <ng-icon hlmIcon name="lucideCrown" class="w-12 h-12" />
+            </span>
+            <div class="flex min-h-[5.5rem] items-end justify-center">
+              <h2 class="text-base md:text-lg font-black uppercase tracking-wide text-foreground">
+                Únete al<br /><span class="text-primary">Comité de Gatos Asociados</span>
+              </h2>
+            </div>
+            <div class="my-5 flex w-full items-center gap-3 px-2">
+              <span class="h-[2px] flex-1 bg-primary/25"></span>
+              <ng-icon hlmIcon name="lucideCat" class="w-5 h-5 text-foreground" />
+              <span class="h-[2px] flex-1 bg-primary/25"></span>
+            </div>
+            <p class="text-sm md:text-[15px] leading-relaxed text-muted-foreground mb-8">
+              Crea tu perfil y entra al imperio. Contenido exclusivo, beneficios y comunidad gatuna.
+            </p>
+            <span
+              class="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-md transition-all group-hover:bg-black group-hover:shadow-lg"
+            >
+              Crear mi cuenta
+              <ng-icon hlmIcon name="lucideCat" class="w-5 h-5 text-primary" />
+            </span>
           </a>
+
+          <!-- Explora nuestra Tienda -->
           <a
             routerLink="/tienda"
-            [queryParams]="{ audience: 'michi-lovers' }"
-            hlmBtn
-            variant="outline"
-            size="lg"
-            class="group flex items-center justify-center gap-3"
+            class="group relative flex flex-col items-center text-center rounded-[2rem] border-2 border-primary/25 bg-[#FFFBF8] px-7 pb-8 pt-10 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-primary/50"
             appScrollReveal
             [delay]="0.1"
           >
-            <ng-icon
-              hlmIcon
-              name="lucideUser"
-              class="w-7 h-7 md:w-8 md:h-8 flex-shrink-0 transition-transform group-hover:scale-110"
-            />
-            <span class="text-base md:text-lg font-extrabold tracking-wide uppercase"
-              >PARA MICHILOVERS</span
+            <span
+              class="absolute -top-10 left-1/2 z-10 inline-flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full bg-primary text-foreground shadow-md"
             >
+              <ng-icon hlmIcon name="lucideShoppingBag" class="w-12 h-12" />
+            </span>
+            <div class="flex min-h-[5.5rem] items-end justify-center">
+              <h2 class="text-base md:text-lg font-black uppercase tracking-wide text-foreground">
+                Explora nuestra<br /><span class="text-primary">Tienda</span>
+              </h2>
+            </div>
+            <div class="my-5 flex w-full items-center gap-3 px-2">
+              <span class="h-[2px] flex-1 bg-primary/25"></span>
+              <ng-icon hlmIcon name="lucideShoppingCart" class="w-5 h-5 text-foreground" />
+              <span class="h-[2px] flex-1 bg-primary/25"></span>
+            </div>
+            <p class="text-sm md:text-[15px] leading-relaxed text-muted-foreground mb-8">
+              Productos seleccionados para consentir a quienes gobiernan la casa.
+            </p>
+            <span
+              class="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-md transition-all group-hover:bg-primary/90 group-hover:shadow-lg"
+            >
+              Ver productos
+              <ng-icon hlmIcon name="lucideShoppingCart" class="w-5 h-5 text-foreground" />
+            </span>
+          </a>
+
+          <!-- Conoce nuestros Servicios -->
+          <a
+            routerLink="/contact"
+            class="group relative flex flex-col items-center text-center rounded-[2rem] border-2 border-primary/25 bg-[#FFFBF8] px-7 pb-8 pt-10 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:border-primary/50"
+            appScrollReveal
+            [delay]="0.2"
+          >
+            <span
+              class="absolute -top-10 left-1/2 z-10 inline-flex h-20 w-20 -translate-x-1/2 items-center justify-center rounded-full bg-primary text-foreground shadow-md"
+            >
+              <ng-icon hlmIcon name="lucideHandshake" class="w-12 h-12" />
+            </span>
+            <div class="flex min-h-[5.5rem] items-end justify-center">
+              <h2 class="text-base md:text-lg font-black uppercase tracking-wide text-foreground">
+                Conoce nuestros<br /><span class="text-primary">Servicios</span>
+              </h2>
+            </div>
+            <div class="my-5 flex w-full items-center gap-3 px-2">
+              <span class="h-[2px] flex-1 bg-primary/25"></span>
+              <ng-icon hlmIcon name="lucideStar" class="w-5 h-5 text-foreground" />
+              <span class="h-[2px] flex-1 bg-primary/25"></span>
+            </div>
+            <p class="text-sm md:text-[15px] leading-relaxed text-muted-foreground mb-8">
+              Colabora con nosotros, participa en nuestro programa "Haz famoso a tu mascota".
+            </p>
+            <span
+              class="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-md transition-all group-hover:bg-black group-hover:shadow-lg"
+            >
+              Descubrir más
+              <ng-icon hlmIcon name="lucideStar" class="w-5 h-5 text-primary" />
+            </span>
           </a>
         </div>
       </div>
@@ -205,7 +283,10 @@ import {
               appScrollReveal
               [delay]="0.05"
             >
-              <article hlmCard class="relative h-full !p-0" appTiltCard [max]="8" [scale]="1.02">
+              <article
+                hlmCard
+                class="group relative h-full !p-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+              >
                 <span hlmBadge class="absolute top-3 left-3 z-10">
                   {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
                 </span>
@@ -224,10 +305,20 @@ import {
                   <p class="text-sm font-extrabold text-primary">{{ product.price }}</p>
                 </div>
                 <div class="flex gap-2 px-3.5 pb-3.5">
-                  <button hlmBtn variant="outline" type="button" (click)="openPreview(product)">
+                  <button
+                    hlmBtn
+                    variant="outline"
+                    type="button"
+                    class="flex-1"
+                    (click)="openPreview(product)"
+                  >
                     Ver
                   </button>
-                  <a hlmBtn [routerLink]="['/tienda']" [queryParams]="{ product: product.id }"
+                  <a
+                    hlmBtn
+                    class="flex-1 text-center"
+                    [routerLink]="['/tienda']"
+                    [queryParams]="{ product: product.id }"
                     >Comprar</a
                   >
                 </div>
@@ -269,11 +360,8 @@ import {
             >
               <a
                 hlmCard
-                class="group h-full !gap-2 !p-0"
+                class="group h-full !gap-2 !p-0 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 [routerLink]="['/blog', post.slug]"
-                appTiltCard
-                [max]="8"
-                [scale]="1.02"
               >
                 <div class="aspect-video overflow-hidden bg-muted">
                   <img
@@ -305,18 +393,45 @@ import {
 
     @if (selectedProduct(); as product) {
       <hlm-dialog [state]="'open'" (stateChanged)="onPreviewStateChange($event)">
-        <hlm-dialog-content *hlmDialogPortal class="sm:max-w-4xl p-0 overflow-hidden">
-          <article class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-white">
-            <img [src]="product.images[0] || '/images/cats/iris4.jpeg'" [alt]="product.name" />
-            <div class="grid content-start gap-3">
-              <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-                {{ product.tag }}
+        <hlm-dialog-content
+          *hlmDialogPortal
+          class="sm:max-w-3xl p-0 overflow-hidden rounded-3xl border-0 shadow-2xl"
+        >
+          <article class="w-full grid grid-cols-1 md:grid-cols-2 bg-white">
+            <div class="relative aspect-square bg-muted">
+              <img
+                [src]="product.images[0] || '/images/cats/iris4.jpeg'"
+                [alt]="product.name"
+                class="w-full h-full object-cover"
+              />
+              <span
+                hlmBadge
+                class="absolute top-4 left-4 z-10"
+                [variant]="product.source === 'owned' ? 'default' : 'secondary'"
+              >
+                {{ product.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+              </span>
+            </div>
+            <div class="flex flex-col gap-4 p-6 md:p-8">
+              <div>
+                <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
+                  {{ product.tag }}
+                </p>
+                <h2 class="text-2xl md:text-3xl font-black leading-tight text-foreground mb-2">
+                  {{ product.name }}
+                </h2>
+                <p class="text-xl font-extrabold text-primary">{{ product.price }}</p>
+              </div>
+              <p class="text-sm md:text-base leading-relaxed text-muted-foreground">
+                {{ product.description || product.copy }}
               </p>
-              <h2>{{ product.name }}</h2>
-              <p>{{ product.description || product.copy }}</p>
-              <div class="flex gap-3 flex-wrap">
-                <button hlmBtn type="button" (click)="addToCart(product)">Agregar</button>
-                <a hlmBtn variant="outline" routerLink="/tienda">Ver catálogo</a>
+              <div class="flex flex-col sm:flex-row gap-3 mt-auto">
+                <button hlmBtn type="button" class="flex-1" (click)="addToCart(product)">
+                  Agregar al carrito
+                </button>
+                <a hlmBtn variant="outline" class="flex-1 text-center" routerLink="/tienda">
+                  Ver catálogo
+                </a>
               </div>
             </div>
           </article>
