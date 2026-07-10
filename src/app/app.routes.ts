@@ -136,6 +136,13 @@ const shellRoutes: Routes = [
                 (m) => m.AdminProductFormComponent,
               ),
           },
+          {
+            path: 'social-metrics',
+            loadComponent: () =>
+              import('./features/admin/social-metrics/admin-social-metrics.component').then(
+                (m) => m.AdminSocialMetricsComponent,
+              ),
+          },
         ],
       },
       {

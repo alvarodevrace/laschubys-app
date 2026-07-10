@@ -108,14 +108,14 @@ interface NavItem {
       >
         <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
           <!-- Logo -->
-          <a routerLink="/" class="flex items-center justify-start ml-15 mt-3">
+          <a routerLink="/" class="flex items-center justify-start ml-8">
             <img
               src="/brand/logoLasChubys.png?v=1"
               alt="Las Chubys"
-              width="120"
-              height="80"
+              width="84"
+              height="56"
               loading="eager"
-              class="h-20 w-auto scale-[1.9] origin-center drop-shadow-sm"
+              class="h-14 w-auto drop-shadow-sm"
             />
           </a>
 
@@ -125,9 +125,9 @@ interface NavItem {
               @for (item of navItems; track item.testId) {
                 <li hlmNavigationMenuItem>
                   @if (item.children) {
-                    <button hlmNavigationMenuTrigger [attr.data-testid]="item.testId">
+                    <button hlmNavigationMenuTrigger class="gap-2" [attr.data-testid]="item.testId">
                       @if (item.icon) {
-                        <ng-icon [name]="iconName(item.icon)" hlmIcon />
+                        <ng-icon [name]="iconName(item.icon)" hlmIcon class="w-4 h-4" />
                       }
                       <span>{{ item.label }}</span>
                     </button>
@@ -140,12 +140,13 @@ interface NavItem {
                               <li>
                                 <a
                                   hlmNavigationMenuLink
+                                  class="gap-2"
                                   [routerLink]="[child.href]"
                                   [queryParams]="child.queryParams ?? null"
                                   [fragment]="child.fragment"
                                   [attr.data-testid]="child.testId"
                                 >
-                                  <ng-icon [name]="iconName(child.icon)" hlmIcon />
+                                  <ng-icon [name]="iconName(child.icon)" hlmIcon class="w-4 h-4" />
                                   <span>{{ child.label }}</span>
                                 </a>
                               </li>
@@ -179,6 +180,7 @@ interface NavItem {
                   } @else {
                     <a
                       hlmNavigationMenuLink
+                      class="gap-2"
                       [routerLink]="item.href"
                       routerLinkActive
                       #rla="routerLinkActive"
@@ -186,7 +188,7 @@ interface NavItem {
                       [attr.data-testid]="item.testId"
                     >
                       @if (item.icon) {
-                        <ng-icon [name]="iconName(item.icon)" hlmIcon />
+                        <ng-icon [name]="iconName(item.icon)" hlmIcon class="w-4 h-4" />
                       }
                       <span>{{ item.label }}</span>
                     </a>
@@ -289,9 +291,9 @@ interface NavItem {
               <img
                 src="/brand/logoLasChubys.png?v=1"
                 alt="Las Chubys"
-                width="100"
-                height="67"
-                class="h-16 w-auto scale-[1.6] origin-center drop-shadow-sm"
+                width="72"
+                height="48"
+                class="h-12 w-auto drop-shadow-sm"
               />
             </a>
             <button
