@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { environment } from './core/config/environment';
-import { UnderConstructionComponent } from './features/static/under-construction.component';
-
 const linktreeRoute: Routes = [
   {
     path: 'linktree',
@@ -11,16 +8,7 @@ const linktreeRoute: Routes = [
   },
 ];
 
-const constructionRoutes: Routes = [
-  ...linktreeRoute,
-  {
-    path: '',
-    component: UnderConstructionComponent,
-  },
-  { path: '**', redirectTo: '', pathMatch: 'full' },
-];
-
-const shellRoutes: Routes = [
+export const routes: Routes = [
   ...linktreeRoute,
   {
     path: '',
@@ -154,5 +142,3 @@ const shellRoutes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-export const routes: Routes = environment.underConstruction ? constructionRoutes : shellRoutes;
