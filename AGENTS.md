@@ -31,7 +31,7 @@
 - Zoneless: `provideZonelessChangeDetection()`; no usar `zone.js`.
 - Control flow nativo: `@if`, `@for`, `@switch`.
 - OnPush obligatorio en componentes.
-- No lifecycle hooks (`ngOnInit`, `ngOnChanges`, `ngOnDestroy`). Usar `effect()` + `DestroyRef`.
+- Evitar lifecycle hooks (`ngOnInit`, `ngOnChanges`, `ngOnDestroy`); preferir `effect()` + `DestroyRef`. Existen componentes legacy que aún los usan y deben migrarse progresivamente.
 - Spartan NG para componentes de UI base.
 - Tailwind CSS 4 para estilos.
 - Estructura actual:
