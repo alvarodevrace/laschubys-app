@@ -1,22 +1,24 @@
 # AGENTS.md — Las Chubys Frontend
 
 > Instrucciones de proyecto para Kimi Code operando en `LasChubys-Front`.
-> Lee siempre `KIMI.md`, `agents/KIMI-AGENTS.md` y `vault/laschubys/00-Index/INDEX.md` antes de este archivo.
+> Lee siempre `../../KIMI.md`, `../../agents/KIMI-AGENTS.md` y `../../vault/laschubys/00-Index/INDEX.md` antes de este archivo.
 
 ## Proyecto
 
-| Campo           | Valor                                                                      |
-| --------------- | -------------------------------------------------------------------------- |
-| Nombre          | Las Chubys — Frontend                                                      |
-| Repo            | https://github.com/alvarodevrace/laschubys-app                             |
-| Stack           | Angular 21 SSR, Tailwind CSS 4, Spartan NG, Lucide Angular, Motion, Sentry |
-| Package manager | Bun 1.3.14                                                                 |
-| Rama default    | `develop`                                                                  |
+| Campo            | Valor                                                                      |
+| ---------------- | -------------------------------------------------------------------------- |
+| Nombre           | Las Chubys — Frontend                                                      |
+| Repo             | https://github.com/alvarodevrace/laschubys-app                             |
+| Stack            | Angular 21 SSR, Tailwind CSS 4, Spartan NG, Lucide Angular, Motion, Sentry |
+| Package manager  | Bun 1.3.14                                                                 |
+| Rama default     | `main`                                                                     |
+| Rama integración | `develop`                                                                  |
 
 ## Agentes que operan aquí
 
 | Agente     | Rol en este proyecto                                                               |
 | ---------- | ---------------------------------------------------------------------------------- |
+| KIMI-TRIN  | Orquestador. Abre/mergea PRs, coordina QA, nunca aprueba su propio PR.             |
 | KIMI-PIXEL | Dueño del código Angular. Implementa features, corrige bugs, optimiza performance. |
 | KIMI-AURA  | Diseña shells visuales nuevos en Figma → Angular. Nunca escribe lógica de negocio. |
 | KIMI-NOVA  | QA: Playwright, Lighthouse, typecheck, build. Nunca modifica código productivo.    |
@@ -52,25 +54,30 @@ bun run build
 ## Flujo Git (LEY DE RAMAS)
 
 ```
-rama feature (feature/LCH-N-nombre) → commits locales → build OK → merge local a develop
-→ avisa a TRIN: "listo en develop local — rama: feature/LCH-N-nombre"
-→ TRIN push develop → llama a NOVA → PR develop → main → Álvaro aprueba → deploy Dokploy
+rama feature (feature/LCH-N-nombre) → commits locales → build OK
+→ push feature/LCH-N-nombre
+→ PR feature → develop
+→ NOVA QA pass + CI verde
+→ Álvaro aprueba → merge a develop
+→ PR develop → main
+→ Álvaro aprueba → merge → deploy Dokploy
 ```
 
 - Nunca push directo a `main` ni `develop`.
+- Nunca merge a `develop` sin QA de NOVA.
 - Nombres de rama: `feature/LCH-N-nombre-corto`.
 - TRIN nunca aprueba su propio PR; solo Álvaro aprueba.
 - Commits en español, descriptivos, preferiblemente conventional commits.
 
 ## Reglas de frontera
 
-- PIXEL no mergea su propio PR sin QA de NOVA.
+- PIXEL no mergea su propio PR; Álvaro (o quien él delegue) es el único approver.
 - AURA entrega shells listos para que PIXEL integre la lógica.
 - NOVA solo reporta; si encuentra bug, crea ticket/comentario y asigna a PIXEL.
 - No instalar dependencias sin justificar y sin actualizar `bun.lockb`.
 
 ## Memoria del proyecto
 
-- Decisiones técnicas: `vault/laschubys/20-Tech/decisions/`.
-- Especificaciones de producto: `vault/laschubys/30-Product/specs/`.
-- Log diario: `vault/laschubys/10-Log/LOG.md`.
+- Decisiones técnicas: `../../vault/laschubys/20-Tech/decisions/`.
+- Especificaciones de producto: `../../vault/laschubys/30-Product/specs/`.
+- Log diario: `../../vault/laschubys/10-Log/LOG.md`.
