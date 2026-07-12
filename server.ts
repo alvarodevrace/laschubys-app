@@ -97,16 +97,37 @@ function proxyToApi(req: IncomingMessage, res: ServerResponse, overridePath?: st
   req.pipe(proxy);
 }
 
+function getSentryOrigin(): string | null {
+  const dsn = process.env['SENTRY_DSN'];
+  if (!dsn) return null;
+  try {
+    return new URL(dsn).origin;
+  } catch {
+    return null;
+  }
+}
+
 function buildCspHeader(nonce: string, apiTarget: string): string {
   // PUBLIC_SUPABASE_URL is injected at build time by Dokploy.
   const supabaseUrl = process.env['PUBLIC_SUPABASE_URL'] || 'https://db.alvarodevrace.tech';
+  const sentryOrigin = getSentryOrigin();
+  const connectSrc = [
+    "'self'",
+    apiTarget,
+    supabaseUrl,
+    `wss://${new URL(supabaseUrl).host}`,
+    'https://analytics.alvarodevrace.tech',
+    'https://static.cloudflareinsights.com',
+    sentryOrigin,
+  ].filter(Boolean);
   return [
     "default-src 'self'",
     "font-src 'self' https://fonts.gstatic.com",
     "img-src 'self' data: https:",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-    `script-src 'self' 'nonce-${nonce}' https://analytics.alvarodevrace.tech`,
-    `connect-src 'self' ${apiTarget} ${supabaseUrl} wss://${new URL(supabaseUrl).host} https://analytics.alvarodevrace.tech`,
+    `script-src 'self' 'nonce-${nonce}' https://analytics.alvarodevrace.tech https://static.cloudflareinsights.com`,
+    `connect-src ${connectSrc.join(' ')}`,
+    "worker-src 'self' blob:",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
