@@ -4,7 +4,12 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4321 --no-hmr",
+    "start:dev": "ng serve --port 4321 --no-hmr",
+    "start:prod": "bun run build:prod && bun run serve:prod",
+    "serve:prod": "NODE_ENV=production bun dist/laschubys-ng/server/server.mjs",
     "build": "NG_BUILD_PARTIAL_SSR=1 CI=1 ng build --configuration production --no-progress",
+    "build:dev": "ng build --configuration development",
+    "build:prod": "NG_BUILD_PARTIAL_SSR=1 CI=1 ng build --configuration production --no-progress",
     "typecheck": "npx tsc --noEmit",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
