@@ -76,6 +76,12 @@ rama feature (feature/LCH-N-nombre) → commits locales → build OK
 - NOVA solo reporta; si encuentra bug, crea ticket/comentario y asigna a PIXEL.
 - No instalar dependencias sin justificar y sin actualizar `bun.lockb`.
 
+## Ritual de cierre
+
+1. Crear dump en `../../vault/laschubys/temp/YYYY-MM-DD-<AGENTE>.md`.
+2. Migrar memorias relevantes de Engram a `../../vault/laschubys/10-Log/LOG.md` o `../../vault/laschubys/20-Tech/decisions/`.
+3. Comentar ticket en Planka y mover a Done si aplica.
+
 ## Memoria del proyecto
 
 - Decisiones técnicas: `../../vault/laschubys/20-Tech/decisions/`.
