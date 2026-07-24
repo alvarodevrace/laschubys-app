@@ -97,7 +97,7 @@ interface NavItem {
   ],
   template: `
     <header
-      class="fixed top-3 left-0 right-0 mx-auto z-50 w-[calc(100%-1.5rem)] max-w-6xl"
+      class="fixed top-3 left-0 right-0 mx-auto z-50 w-[calc(100%-4rem)]"
       [class.animate-in]="isVisible()"
       data-testid="header-pill"
     >
@@ -121,7 +121,7 @@ interface NavItem {
 
           <!-- Desktop nav -->
           <nav hlmNavigationMenu class="hidden lg:flex justify-center">
-            <ul hlmNavigationMenuList>
+            <ul hlmNavigationMenuList class="gap-6">
               @for (item of navItems; track item.testId) {
                 <li hlmNavigationMenuItem>
                   @if (item.children) {
@@ -180,7 +180,7 @@ interface NavItem {
                   } @else {
                     <a
                       hlmNavigationMenuLink
-                      class="gap-2"
+                      class="gap-2 min-w-[120px] justify-center"
                       [routerLink]="item.href"
                       routerLinkActive
                       #rla="routerLinkActive"
@@ -477,56 +477,9 @@ export class HeaderComponent {
   protected readonly navItems: NavItem[] = [
     {
       label: 'Tienda',
-      testId: 'header-nav-tienda',
+      href: '/tienda',
       icon: 'lucideStore',
-      children: [
-        {
-          label: 'Alimentos',
-          href: '/tienda',
-          queryParams: { categoria: 'alimentos' },
-          icon: 'lucideCat',
-          testId: 'header-nav-tienda-alimentos',
-        },
-        {
-          label: 'Arenas',
-          href: '/tienda',
-          queryParams: { categoria: 'arenas' },
-          icon: 'lucideSparkles',
-          testId: 'header-nav-tienda-arenas',
-        },
-        {
-          label: 'Juguetes',
-          href: '/tienda',
-          queryParams: { categoria: 'juguetes' },
-          icon: 'lucideHeart',
-          testId: 'header-nav-tienda-juguetes',
-        },
-        {
-          label: 'Accesorios',
-          href: '/tienda',
-          queryParams: { categoria: 'accesorios' },
-          icon: 'lucideLayoutGrid',
-          testId: 'header-nav-tienda-accesorios',
-        },
-        {
-          label: 'Higiene',
-          href: '/tienda',
-          queryParams: { categoria: 'higiene' },
-          icon: 'lucideSparkles',
-          testId: 'header-nav-tienda-higiene',
-        },
-        {
-          label: 'Ver todo',
-          href: '/tienda',
-          icon: 'lucideStore',
-          testId: 'header-nav-tienda-todo',
-        },
-      ],
-      featured: {
-        image: '/images/cats/iris4.jpeg',
-        title: 'Lo mejor para tu michi',
-        href: '/tienda',
-      },
+      testId: 'header-nav-tienda',
     },
     {
       label: 'Servicios',
@@ -536,35 +489,15 @@ export class HeaderComponent {
     },
     {
       label: 'Nosotras',
-      testId: 'header-nav-about',
+      href: '/about',
       icon: 'lucideUsers',
-      children: [
-        {
-          label: 'Sobre nosotras',
-          href: '/about',
-          icon: 'lucideHeart',
-          testId: 'header-nav-about-nosotras',
-        },
-        {
-          label: 'Nuestro equipo',
-          href: '/about',
-          fragment: 'equipo',
-          icon: 'lucideUsers',
-          testId: 'header-nav-about-equipo',
-        },
-        {
-          label: 'Contacto',
-          href: '/contact',
-          icon: 'lucideMail',
-          testId: 'header-nav-about-contact',
-        },
-      ],
+      testId: 'header-nav-nosotras',
     },
     {
-      label: 'Blog',
+      label: 'Comunidad',
       href: '/blog',
       icon: 'lucideBookOpen',
-      testId: 'header-nav-blog',
+      testId: 'header-nav-comunidad',
     },
     {
       label: 'Contacto',
