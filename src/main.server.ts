@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { bootstrapApplication } from '@angular/platform-browser';
 import WebSocket from 'ws';
 
