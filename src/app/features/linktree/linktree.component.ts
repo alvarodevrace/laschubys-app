@@ -70,6 +70,32 @@ import { SeoService } from '../../core/services/seo.service';
                 Reality y parodias felinas.
               </p>
               <nav class="flex w-full flex-col gap-2" aria-label="Enlaces principales">
+                <!-- Huellas de Paz -->
+                <button
+                  type="button"
+                  (click)="showCourses.set(true)"
+                  hlmBtn
+                  variant="outline"
+                  class="grid h-12 w-full grid-cols-[2rem_1fr_2rem] items-center gap-2 rounded-full border-stone-100 bg-white px-5 text-base font-semibold text-stone-800 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
+                  aria-label="Ver cursos de Huellas de Paz"
+                >
+                  <svg
+                    class="h-6 w-6 justify-self-center text-purple-600"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 10.5c-2.8 0-5 2-5 4.5s1.5 4 5 4 5-1.7 5-4-2.2-4.5-5-4.5z" />
+                    <circle cx="7" cy="7" r="2" />
+                    <circle cx="12" cy="5" r="2.2" />
+                    <circle cx="17" cy="7" r="2" />
+                    <circle cx="6" cy="11.5" r="1.5" />
+                    <circle cx="18" cy="11.5" r="1.5" />
+                  </svg>
+                  <span class="text-center">Huellas de Paz</span>
+                  <span aria-hidden="true" class="h-6 w-6"></span>
+                </button>
+
                 <!-- Instagram -->
                 <a
                   [href]="socialChannels[0].href"
@@ -167,32 +193,6 @@ import { SeoService } from '../../core/services/seo.service';
                   <span class="text-center">laschubys.oficial@gmail.com</span>
                   <span aria-hidden="true" class="h-6 w-6"></span>
                 </a>
-
-                <!-- Huellas de Paz -->
-                <button
-                  type="button"
-                  (click)="showCourses.set(true)"
-                  hlmBtn
-                  variant="outline"
-                  class="grid h-12 w-full grid-cols-[2rem_1fr_2rem] items-center gap-2 rounded-full border-stone-100 bg-white px-5 text-base font-semibold text-stone-800 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
-                  aria-label="Ver cursos de Huellas de Paz"
-                >
-                  <svg
-                    class="h-6 w-6 justify-self-center text-purple-600"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 10.5c-2.8 0-5 2-5 4.5s1.5 4 5 4 5-1.7 5-4-2.2-4.5-5-4.5z" />
-                    <circle cx="7" cy="7" r="2" />
-                    <circle cx="12" cy="5" r="2.2" />
-                    <circle cx="17" cy="7" r="2" />
-                    <circle cx="6" cy="11.5" r="1.5" />
-                    <circle cx="18" cy="11.5" r="1.5" />
-                  </svg>
-                  <span class="text-center">Huellas de Paz</span>
-                  <span aria-hidden="true" class="h-6 w-6"></span>
-                </button>
               </nav>
             </div>
 
