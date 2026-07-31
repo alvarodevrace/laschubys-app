@@ -52,6 +52,8 @@ import { SeoService } from '../../core/services/seo.service';
         <div class="relative mt-5 flex-1 w-full overflow-hidden">
           <div
             class="flex w-[200%] transition-transform duration-300 ease-out"
+            (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)"
             [class.-translate-x-1/2]="showCourses()"
           >
             <!-- Panel 1: social + Huellas de Paz -->
@@ -266,6 +268,21 @@ export class LinktreeComponent {
 
   protected readonly socialChannels = socialChannels;
   protected readonly showCourses = signal(false);
+  private touchStartX = 0;
+
+  protected onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  protected onTouchEnd(event: TouchEvent) {
+    const delta = this.touchStartX - event.changedTouches[0].screenX;
+    const threshold = 50;
+    if (delta > threshold && !this.showCourses()) {
+      this.showCourses.set(true);
+    } else if (delta < -threshold && this.showCourses()) {
+      this.showCourses.set(false);
+    }
+  }
 
   protected readonly courses = [
     { label: 'Curso Virtual - Huellas de Paz', href: 'https://go.hotmart.com/T106786930X' },

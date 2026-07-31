@@ -1,22 +1,37 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
-import { lucideBookOpen, lucideImage } from '@ng-icons/lucide';
-
+import { lucideClapperboard, lucideFilm, lucideSofa, lucideTv } from '@ng-icons/lucide';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 
-import { serviceHighlights } from '../../core/content/site-content';
+import { chubySeries } from '../../core/content/site-content';
 import { SeoService } from '../../core/services/seo.service';
+import { ScrollRevealDirective, StaggerChildrenDirective } from '../../shared/animations';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-servicios',
   standalone: true,
-  imports: [RouterLink, HlmButtonImports, HlmBreadcrumbImports, HlmCardImports, HlmIconImports],
-  providers: [provideIcons({ lucideBookOpen, lucideImage })],
+  imports: [
+    RouterLink,
+    HlmButtonImports,
+    HlmBreadcrumbImports,
+    HlmCardImports,
+    HlmIconImports,
+    ScrollRevealDirective,
+    StaggerChildrenDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideClapperboard,
+      lucideFilm,
+      lucideSofa,
+      lucideTv,
+    }),
+  ],
   template: `
     <section class="py-10 pb-8" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
@@ -27,67 +42,65 @@ import { SeoService } from '../../core/services/seo.service';
             </li>
             <li hlmBreadcrumbSeparator></li>
             <li hlmBreadcrumbItem>
-              <span hlmBreadcrumbPage>Servicios</span>
+              <span hlmBreadcrumbPage>Series</span>
             </li>
           </ol>
         </nav>
-        <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-primary mb-2"
-        >
-          Nuestros Servicios
-        </h1>
+        <h1 class="text-h1 text-primary mb-2">Nuestras Series</h1>
         <p class="text-muted-foreground max-w-2xl">
-          Elevando el estilo de vida felino a través de experiencias diseñadas por el equipo de Las
-          Chubys.
+          Ocho formatos que conforman el universo de Las Chubys. Cada publicación es un nuevo
+          episodio.
         </p>
       </div>
     </section>
 
-    <section class="services-preview" data-reveal>
+    <section class="pb-16" data-reveal>
       <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-end justify-between gap-4 mb-6">
-          <div>
-            <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-              Experiencias
-            </p>
-            <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
-              Nuestros Servicios
-            </h2>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          @for (item of serviceHighlights; track item.title; let i = $index) {
-            <hlm-card class="text-center">
-              <div
-                class="w-12 h-12 rounded-xl flex items-center justify-center text-xl mb-5 bg-primary/[0.12] text-primary"
-              >
-                @if (i === 0) {
-                  <ng-icon hlmIcon name="lucideBookOpen" class="w-5 h-5" />
-                } @else if (i === 1) {
-                  <ng-icon hlmIcon name="lucideImage" class="w-5 h-5" />
-                } @else {
-                  <ng-icon hlmIcon name="lucideBookOpen" class="w-5 h-5" />
-                }
-              </div>
-              <h3 class="text-lg font-extrabold mb-3 text-foreground">{{ item.title }}</h3>
-              <p class="text-sm text-muted-foreground leading-relaxed mb-6">{{ item.body }}</p>
-              <a routerLink="/contact" hlmBtn variant="link">Consultar →</a>
-            </hlm-card>
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
+          appStaggerChildren
+          childSelector="article"
+          [staggerDelay]="0.06"
+          [duration]="0.5"
+          [y]="24"
+        >
+          @for (s of chubySeries; track s.title) {
+            <article
+              class="group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default"
+              [class]="s.color"
+            >
+              <ng-icon hlmIcon [name]="s.icon" class="w-7 h-7 block mb-3 text-foreground/70" />
+              <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                {{ s.subtitle }}
+              </p>
+              <h3 class="text-base font-bold text-foreground mb-2 leading-snug">{{ s.title }}</h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">{{ s.description }}</p>
+            </article>
           }
         </div>
+      </div>
+    </section>
+
+    <section class="py-16 bg-surface">
+      <div class="max-w-3xl mx-auto px-4 text-center" appScrollReveal [y]="24" [duration]="0.6">
+        <h2 class="text-h2 mb-4">¿Quieres formar parte del universo?</h2>
+        <p class="text-muted-foreground leading-relaxed mb-8">
+          El público puede unirse al Comité de Gatos Asociados (CGA), una extensión participativa
+          del lore hacia los seguidores.
+        </p>
+        <a routerLink="/contact" hlmBtn>Únete al CGA</a>
       </div>
     </section>
   `,
 })
 export class ServiciosComponent {
   private readonly seo = inject(SeoService);
-  protected readonly serviceHighlights = serviceHighlights;
+  protected readonly chubySeries = chubySeries;
 
   constructor() {
     this.seo.setPage(
-      'Servicios | Las Chubys',
-      'Servicios y colaboraciones editoriales del universo Las Chubys.',
+      'Series | Las Chubys',
+      'Descubre las 8 series del universo Las Chubys: CGA, Noticias Chubys, Expedientes Chubys y más.',
       '/images/cats/iris3.jpeg',
       '/servicios',
     );

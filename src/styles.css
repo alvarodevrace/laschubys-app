@@ -5,7 +5,6 @@
 
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
 @theme {
-  /* Paleta de marca: naranja + stone (Tailwind v4) */
   --color-orange-50: oklch(98% 0.016 73.684);
   --color-orange-100: oklch(95.4% 0.038 75.164);
   --color-orange-200: oklch(90.1% 0.076 70.697);
@@ -17,6 +16,18 @@
   --color-orange-800: oklch(47% 0.157 37.304);
   --color-orange-900: oklch(40.8% 0.123 38.172);
   --color-orange-950: oklch(26.6% 0.079 36.259);
+
+  --color-rose-50: oklch(97% 0.018 355);
+  --color-rose-100: oklch(93.5% 0.035 355);
+  --color-rose-200: oklch(87% 0.06 355);
+  --color-rose-300: oklch(79% 0.095 355);
+  --color-rose-400: oklch(71% 0.13 355);
+  --color-rose-500: oklch(64% 0.16 355);
+  --color-rose-600: oklch(56% 0.18 355);
+  --color-rose-700: oklch(48% 0.17 355);
+  --color-rose-800: oklch(41% 0.14 355);
+  --color-rose-900: oklch(34% 0.11 355);
+  --color-rose-950: oklch(22% 0.07 355);
 
   --color-stone-50: oklch(98.5% 0.001 106.423);
   --color-stone-100: oklch(97% 0.001 106.424);
@@ -30,12 +41,45 @@
   --color-stone-900: oklch(21.6% 0.006 56.043);
   --color-stone-950: oklch(14.7% 0.004 49.25);
 
-  --color-surface: var(--color-stone-50);
+  --color-surface: #f6e9d8;
   --color-surface-foreground: var(--color-stone-950);
 
-  --font-sans: 'Open Sans', sans-serif;
+  --font-sans: 'Fredoka', sans-serif;
+
+  --text-h1: 3rem;
+  --text-h1--line-height: 1.1;
+  --text-h1--font-weight: 700;
+  --text-h2: 2.25rem;
+  --text-h2--line-height: 1.2;
+  --text-h2--font-weight: 700;
+  --text-h3: 1.75rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 600;
+  --text-h4: 1.5rem;
+  --text-h4--line-height: 1.4;
+  --text-h4--font-weight: 600;
+  --text-body: 1.25rem;
+  --text-body--line-height: 1.6;
+  --text-small: 1.125rem;
+  --text-small--line-height: 1.5;
+  --text-xs: 1rem;
+  --text-xs--line-height: 1.4;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
   --animate-marquee: marquee 20s linear infinite;
   --animate-auth-pulse: authPulse 1.2s ease-in-out infinite;
+  --animate-slide-up: slideUp 0.35s var(--ease-smooth);
+  --animate-wiggle: wiggle 0.5s ease-in-out;
+  --animate-bounce-in: bounceIn 0.5s var(--ease-bounce);
+  --animate-float: float 3s ease-in-out infinite;
 }
 
 @keyframes marquee {
@@ -44,6 +88,61 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-3deg);
+  }
+  40% {
+    transform: rotate(3deg);
+  }
+  60% {
+    transform: rotate(-2deg);
+  }
+  80% {
+    transform: rotate(2deg);
+  }
+}
+
+@keyframes bounceIn {
+  from {
+    opacity: 0;
+    transform: scale(0.6) translateY(0.5rem);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-0.15rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
   }
 }
 
@@ -77,9 +176,11 @@ Base tokens + reset
     margin: 0;
     background: var(--background);
     color: var(--foreground);
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
     line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   a {
@@ -124,16 +225,15 @@ Base tokens + reset
 :root {
   color-scheme: light;
 
-  /* Luma-like: suave, redondeado, fluido */
-  --radius: 1rem;
   --background: oklch(1 0 0);
   --foreground: var(--color-stone-950);
   --card: oklch(1 0 0);
   --card-foreground: var(--color-stone-950);
   --popover: oklch(1 0 0);
   --popover-foreground: var(--color-stone-950);
-  --primary: var(--color-orange-500);
+  --primary: var(--color-orange-600);
   --primary-foreground: var(--color-orange-50);
+  --primary-text: var(--color-orange-800);
   --secondary: var(--color-stone-100);
   --secondary-foreground: var(--color-stone-900);
   --muted: var(--color-stone-100);
@@ -143,7 +243,7 @@ Base tokens + reset
   --destructive: var(--color-red-500);
   --border: var(--color-stone-200);
   --input: var(--color-stone-200);
-  --ring: var(--color-orange-500);
+  --ring: var(--color-orange-600);
   --sidebar: var(--color-stone-50);
   --sidebar-foreground: var(--color-stone-950);
   --sidebar-primary: var(--color-stone-900);
@@ -151,7 +251,7 @@ Base tokens + reset
   --sidebar-accent: var(--color-stone-100);
   --sidebar-accent-foreground: var(--color-stone-900);
   --sidebar-border: var(--color-stone-200);
-  --sidebar-ring: var(--color-orange-500);
+  --sidebar-ring: var(--color-orange-600);
 }
 
 :root.dark {
@@ -163,8 +263,9 @@ Base tokens + reset
   --card-foreground: var(--color-stone-50);
   --popover: var(--color-stone-900);
   --popover-foreground: var(--color-stone-50);
-  --primary: var(--color-orange-500);
+  --primary: var(--color-orange-400);
   --primary-foreground: var(--color-stone-950);
+  --primary-text: var(--color-orange-300);
   --secondary: var(--color-stone-800);
   --secondary-foreground: var(--color-stone-50);
   --muted: var(--color-stone-800);
@@ -191,5 +292,34 @@ Base tokens + reset
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  ::-webkit-scrollbar {
+    width: 14px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-orange-300);
+    border-radius: 8px;
+    border: 2px solid var(--color-surface);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-orange-400);
+  }
+
+  swiper-container::part(button-prev),
+  swiper-container::part(button-next) {
+    background: white !important;
+    border-radius: 50% !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    width: 32px !important;
+    height: 32px !important;
+  }
+  swiper-container::part(button-prev):hover,
+  swiper-container::part(button-next):hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   }
 }

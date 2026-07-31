@@ -21,7 +21,7 @@ import { ProductPick } from '../../core/models/content.model';
   template: `
     <article
       hlmCard
-      class="group relative cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      class="group relative cursor-pointer transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)]"
       (click)="navigateToDetail()"
       [attr.data-product-slug]="product().slug"
       [attr.data-product-type]="product().productType"
@@ -60,7 +60,12 @@ import { ProductPick } from '../../core/models/content.model';
             [disabled]="adding()"
             (click)="add.emit(product())"
           >
-            @if (adding()) {
+            @if (added()) {
+              <span class="inline-flex items-center gap-1.5 text-emerald-600 font-bold">
+                <span class="text-lg leading-none">✓</span>
+                Agregado
+              </span>
+            } @else if (adding()) {
               <hlm-spinner class="w-3.5 h-3.5" />
               Agregando...
             } @else {
@@ -91,6 +96,7 @@ export class ProductCardComponent {
 
   readonly product = input.required<ProductPick>();
   readonly adding = input<boolean>(false);
+  readonly added = input<boolean>(false);
   readonly add = output<ProductPick>();
 
   protected navigateToDetail() {

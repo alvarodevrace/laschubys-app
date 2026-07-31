@@ -1,10 +1,27 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideCamera,
+  lucideCrown,
+  lucideFlame,
+  lucideHome,
+  lucideTv,
+  lucideUser,
+  lucideUsers,
+} from '@ng-icons/lucide';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmIconImports } from '@spartan-ng/helm/icon';
 
-import { personas, serviceHighlights, socialChannels } from '../../core/content/site-content';
+import {
+  characters,
+  humans,
+  chubySeries,
+  casaChuby,
+  socialChannels,
+} from '../../core/content/site-content';
 import { SeoService } from '../../core/services/seo.service';
 import {
   ScrollRevealDirective,
@@ -22,10 +39,22 @@ import {
     HlmButtonImports,
     HlmBreadcrumbImports,
     HlmCardImports,
+    HlmIconImports,
     ScrollRevealDirective,
     ParallaxDirective,
     StaggerChildrenDirective,
     TextRevealDirective,
+  ],
+  providers: [
+    provideIcons({
+      lucideCamera,
+      lucideCrown,
+      lucideFlame,
+      lucideHome,
+      lucideTv,
+      lucideUser,
+      lucideUsers,
+    }),
   ],
   template: `
     <!-- Hero -->
@@ -47,9 +76,10 @@ import {
 
         <div class="max-w-xl z-10" appScrollReveal [y]="30" [duration]="0.7">
           <p
-            class="inline-block text-xs font-extrabold uppercase tracking-widest text-primary mb-4"
+            class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-primary mb-4"
           >
-            Bienvenidos a nuestra casa
+            <ng-icon hlmIcon name="lucideHome" class="w-4 h-4" />
+            <span>Bienvenidos a la Casa Chuby</span>
           </p>
           <h1
             id="about-title"
@@ -59,15 +89,21 @@ import {
               >Dos gatas.</span
             >
             <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
-              >Una mamá.</span
+              >Dos humanas.</span
             >
             <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
               >Un universo.</span
             >
           </h1>
           <p class="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
-            Las Chubys nació de una casa llena de pelos, siestas y zoomies. Hoy somos una comunidad
-            de cat moms que celebra el caos elegante de convivir con michis.
+            Las Chubys es un reality show y sitcom parodia protagonizada por gatos. No es una cuenta
+            de mascotas: es una franquicia con lore, personajes con arcos propios y un mundo
+            coherente donde cada publicación funciona como un nuevo episodio.
+          </p>
+          <p class="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+            La casa está habitada por dos hermanas gatas completamente opuestas —Iris y Rubí— y sus
+            dos humanas subordinadas, Karen y Karencio, quienes conviven (y sobreviven) al caos
+            diario que las gatas convierten en drama épico.
           </p>
           <div class="flex flex-wrap items-center gap-4">
             <a routerLink="/contact" hlmBtn>Escríbenos</a>
@@ -87,7 +123,7 @@ import {
           <div class="relative h-[380px] md:h-[480px]">
             <img
               src="/images/cats/iris.jpeg"
-              alt="Iris, la gata seria de Las Chubys"
+              alt="Iris, la Reina de la Casa Chuby"
               loading="eager"
               appParallax
               [speed]="-0.25"
@@ -95,7 +131,7 @@ import {
             />
             <img
               src="/images/cats/rubi.jpeg"
-              alt="Rubi, la gata revoltosa de Las Chubys"
+              alt="Rubí, la Defensora del caos"
               loading="eager"
               appParallax
               [speed]="0.2"
@@ -115,98 +151,77 @@ import {
       </svg>
     </section>
 
-    <!-- Protagonistas -->
-    <section class="py-16 md:py-24 bg-white" aria-labelledby="cats-title">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header class="text-center mb-12 md:mb-16" appScrollReveal [y]="30" [duration]="0.6">
-          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
-            Las protagonistas
-          </p>
-          <h2 id="cats-title" class="text-3xl md:text-4xl font-extrabold tracking-tight text-dark">
-            Conoce a Iris y Rubi
-          </h2>
-        </header>
-
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8"
-          appStaggerChildren
-          childSelector="article"
-          [staggerDelay]="0.12"
-          [duration]="0.6"
-          [y]="40"
+    <!-- La Casa Chuby -->
+    <section class="py-16 md:py-24 bg-white" aria-labelledby="casa-title">
+      <div
+        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
+        appScrollReveal
+        [y]="30"
+        [duration]="0.6"
+      >
+        <p
+          class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
         >
-          @for (cat of cats; track cat.name) {
-            <article hlmCard class="group relative !p-0">
-              <div class="relative aspect-[4/3] overflow-hidden">
-                <img
-                  [src]="cat.image"
-                  [alt]="'Foto de ' + cat.name"
-                  loading="lazy"
-                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div
-                  class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                ></div>
-              </div>
-              <div class="p-6 md:p-8">
-                <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-                  {{ cat.role }}
-                </p>
-                <h3 class="text-2xl font-extrabold text-dark mb-2">{{ cat.name }}</h3>
-                <p class="text-muted-foreground leading-relaxed">{{ cat.accent }}</p>
-              </div>
-            </article>
-          }
+          <ng-icon hlmIcon name="lucideHome" class="w-4 h-4" />
+          <span>El universo</span>
+        </p>
+        <h2 id="casa-title" class="text-h1 mb-6">{{ casaChuby.title }}</h2>
+        <p class="text-muted-foreground leading-relaxed text-lg max-w-2xl mx-auto mb-4">
+          {{ casaChuby.description }}
+        </p>
+        <p class="text-base font-semibold text-foreground/60 italic">"{{ casaChuby.lema }}"</p>
+      </div>
+    </section>
+
+    <!-- Iris -->
+    <section class="py-16 md:py-24 bg-surface" aria-labelledby="iris-title">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
+      >
+        <div appScrollReveal [x]="-40" [duration]="0.7">
+          <img
+            src="/images/cats/iris3.jpeg"
+            alt="Iris Lourdes"
+            loading="lazy"
+            class="w-full rounded-[2rem] shadow-xl"
+          />
+        </div>
+        <div appScrollReveal [x]="40" [duration]="0.7">
+          <ng-icon hlmIcon name="lucideCrown" class="w-8 h-8 mb-3 text-primary" />
+          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
+            {{ irisData.archetype }} — {{ irisData.role }}
+          </p>
+          <h2 id="iris-title" class="text-h1 mb-4">{{ irisData.fullName }}</h2>
+          <div class="space-y-4 text-muted-foreground leading-relaxed">
+            <p>{{ irisData.bio }}</p>
+            <p class="font-semibold text-foreground/80">{{ irisData.personality }}</p>
+            <p class="text-sm italic">{{ irisData.rolNarrativo }}</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Historia -->
-    <section class="py-16 md:py-24 bg-white" aria-labelledby="story-title">
+    <!-- Rubí -->
+    <section class="py-16 md:py-24 bg-white" aria-labelledby="rubi-title">
       <div
         class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
       >
-        <div
-          class="order-2 lg:order-1"
-          appScrollReveal
-          [x]="-50"
-          [duration]="0.7"
-          [easing]="'easeOut'"
-        >
-          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
-            La historia
+        <div class="order-2 lg:order-1" appScrollReveal [x]="-40" [duration]="0.7">
+          <ng-icon hlmIcon name="lucideFlame" class="w-8 h-8 mb-3 text-primary" />
+          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
+            {{ rubiData.archetype }} — {{ rubiData.role }}
           </p>
-          <h2
-            id="story-title"
-            class="text-3xl md:text-4xl font-extrabold tracking-tight text-dark mb-5"
-          >
-            De dos gatas a una marca
-          </h2>
-          <div class="space-y-4 text-muted-foreground leading-relaxed mb-8">
-            <p>
-              Todo empezó con dos gatas de carácter único y una humana que no paraba de sacarles
-              fotos. Iris ponía el drama. Rubi ponía el caos. Entre ronroneos y madrugadas, nació
-              Las Chubys: un espacio para compartir lo bonito, lo divertido y lo útil de vivir con
-              michis.
-            </p>
-            <p>
-              Hoy creamos contenido, recomendamos productos y diseñamos experiencias pensadas para
-              cat moms como tú: personas que saben que una casa con gatos es más feliz, más peluda y
-              mucho menos aburrida.
-            </p>
+          <h2 id="rubi-title" class="text-h1 mb-4">{{ rubiData.fullName }}</h2>
+          <div class="space-y-4 text-muted-foreground leading-relaxed">
+            <p>{{ rubiData.bio }}</p>
+            <p class="font-semibold text-foreground/80">{{ rubiData.personality }}</p>
+            <p class="text-sm italic">{{ rubiData.rolNarrativo }}</p>
           </div>
-          <a routerLink="/contact" hlmBtn>Cuéntanos tu historia</a>
         </div>
-        <div
-          class="order-1 lg:order-2"
-          appScrollReveal
-          [x]="50"
-          [duration]="0.7"
-          [easing]="'easeOut'"
-        >
+        <div class="order-1 lg:order-2" appScrollReveal [x]="40" [duration]="0.7">
           <img
-            src="/images/cats/iris3.jpeg"
-            alt="Iris y Rubi en casa"
+            src="/images/cats/rubi4.jpeg"
+            alt="Rubí Lucrecia"
             loading="lazy"
             class="w-full rounded-[2rem] shadow-xl"
           />
@@ -214,60 +229,107 @@ import {
       </div>
     </section>
 
-    <!-- Servicios -->
+    <!-- Humanas -->
+    <section class="py-16 md:py-24 bg-surface" aria-labelledby="humans-title">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header class="text-center mb-12" appScrollReveal [y]="24" [duration]="0.6">
+          <p
+            class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
+          >
+            <ng-icon hlmIcon name="lucideUsers" class="w-4 h-4" />
+            <span>El staff humano</span>
+          </p>
+          <h2 id="humans-title" class="text-h1 mb-3">Karen y Karencio</h2>
+          <p class="text-muted-foreground max-w-xl mx-auto">
+            Las subordinadas humanas que conviven (y sobreviven) al caos de la Casa Chuby.
+          </p>
+        </header>
+
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 gap-6"
+          appStaggerChildren
+          childSelector="article"
+          [staggerDelay]="0.1"
+          [duration]="0.5"
+          [y]="24"
+        >
+          @for (human of humans; track human.name) {
+            <article hlmCard class="border-t-[3px] border-orange-500">
+              <div hlmCardHeader>
+                <ng-icon hlmIcon name="lucideUser" class="w-7 h-7 text-muted-foreground/60" />
+                <h3 hlmCardTitle>{{ human.name }}</h3>
+                <p hlmCardDescription>{{ human.role }}</p>
+              </div>
+              <div hlmCardContent>
+                <p class="text-body text-muted-foreground leading-relaxed mb-3">
+                  {{ human.personality }}
+                </p>
+                <p class="text-body italic text-muted-foreground/70">{{ human.rolNarrativo }}</p>
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Series / Formatos -->
     @defer (on viewport) {
-      <section class="py-16 md:py-24 bg-surface" aria-labelledby="services-title">
+      <section class="py-16 md:py-24 bg-white" aria-labelledby="series-title">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header class="text-center mb-12 md:mb-16" appScrollReveal [y]="30" [duration]="0.6">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
-              Lo que hacemos
-            </p>
-            <h2
-              id="services-title"
-              class="text-3xl md:text-4xl font-extrabold tracking-tight text-dark"
+          <header class="text-center mb-12" appScrollReveal [y]="24" [duration]="0.6">
+            <p
+              class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
             >
-              Servicios con aroma a gato
-            </h2>
+              <ng-icon hlmIcon name="lucideTv" class="w-4 h-4" />
+              <span>Las series</span>
+            </p>
+            <h2 id="series-title" class="text-h1 mb-3">Formatos del universo Chuby</h2>
+            <p class="text-muted-foreground max-w-xl mx-auto">
+              Cada contenido de Las Chubys pertenece a una de estas series recurrentes. Ocho
+              formatos, un solo universo.
+            </p>
           </header>
 
           <div
-            class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
             appStaggerChildren
             childSelector="article"
-            [staggerDelay]="0.1"
-            [duration]="0.55"
-            [y]="35"
+            [staggerDelay]="0.06"
+            [duration]="0.5"
+            [y]="24"
           >
-            @for (service of services; track service.title) {
-              <article hlmCard class="!p-0 text-center">
-                <div class="p-7 md:p-8">
-                  <span class="text-4xl mb-4 block">{{ serviceIcons[$index] }}</span>
-                  <h3 class="text-xl font-extrabold text-dark mb-2">{{ service.title }}</h3>
-                  <p class="text-muted-foreground leading-relaxed text-sm">{{ service.body }}</p>
-                </div>
+            @for (s of chubySeries; track s.title) {
+              <article
+                class="group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default"
+                [class]="s.color"
+              >
+                <ng-icon hlmIcon [name]="s.icon" class="w-7 h-7 block mb-3 text-foreground/70" />
+                <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                  {{ s.subtitle }}
+                </p>
+                <h3 class="text-base font-bold text-foreground mb-2 leading-snug">{{ s.title }}</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">{{ s.description }}</p>
               </article>
             }
           </div>
         </div>
       </section>
     } @placeholder {
-      <div class="h-48 bg-surface" aria-hidden="true"></div>
+      <div class="h-48 bg-white" aria-hidden="true"></div>
     }
 
     <!-- Galería -->
     @defer (on viewport) {
-      <section class="py-16 md:py-24 bg-white" aria-labelledby="gallery-title">
+      <section class="py-16 md:py-24 bg-surface" aria-labelledby="gallery-title">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header class="text-center mb-12 md:mb-16" appScrollReveal [y]="30" [duration]="0.6">
-            <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2">
-              Momentos
-            </p>
-            <h2
-              id="gallery-title"
-              class="text-3xl md:text-4xl font-extrabold tracking-tight text-dark"
+          <header class="text-center mb-12" appScrollReveal [y]="30" [duration]="0.6">
+            <p
+              class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
             >
-              La vida en cuatro patas
-            </h2>
+              <ng-icon hlmIcon name="lucideCamera" class="w-4 h-4" />
+              <span>Momentos</span>
+            </p>
+            <h2 id="gallery-title" class="text-h1 mb-3">La vida en la Casa Chuby</h2>
           </header>
 
           <div
@@ -292,12 +354,12 @@ import {
         </div>
       </section>
     } @placeholder {
-      <div class="h-48 bg-white" aria-hidden="true"></div>
+      <div class="h-48 bg-surface" aria-hidden="true"></div>
     }
 
     <!-- CTA -->
     @defer (on viewport) {
-      <section class="py-16 md:py-24 bg-surface" aria-labelledby="cta-title">
+      <section class="py-16 md:py-24 bg-white" aria-labelledby="cta-title">
         <div
           class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
           appScrollReveal
@@ -305,20 +367,16 @@ import {
           [duration]="0.7"
           [scale]="0.98"
         >
-          <h2
-            id="cta-title"
-            class="text-3xl md:text-4xl font-extrabold tracking-tight text-dark mb-4"
-          >
-            ¿Quieres colaborar con nosotras?
-          </h2>
+          <h2 id="cta-title" class="text-h1 mb-4">¿Quieres ser parte del Comité?</h2>
           <p class="text-muted-foreground leading-relaxed mb-8 md:text-lg">
-            Marcas, contenido, fotografía y todo lo que tenga que ver con gatas.
+            Únete al CGA (Comité de Gatos Asociados). Marcas, contenido, fotografía y todo lo que
+            tenga que ver con gatas.
           </p>
           <a routerLink="/contact" hlmBtn class="animate-subtle-pulse">Contáctanos</a>
         </div>
       </section>
     } @placeholder {
-      <div class="h-40 bg-surface" aria-hidden="true"></div>
+      <div class="h-40 bg-white" aria-hidden="true"></div>
     }
   `,
   styles: [
@@ -332,11 +390,9 @@ import {
           box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
         }
       }
-
       .animate-subtle-pulse {
         animation: subtle-pulse 2.5s ease-in-out infinite;
       }
-
       @media (prefers-reduced-motion: reduce) {
         .animate-subtle-pulse {
           animation: none;
@@ -348,10 +404,12 @@ import {
 export class AboutComponent {
   private readonly seo = inject(SeoService);
 
-  protected readonly cats = personas;
-  protected readonly services = serviceHighlights;
+  protected readonly irisData = characters[0];
+  protected readonly rubiData = characters[1];
+  protected readonly humans = humans;
+  protected readonly chubySeries = chubySeries;
+  protected readonly casaChuby = casaChuby;
   protected readonly socialChannels = socialChannels;
-  protected readonly serviceIcons = ['🐾', '📸', '✨'];
   protected readonly galleryPhotos = [
     '/images/cats/iris2.jpeg',
     '/images/cats/rubi2.jpeg',
@@ -363,7 +421,7 @@ export class AboutComponent {
   constructor() {
     this.seo.setPage(
       'Nosotras | Las Chubys',
-      'Conoce a Iris, Rubi y el universo de Las Chubys. La biografía más linda de gatas que vas a leer.',
+      'Conoce a Iris, Rubí y el universo de la Casa Chuby. El reality y sitcom felino más divertido de Ecuador.',
       '/images/cats/iris.jpeg',
       '/about',
     );

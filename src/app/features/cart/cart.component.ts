@@ -1,13 +1,19 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, resource, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
+import { HlmBadgeImports } from '@spartan-ng/helm/badge';
 
+import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
+import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
+import { ToastService } from '../../shared/ui/toast/toast.service';
+import { StaggerChildrenDirective } from '../../shared/animations';
+import { ProductCardComponent } from '../shop/product-card.component';
 import { CartItemRowComponent } from './cart-item-row.component';
 
 @Component({
@@ -18,9 +24,12 @@ import { CartItemRowComponent } from './cart-item-row.component';
     RouterLink,
     CurrencyPipe,
     CartItemRowComponent,
+    ProductCardComponent,
+    StaggerChildrenDirective,
     HlmBreadcrumbImports,
     HlmButtonImports,
     HlmCardImports,
+    HlmBadgeImports,
   ],
   template: `
     <section class="max-w-6xl mx-auto px-4 py-10 pb-8">
@@ -40,7 +49,7 @@ import { CartItemRowComponent } from './cart-item-row.component';
         </ol>
       </nav>
       <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">Carrito</p>
-      <h1>Tu selección actual.</h1>
+      <h1 class="text-h1 text-primary mb-2">Tu selección actual.</h1>
       <p class="text-muted-foreground">
         Ajusta cantidades, revisa total y sigue a checkout cuando esté listo.
       </p>
@@ -99,17 +108,45 @@ import { CartItemRowComponent } from './cart-item-row.component';
             <a hlmBtn routerLink="/tienda" size="lg">Ir a tienda</a>
           </div>
         </section>
+
+        @if (suggestedProducts.value()?.length) {
+          <section class="mt-10">
+            <h2 class="text-h3 text-primary mb-4 text-center">También te puede gustar</h2>
+            <div
+              class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"
+              appStaggerChildren
+              childSelector="app-product-card"
+              [staggerDelay]="0.03"
+              [duration]="0.4"
+              [y]="16"
+            >
+              @for (product of suggestedProducts.value()!.slice(0, 4); track product.id) {
+                <app-product-card
+                  [product]="product"
+                  [adding]="false"
+                  [added]="false"
+                  (add)="addSuggested($event)"
+                />
+              }
+            </div>
+          </section>
+        }
       }
     </section>
   `,
 })
 export class CartComponent {
   private readonly cart = inject(CartService);
+  private readonly content = inject(ContentService);
   private readonly seo = inject(SeoService);
+  private readonly toast = inject(ToastService);
 
   protected readonly items = this.cart.items;
   protected readonly total = this.cart.total;
   protected readonly count = this.cart.count;
+  protected readonly suggestedProducts = resource({
+    loader: async () => (await this.content.getProducts()).slice(0, 4),
+  });
 
   constructor() {
     this.seo.setPage(
@@ -130,5 +167,11 @@ export class CartComponent {
 
   protected clear() {
     this.cart.clearCart();
+    this.toast.show('Carrito vaciado', 'info');
+  }
+
+  protected addSuggested(product: ProductPick) {
+    this.cart.addItem(product);
+    this.toast.show(`${product.name} agregado al carrito`, 'success');
   }
 }

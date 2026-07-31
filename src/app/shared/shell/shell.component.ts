@@ -15,6 +15,7 @@ import { CartDrawerComponent } from '../components/cart-drawer/cart-drawer.compo
 import { FooterComponent } from '../components/footer/footer.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { WhatsappFloatComponent } from '../components/whatsapp-float/whatsapp-float.component';
+import { ToastContainerComponent } from '../ui/toast/toast.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,15 +27,18 @@ import { WhatsappFloatComponent } from '../components/whatsapp-float/whatsapp-fl
     FooterComponent,
     CartDrawerComponent,
     WhatsappFloatComponent,
+    ToastContainerComponent,
   ],
+  host: { class: 'flex flex-col min-h-screen' },
   template: `
     <app-header />
-    <main class="min-h-[calc(100vh-360px)] pt-20">
+    <main class="flex-1 pt-20">
       <router-outlet />
     </main>
     <app-footer />
     <app-cart-drawer />
     <app-whatsapp-float />
+    <app-toast-container />
   `,
 })
 export class ShellComponent {
