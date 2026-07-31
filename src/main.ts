@@ -1,7 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import * as Sentry from '@sentry/angular';
+import { register as registerSwiperElements } from 'swiper/element/bundle';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
+
+registerSwiperElements();
 
 const isLocalhost =
   typeof window !== 'undefined' &&

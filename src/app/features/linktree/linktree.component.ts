@@ -52,11 +52,13 @@ import { SeoService } from '../../core/services/seo.service';
         <div class="relative mt-5 flex-1 w-full overflow-hidden">
           <div
             class="flex w-[200%] transition-transform duration-300 ease-out"
+            (touchstart)="onTouchStart($event)"
+            (touchend)="onTouchEnd($event)"
             [class.-translate-x-1/2]="showCourses()"
           >
             <!-- Panel 1: social + Huellas de Paz -->
             <div class="w-1/2 shrink-0 px-1">
-              <div class="mb-6 flex justify-center px-4">
+              <div class="mb-3 flex justify-center px-4">
                 <img
                   src="/brand/logoLasChubys.png?v=1"
                   alt="Las Chubys"
@@ -66,7 +68,7 @@ import { SeoService } from '../../core/services/seo.service';
                   loading="eager"
                 />
               </div>
-              <p class="mb-14 text-center text-base font-bold text-stone-700">
+              <p class="mb-8 text-center text-base font-bold text-stone-700">
                 Reality y parodias felinas.
               </p>
               <nav class="flex w-full flex-col gap-2" aria-label="Enlaces principales">
@@ -79,19 +81,14 @@ import { SeoService } from '../../core/services/seo.service';
                   class="grid h-12 w-full grid-cols-[2rem_1fr_2rem] items-center gap-2 rounded-full border-stone-100 bg-white px-5 text-base font-semibold text-stone-800 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
                   aria-label="Ver cursos de Huellas de Paz"
                 >
-                  <svg
-                    class="h-6 w-6 justify-self-center text-purple-600"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 10.5c-2.8 0-5 2-5 4.5s1.5 4 5 4 5-1.7 5-4-2.2-4.5-5-4.5z" />
-                    <circle cx="7" cy="7" r="2" />
-                    <circle cx="12" cy="5" r="2.2" />
-                    <circle cx="17" cy="7" r="2" />
-                    <circle cx="6" cy="11.5" r="1.5" />
-                    <circle cx="18" cy="11.5" r="1.5" />
-                  </svg>
+                  <img
+                    src="/images/huellas-de-paz-icon.png"
+                    alt="Huellas de Paz"
+                    width="24"
+                    height="24"
+                    class="h-10 w-10 justify-self-center object-contain"
+                    loading="eager"
+                  />
                   <span class="text-center">Huellas de Paz</span>
                   <span aria-hidden="true" class="h-6 w-6"></span>
                 </button>
@@ -266,6 +263,21 @@ export class LinktreeComponent {
 
   protected readonly socialChannels = socialChannels;
   protected readonly showCourses = signal(false);
+  private touchStartX = 0;
+
+  protected onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  protected onTouchEnd(event: TouchEvent) {
+    const delta = this.touchStartX - event.changedTouches[0].screenX;
+    const threshold = 50;
+    if (delta > threshold && !this.showCourses()) {
+      this.showCourses.set(true);
+    } else if (delta < -threshold && this.showCourses()) {
+      this.showCourses.set(false);
+    }
+  }
 
   protected readonly courses = [
     { label: 'Curso Virtual - Huellas de Paz', href: 'https://go.hotmart.com/T106786930X' },

@@ -2,7 +2,7 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, ActivatedRoute } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { provideIcons } from '@ng-icons/core';
 import { lucideAlertCircle } from '@ng-icons/lucide';
 
@@ -14,6 +14,7 @@ import { HlmTabsImports } from '@spartan-ng/helm/tabs';
 
 import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
+import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 import { ProductCardComponent } from './product-card.component';
@@ -207,6 +208,7 @@ import { ProductGalleryComponent } from './product-gallery.component';
 })
 export class ProductDetailComponent {
   private readonly cart = inject(CartService);
+  private readonly content = inject(ContentService);
   private readonly seo = inject(SeoService);
   private readonly route = inject(ActivatedRoute);
 
@@ -214,7 +216,10 @@ export class ProductDetailComponent {
   protected readonly activeTab = signal<string>('details');
 
   protected readonly product = toSignal(
-    this.route.data.pipe(map((data) => data['product'] as ProductPick | null)),
+    this.route.paramMap.pipe(
+      map((params) => params.get('slug')),
+      switchMap((slug) => (slug ? this.content.getProduct(slug) : [null])),
+    ),
   );
 
   constructor() {

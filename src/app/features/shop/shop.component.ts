@@ -21,6 +21,7 @@ import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
 import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
+import { ToastService } from '../../shared/ui/toast/toast.service';
 import { HlmAlertImports } from '@spartan-ng/helm/alert';
 import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
@@ -72,9 +73,7 @@ import { ProductCardComponent } from './product-card.component';
             }
           </ol>
         </nav>
-        <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-primary mb-2"
-        >
+        <h1 class="text-h1 text-primary mb-2">
           {{ pageTitle() }}
         </h1>
         <p class="text-muted-foreground max-w-2xl">{{ pageSub() }}</p>
@@ -168,6 +167,7 @@ import { ProductCardComponent } from './product-card.component';
                     <app-product-card
                       [product]="product"
                       [adding]="addingIds().has(product.id)"
+                      [added]="addedIds().has(product.id)"
                       (add)="addToCart($event)"
                     />
                   }
@@ -194,6 +194,7 @@ import { ProductCardComponent } from './product-card.component';
 export class ShopComponent {
   private readonly content = inject(ContentService);
   private readonly cart = inject(CartService);
+  private readonly toast = inject(ToastService);
   private readonly seo = inject(SeoService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -202,6 +203,7 @@ export class ShopComponent {
   protected readonly query = signal('');
   protected readonly category = signal('');
   protected readonly addingIds = signal<Set<string>>(new Set());
+  protected readonly addedIds = signal<Set<string>>(new Set());
 
   protected readonly activeCategoryName = computed(() => {
     const slug = this.category();
@@ -339,7 +341,7 @@ export class ShopComponent {
     this.seo.setPage(
       'Tienda | Las Chubys',
       'Catálogo completo para michis y michi lovers.',
-      '/images/banner1.PNG',
+      '/images/banner-1.png',
       '/tienda',
     );
 
@@ -394,6 +396,15 @@ export class ShopComponent {
     this.addingIds.update((ids) => new Set([...ids, product.id]));
     try {
       await Promise.resolve(this.cart.addItem(product));
+      this.toast.show(`${product.name} agregado al carrito`, 'success');
+      this.addedIds.update((ids) => new Set([...ids, product.id]));
+      setTimeout(() => {
+        this.addedIds.update((ids) => {
+          const next = new Set(ids);
+          next.delete(product.id);
+          return next;
+        });
+      }, 1500);
     } finally {
       this.addingIds.update((ids) => {
         const next = new Set(ids);

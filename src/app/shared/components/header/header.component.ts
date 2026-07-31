@@ -97,18 +97,21 @@ interface NavItem {
   ],
   template: `
     <header
-      class="fixed top-3 left-0 right-0 mx-auto z-50 w-[calc(100%-4rem)]"
+      class="fixed top-2 md:top-3 left-0 right-0 mx-auto z-50 w-[calc(100%-1rem)] md:w-[calc(100%-4rem)]"
       [class.animate-in]="isVisible()"
       data-testid="header-pill"
     >
       <div
-        class="rounded-full border px-3 py-1 shadow-lg transition-colors duration-300 backdrop-blur-xl"
+        class="rounded-full border px-2 md:px-3 py-1 shadow-lg transition-colors duration-300 backdrop-blur-xl"
         [class.bg-background/80]="!isScrolled()"
         [class.bg-background]="isScrolled()"
       >
-        <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+        <div class="flex items-center justify-between gap-2 md:gap-4 relative">
           <!-- Logo -->
-          <a routerLink="/" class="flex items-center justify-start ml-8">
+          <a
+            routerLink="/"
+            class="flex items-center justify-start shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
+          >
             <img
               src="/brand/logoLasChubys.png?v=1"
               alt="Las Chubys"
@@ -119,9 +122,9 @@ interface NavItem {
             />
           </a>
 
-          <!-- Desktop nav -->
-          <nav hlmNavigationMenu class="hidden lg:flex justify-center">
-            <ul hlmNavigationMenuList class="gap-6">
+          <!-- Desktop nav — centrado -->
+          <nav hlmNavigationMenu class="hidden lg:flex absolute left-1/2 -translate-x-1/2">
+            <ul hlmNavigationMenuList class="justify-center gap-8">
               @for (item of navItems; track item.testId) {
                 <li hlmNavigationMenuItem>
                   @if (item.children) {
@@ -180,7 +183,7 @@ interface NavItem {
                   } @else {
                     <a
                       hlmNavigationMenuLink
-                      class="gap-2 min-w-[120px] justify-center"
+                      class="gap-2 justify-center"
                       [routerLink]="item.href"
                       routerLinkActive
                       #rla="routerLinkActive"
@@ -199,7 +202,7 @@ interface NavItem {
           </nav>
 
           <!-- Right actions: account, cart -->
-          <div class="flex items-center justify-end gap-1">
+          <div class="flex items-center justify-end gap-1 shrink-0">
             <div class="hidden sm:block">
               @if (user(); as currentUser) {
                 <button
@@ -247,13 +250,13 @@ interface NavItem {
             <button
               hlmBtn
               variant="ghost"
-              class="relative"
+              class="relative px-2 md:px-3"
               type="button"
               (click)="openCart()"
               aria-label="Carrito de compras"
             >
               <ng-icon hlmIcon name="lucideShoppingCart" />
-              <span class="hidden sm:inline">Carrito</span>
+              <span class="hidden sm:inline px-1">Carrito</span>
               @if (count() > 0) {
                 <span
                   hlmBadge
