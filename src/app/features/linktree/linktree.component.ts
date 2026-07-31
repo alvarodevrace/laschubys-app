@@ -82,7 +82,7 @@ import { SeoService } from '../../core/services/seo.service';
                   aria-label="Ver cursos de Huellas de Paz"
                 >
                   <img
-                    src="/images/huellas-de-paz-icon.jpeg"
+                    src="/images/huellas-de-paz-icon.png"
                     alt="Huellas de Paz"
                     width="24"
                     height="24"
