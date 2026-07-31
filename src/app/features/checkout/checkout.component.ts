@@ -22,6 +22,7 @@ import { CheckoutForm } from '../../core/models/checkout.model';
 import { ApiService } from '../../core/services/api.service';
 import { CartService } from '../../core/services/cart.service';
 import { SeoService } from '../../core/services/seo.service';
+import { ToastService } from '../../shared/ui/toast/toast.service';
 import { ScrollRevealDirective } from '../../shared/animations';
 
 interface CheckoutPayload {
@@ -83,11 +84,7 @@ interface CheckoutPayload {
             </li>
           </ol>
         </nav>
-        <h1
-          class="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight text-primary mb-2"
-        >
-          Mi Carrito de Compras
-        </h1>
+        <h1 class="text-h1 text-primary mb-2">Mi Carrito de Compras</h1>
         <p class="text-muted-foreground max-w-2xl">
           Revisa tus productos y completa tus datos para finalizar el pedido.
         </p>
@@ -116,7 +113,7 @@ interface CheckoutPayload {
           <!-- Product table -->
           <section hlmCard appScrollReveal>
             <div hlmCardContent class="overflow-x-auto">
-              <table hlmTable class="min-w-[600px]">
+              <table hlmTable class="min-w-[600px] hidden sm:table">
                 <thead hlmTableHeader>
                   <tr hlmTableRow>
                     <th hlmTableHead>Producto</th>
@@ -195,6 +192,63 @@ interface CheckoutPayload {
                   }
                 </tbody>
               </table>
+              <!-- Mobile card layout -->
+              <div class="sm:hidden flex flex-col gap-4">
+                @for (item of items(); track item.id) {
+                  <div class="flex gap-3 p-3 bg-muted/30 rounded-2xl">
+                    <img
+                      [src]="item.image"
+                      [alt]="item.name"
+                      class="w-20 h-20 object-cover rounded-xl shrink-0"
+                    />
+                    <div class="flex-1 min-w-0 grid gap-1.5">
+                      <p class="font-extrabold text-sm text-foreground truncate">{{ item.name }}</p>
+                      <p class="text-xs text-muted-foreground">
+                        {{ item.source === 'owned' ? 'Las Chubys' : 'Afiliado' }}
+                      </p>
+                      <p class="font-bold text-primary">
+                        {{ item.price | currency: 'USD' : 'symbol' : '1.0-0' }}
+                      </p>
+                      <div class="flex items-center gap-2 mt-1">
+                        <button
+                          hlmBtn
+                          variant="outline"
+                          size="icon-sm"
+                          type="button"
+                          (click)="updateQty(item.id, item.qty - 1)"
+                          aria-label="Disminuir cantidad"
+                        >
+                          -
+                        </button>
+                        <span class="min-w-[1.5rem] text-center font-extrabold text-sm">{{
+                          item.qty
+                        }}</span>
+                        <button
+                          hlmBtn
+                          variant="outline"
+                          size="icon-sm"
+                          type="button"
+                          (click)="updateQty(item.id, item.qty + 1)"
+                          aria-label="Aumentar cantidad"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                    <button
+                      hlmBtn
+                      variant="ghost"
+                      size="icon-sm"
+                      type="button"
+                      (click)="removeItem(item.id)"
+                      aria-label="Eliminar"
+                      class="self-start"
+                    >
+                      <ng-icon hlmIcon name="lucideX" class="w-4 h-4" />
+                    </button>
+                  </div>
+                }
+              </div>
             </div>
           </section>
 
@@ -341,6 +395,7 @@ export class CheckoutComponent {
   private readonly api = inject(ApiService);
   private readonly cart = inject(CartService);
   private readonly seo = inject(SeoService);
+  private readonly toast = inject(ToastService);
   private readonly fb = inject(FormBuilder);
 
   protected readonly items = this.cart.items;
@@ -411,6 +466,7 @@ export class CheckoutComponent {
     try {
       await this.api.post('/api/checkout', payload);
       this.success.set('Pedido recibido. Revisa WhatsApp o correo para el siguiente paso.');
+      this.toast.show('¡Pedido recibido! Te contactaremos pronto.', 'success');
       this.cart.clearCart();
       this.checkoutForm.reset();
       this.termsAccepted.set(false);
