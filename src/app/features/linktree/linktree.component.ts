@@ -58,7 +58,7 @@ import { SeoService } from '../../core/services/seo.service';
           >
             <!-- Panel 1: social + Huellas de Paz -->
             <div class="w-1/2 shrink-0 px-1">
-              <div class="mb-6 flex justify-center px-4">
+              <div class="mb-3 flex justify-center px-4">
                 <img
                   src="/brand/logoLasChubys.png?v=1"
                   alt="Las Chubys"
@@ -68,7 +68,7 @@ import { SeoService } from '../../core/services/seo.service';
                   loading="eager"
                 />
               </div>
-              <p class="mb-14 text-center text-base font-bold text-stone-700">
+              <p class="mb-8 text-center text-base font-bold text-stone-700">
                 Reality y parodias felinas.
               </p>
               <nav class="flex w-full flex-col gap-2" aria-label="Enlaces principales">
@@ -86,7 +86,7 @@ import { SeoService } from '../../core/services/seo.service';
                     alt="Huellas de Paz"
                     width="24"
                     height="24"
-                    class="h-6 w-6 justify-self-center object-contain"
+                    class="h-10 w-10 justify-self-center object-contain"
                     loading="eager"
                   />
                   <span class="text-center">Huellas de Paz</span>
