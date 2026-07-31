@@ -45,6 +45,7 @@
   --color-surface-foreground: var(--color-stone-950);
 
   --font-sans: 'Fredoka', sans-serif;
+  --font-display: 'Gloria Hallelujah', 'HelloImperfect', cursive;
 
   --text-h1: 3rem;
   --text-h1--line-height: 1.1;
@@ -80,6 +81,23 @@
   --animate-wiggle: wiggle 0.5s ease-in-out;
   --animate-bounce-in: bounceIn 0.5s var(--ease-bounce);
   --animate-float: float 3s ease-in-out infinite;
+
+  --color-iris: #f59e0b;
+  --color-iris-bg: #fff7ed;
+  --color-iris-text: #92400e;
+  --color-rubi: #f97316;
+  --color-rubi-bg: #fff7ed;
+  --color-rubi-text: #9a3412;
+  --color-human: #f43f5e;
+  --color-human-bg: #fff1f2;
+  --color-human-text: #9f1239;
+  --color-cga: #8b5cf6;
+  --color-cga-bg: #f5f3ff;
+  --color-cga-text: #5b21b6;
+}
+
+.font-display {
+  font-family: var(--font-display);
 }
 
 @keyframes marquee {
