@@ -41,7 +41,7 @@
   --color-stone-900: oklch(21.6% 0.006 56.043);
   --color-stone-950: oklch(14.7% 0.004 49.25);
 
-  --color-surface: #f6e9d8;
+  --color-surface: #fcf5ea;
   --color-surface-foreground: var(--color-stone-950);
 
   --font-sans: 'Fredoka', sans-serif;
@@ -98,6 +98,10 @@
 
 .font-display {
   font-family: var(--font-display);
+}
+
+.font-poppins {
+  font-family: 'Poppins', sans-serif;
 }
 
 @keyframes marquee {
@@ -211,26 +215,6 @@ Base tokens + reset
   textarea,
   select {
     font: inherit;
-  }
-
-  /* Cursor personalizado: huella de gato Las Chubys */
-  html {
-    cursor:
-      url('/brand/mouse-cursor.png') 16 16,
-      auto;
-  }
-
-  a,
-  button,
-  [role='button'],
-  [type='button'],
-  [type='submit'],
-  [type='reset'],
-  summary,
-  label[for] {
-    cursor:
-      url('/brand/mouse-cursor.png') 16 16,
-      pointer;
   }
 
   :disabled,

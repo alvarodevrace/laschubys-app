@@ -13,11 +13,18 @@ import { RouterLink } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
 import {
   lucideCat,
+  lucideChartNoAxesCombined,
   lucideChevronLeft,
   lucideChevronRight,
+  lucideEye,
+  lucideHeart,
   lucideHome,
+  lucideShare2,
   lucideShoppingCart,
+  lucideSmartphone,
   lucideStore,
+  lucideTrendingUp,
+  lucideUsers,
 } from '@ng-icons/lucide';
 
 import { HlmBadgeImports } from '@spartan-ng/helm/badge';
@@ -38,7 +45,6 @@ import {
   ScrollRevealDirective,
   StaggerChildrenDirective,
   ParallaxDirective,
-  TiltCardDirective,
   TextRevealDirective,
 } from '../../shared/animations';
 
@@ -53,7 +59,6 @@ import {
     ScrollRevealDirective,
     StaggerChildrenDirective,
     ParallaxDirective,
-    TiltCardDirective,
     TextRevealDirective,
     HlmButtonImports,
     HlmIconImports,
@@ -64,11 +69,18 @@ import {
   providers: [
     provideIcons({
       lucideCat,
+      lucideChartNoAxesCombined,
       lucideChevronLeft,
       lucideChevronRight,
+      lucideEye,
+      lucideHeart,
       lucideHome,
+      lucideShare2,
       lucideShoppingCart,
+      lucideSmartphone,
       lucideStore,
+      lucideTrendingUp,
+      lucideUsers,
     }),
   ],
   template: `
@@ -117,7 +129,7 @@ import {
         <ng-icon hlmIcon name="lucideChevronRight" class="w-6 h-6" />
       </button>
 
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
+      <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         @for (photo of bannerPhotos; track photo.src + $index) {
           <button
             hlmBtn
@@ -136,7 +148,7 @@ import {
               [class.w-2]="currentSlide() !== $index"
               [class.h-2]="currentSlide() !== $index"
               [class.bg-primary]="currentSlide() === $index"
-              [class.bg-background/80]="currentSlide() !== $index"
+              [class.bg-primary/50]="currentSlide() !== $index"
               [class.ring-2]="currentSlide() === $index"
               [class.ring-white]="currentSlide() === $index"
               [class.motion-safe:animate-pulse]="currentSlide() === $index"
@@ -146,18 +158,15 @@ import {
       </div>
 
       <svg
-        class="absolute bottom-0 w-full h-16 md:h-20 pointer-events-none z-10"
-        viewBox="0 0 1440 80"
+        class="absolute bottom-0 w-full h-16 md:h-20 pointer-events-none z-10 text-white"
+        viewBox="0 0 1200 80"
         preserveAspectRatio="none"
-        fill="white"
+        xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
         <path
-          d="M0,25 C160,52 320,52 480,25 C640,52 800,52 960,25 C1120,52 1280,52 1440,25 L1440,80 L0,80 Z"
-          opacity="0.35"
-        />
-        <path
-          d="M0,20 C160,47 320,47 480,20 C640,47 800,47 960,20 C1120,47 1280,47 1440,20 L1440,80 L0,80 Z"
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
         />
       </svg>
     </section>
@@ -178,23 +187,18 @@ import {
           />
         </svg>
 
-        <div
-          class="flex items-end justify-between gap-4 mb-6"
-          appScrollReveal
-          [y]="16"
-          [duration]="0.5"
-        >
-          <div>
-            <h2
-              class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-1 flex items-center gap-1.5"
+        <div class="text-center mb-10" appScrollReveal [y]="16" [duration]="0.5">
+          <h2
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-1 flex items-center justify-center gap-1.5"
+          >
+            <ng-icon hlmIcon name="lucideStore" class="w-5 h-5 md:w-6 md:h-6" />
+            <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+              >Mercado Chuby</span
             >
-              <ng-icon hlmIcon name="lucideStore" class="w-5 h-5 md:w-6 md:h-6" />
-              <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
-                >Mercado Chuby</span
-              >
-            </h2>
-            <p class="text-base md:text-lg font-bold text-muted-foreground">Nuestros productos</p>
-          </div>
+          </h2>
+          <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">
+            Nuestros productos
+          </p>
           <a
             hlmBtn
             variant="link"
@@ -266,20 +270,17 @@ import {
       }
     </app-section-shell>
 
-    <!-- Wave multi-ola: productos → protagonistas -->
+    <!-- Wave: productos → protagonistas -->
     <div class="relative h-16 md:h-20 overflow-hidden bg-white -mb-1" aria-hidden="true">
       <svg
-        class="absolute bottom-0 w-full h-full"
-        viewBox="0 0 1440 80"
+        class="absolute bottom-0 w-full h-full text-surface"
+        viewBox="0 0 1200 80"
         preserveAspectRatio="none"
-        style="fill: var(--color-surface)"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M0,25 C160,52 320,52 480,25 C640,52 800,52 960,25 C1120,52 1280,52 1440,25 L1440,80 L0,80 Z"
-          opacity="0.35"
-        />
-        <path
-          d="M0,20 C160,47 320,47 480,20 C640,47 800,47 960,20 C1120,47 1280,47 1440,20 L1440,80 L0,80 Z"
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
         />
       </svg>
     </div>
@@ -333,10 +334,7 @@ import {
         >
           @for (cat of characters; track cat.name) {
             <article
-              hlmCard
-              appTiltCard
-              [max]="6"
-              class="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl border-t-[3px] border-orange-500"
+              class="group relative overflow-hidden rounded-[2.5rem] bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
               <div class="relative aspect-[4/3] overflow-hidden">
                 <img
@@ -345,18 +343,16 @@ import {
                   loading="lazy"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-                <span
-                  class="absolute bottom-3 left-4 text-small font-bold text-white/90 bg-black/40 px-3 py-1 rounded-full backdrop-blur-sm"
-                >
-                  {{ cat.archetype }}
-                </span>
               </div>
-              <div hlmCardContent>
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-xl font-bold text-foreground">{{ cat.fullName }}</h3>
-                  <span class="text-small font-semibold text-primary">{{ cat.role }}</span>
-                </div>
+              <div
+                class="flex flex-col items-center text-center gap-1 px-6 pt-5 pb-6 rounded-[1.75rem] mx-2 mb-2 bg-white"
+              >
+                <h3 class="text-2xl md:text-3xl font-bold" [style.color]="catColor(cat).text">
+                  {{ cat.fullName }}
+                </h3>
+                <span class="text-small font-semibold" [style.color]="catColor(cat).accent">{{
+                  cat.role
+                }}</span>
                 <p class="text-body text-muted-foreground leading-relaxed">
                   {{ shortBio(cat.name) }}
                 </p>
@@ -367,27 +363,48 @@ import {
       </div>
     </app-section-shell>
 
-    <!-- Wave multi-ola: protagonistas → casa chuby -->
-    <div
-      class="relative h-16 md:h-20 overflow-hidden -mb-1"
-      style="background: var(--color-surface)"
-      aria-hidden="true"
-    >
+    <!-- Wave: protagonistas → media kit -->
+    <div class="relative h-16 md:h-20 overflow-hidden bg-surface -mb-1" aria-hidden="true">
       <svg
-        class="absolute bottom-0 w-full h-full"
-        viewBox="0 0 1440 80"
+        class="absolute bottom-0 w-full h-full text-white"
+        viewBox="0 0 1200 80"
         preserveAspectRatio="none"
-        fill="white"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M0,25 C160,52 320,52 480,25 C640,52 800,52 960,25 C1120,52 1280,52 1440,25 L1440,80 L0,80 Z"
-          opacity="0.35"
-        />
-        <path
-          d="M0,20 C160,47 320,47 480,20 C640,47 800,47 960,20 C1120,47 1280,47 1440,20 L1440,80 L0,80 Z"
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
         />
       </svg>
     </div>
+
+    <!-- Media kit / estadísticas -->
+    <app-section-shell variant="white">
+      <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+        <h2
+          class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+        >
+          <ng-icon hlmIcon name="lucideChartNoAxesCombined" class="w-5 h-5 md:w-6 md:h-6" />
+          <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+            >Las Chubys en cifras</span
+          >
+        </h2>
+        <p class="text-base md:text-lg font-bold text-muted-foreground">Nuestro alcance en redes</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-8 text-center">
+        @for (stat of socialStats; track stat.label) {
+          <div class="flex flex-col items-center gap-2">
+            <ng-icon hlmIcon [name]="stat.icon" size="xl" class="text-primary" />
+            <p class="text-4xl md:text-5xl font-bold font-poppins text-foreground leading-tight">
+              {{ stat.value }}
+            </p>
+            <p class="text-base md:text-lg font-semibold text-muted-foreground leading-snug">
+              {{ stat.label }}
+            </p>
+          </div>
+        }
+      </div>
+    </app-section-shell>
 
     <!-- La Casa Chuby -->
     <app-section-shell variant="white">
@@ -405,6 +422,19 @@ import {
           />
         </svg>
 
+        <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+          <h2
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+          >
+            <ng-icon hlmIcon name="lucideHome" class="w-5 h-5 md:w-6 md:h-6" />
+            <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+              >El universo</span
+            >
+          </h2>
+          <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">
+            {{ casaChuby.title }}
+          </p>
+        </div>
         <div
           class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
           appScrollReveal
@@ -412,17 +442,6 @@ import {
           [duration]="0.6"
         >
           <div>
-            <h2
-              class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center gap-1.5"
-            >
-              <ng-icon hlmIcon name="lucideHome" class="w-5 h-5 md:w-6 md:h-6" />
-              <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
-                >El universo</span
-              >
-            </h2>
-            <p class="text-base md:text-lg font-bold text-muted-foreground mb-4">
-              {{ casaChuby.title }}
-            </p>
             <p class="text-muted-foreground leading-relaxed mb-4">
               El hogar donde ocurre todo: el set de grabación permanente del reality felino más
               divertido.
@@ -570,6 +589,37 @@ export class HomeComponent {
     const idx = product.id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
     return this.productPalette[idx % this.productPalette.length];
   }
+
+  protected readonly catPalette: Record<string, { bg: string; accent: string; text: string }> = {
+    Iris: {
+      bg: 'var(--color-iris-bg)',
+      accent: 'var(--color-iris)',
+      text: 'var(--color-iris-text)',
+    },
+    Rubí: {
+      bg: 'var(--color-rubi-bg)',
+      accent: 'var(--color-rubi)',
+      text: 'var(--color-rubi-text)',
+    },
+  };
+
+  protected catColor(cat: (typeof this.characters)[number]): (typeof this.catPalette)['Iris'] {
+    return this.catPalette[cat.name] ?? this.catPalette['Iris'];
+  }
+
+  protected readonly socialStats: readonly {
+    icon: string;
+    value: string;
+    label: string;
+  }[] = [
+    { icon: 'lucideUsers', value: '+50K', label: 'Seguidores combinados' },
+    { icon: 'lucideEye', value: '+2.2M', label: 'Visualizaciones en julio' },
+    { icon: 'lucideSmartphone', value: '892K', label: 'Personas alcanzadas (solo Instagram)' },
+    { icon: 'lucideShare2', value: '+65K', label: 'Compartidos orgánicos en julio' },
+    { icon: 'lucideHeart', value: '+258K', label: 'Interacciones en julio' },
+    { icon: 'lucideTrendingUp', value: '100%', label: 'Contenido orgánico — sin pauta pagada' },
+  ];
+
   protected readonly bannerPhotos: readonly { src: string; alt: string; link: string }[] = [
     { src: '/images/banner-1.png', alt: 'Las Chubys banner 1', link: '/about' },
     { src: '/images/banner-2.png', alt: 'Las Chubys banner 2', link: '/tienda' },
