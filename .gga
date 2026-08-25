@@ -2,4 +2,5 @@
 # Provider: opencode — usa la auth del propio opencode (sin API key aparte)
 PROVIDER="opencode"
 
-# Defaults activos: FILE_PATTERNS="*", RULES_FILE="AGENTS.md", STRICT_MODE="true", TIMEOUT="300"
+# Revisar todos los archivos staged (override del config global de gentle-ai)
+FILE_PATTERNS="*"
