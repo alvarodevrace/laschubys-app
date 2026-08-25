@@ -131,7 +131,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Formato de junta/comité donde Iris y Rubí "deliberan" sobre asuntos domésticos con solemnidad absurda.',
     icon: 'lucideClapperboard',
-    color: 'bg-cga-bg border-t-[3px] border-cga text-cga-text shadow-sm hover:shadow-md',
+    color: 'bg-cga-bg border-t-[3px] border-cga text-cga-text shadow-sm',
   },
   {
     title: 'Noticias Chubys',
@@ -139,7 +139,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Parodia de noticiero/farándula que reporta los "eventos" de la casa con la seriedad de un noticiero real.',
     icon: 'lucideTv',
-    color: 'bg-iris-bg border-t-[3px] border-iris text-iris-text shadow-sm hover:shadow-md',
+    color: 'bg-iris-bg border-t-[3px] border-iris text-iris-text shadow-sm',
   },
   {
     title: 'Expedientes Chubys',
@@ -147,7 +147,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Formato true crime/investigativo sobre incidentes domésticos triviales —¿quién rompió el jarrón?— tratados como crímenes de Estado.',
     icon: 'lucideSearch',
-    color: 'bg-rubi-bg border-t-[3px] border-rubi text-rubi-text shadow-sm hover:shadow-md',
+    color: 'bg-rubi-bg border-t-[3px] border-rubi text-rubi-text shadow-sm',
   },
   {
     title: 'Diario de Karen y Karencio',
@@ -155,7 +155,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Formato confesional/vlog desde la perspectiva humana. Karen y Karencio documentan su día a día sobreviviendo al caos felino.',
     icon: 'lucideBookOpen',
-    color: 'bg-human-bg border-t-[3px] border-human text-human-text shadow-sm hover:shadow-md',
+    color: 'bg-human-bg border-t-[3px] border-human text-human-text shadow-sm',
   },
   {
     title: 'Talleres Chubys',
@@ -163,7 +163,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Parodia de contenido educativo, "dictado" por las gatas. Aprende las técnicas avanzadas de siesta, maullido estratégico y dominación del hogar.',
     icon: 'lucidePencil',
-    color: 'bg-iris-bg border-t-[3px] border-iris text-iris-text shadow-sm hover:shadow-md',
+    color: 'bg-iris-bg border-t-[3px] border-iris text-iris-text shadow-sm',
   },
   {
     title: 'Parodias Chubys',
@@ -171,7 +171,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Parodias directas de tendencias y cultura pop, adaptadas al universo Chuby. Iris y Rubí versión peluda de tus escenas favoritas.',
     icon: 'lucideFilm',
-    color: 'bg-rubi-bg border-t-[3px] border-rubi text-rubi-text shadow-sm hover:shadow-md',
+    color: 'bg-rubi-bg border-t-[3px] border-rubi text-rubi-text shadow-sm',
   },
   {
     title: 'Michi Terapia',
@@ -179,7 +179,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Formato de consultorio/terapia procesando "traumas" domésticos. ¿Tu humana no te da de comer a tiempo? Tenemos un diagnóstico.',
     icon: 'lucideSofa',
-    color: 'bg-human-bg border-t-[3px] border-human text-human-text shadow-sm hover:shadow-md',
+    color: 'bg-human-bg border-t-[3px] border-human text-human-text shadow-sm',
   },
   {
     title: 'Método MIAU',
@@ -187,7 +187,7 @@ export const chubySeries: ChubySeries[] = [
     description:
       'Self-help/desarrollo personal narrado con seriedad de gurú. Descubre el poder del ronroneo, la siesta estratégica y la indiferencia como filosofía de vida.',
     icon: 'lucideSparkles',
-    color: 'bg-cga-bg border-t-[3px] border-cga text-cga-text shadow-sm hover:shadow-md',
+    color: 'bg-cga-bg border-t-[3px] border-cga text-cga-text shadow-sm',
   },
 ];
 

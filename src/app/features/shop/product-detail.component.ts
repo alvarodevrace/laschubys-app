@@ -1,21 +1,29 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, effect, inject, signal, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  resource,
+  signal,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { provideIcons } from '@ng-icons/core';
-import { lucideAlertCircle } from '@ng-icons/lucide';
+import { lucideAlertCircle, lucideStore } from '@ng-icons/lucide';
 
-import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmBadgeImports } from '@spartan-ng/helm/badge';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { HlmTabsImports } from '@spartan-ng/helm/tabs';
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
 
 import { ProductPick } from '../../core/models/content.model';
 import { CartService } from '../../core/services/cart.service';
 import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
+import { ScrollRevealDirective, TextRevealDirective } from '../../shared/animations';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 import { ProductCardComponent } from './product-card.component';
 import { ProductGalleryComponent } from './product-gallery.component';
@@ -27,55 +35,28 @@ import { ProductGalleryComponent } from './product-gallery.component';
   imports: [
     RouterLink,
     CurrencyPipe,
-    HlmBreadcrumbImports,
+    HlmAlertImports,
     HlmButtonImports,
     HlmIconImports,
     HlmBadgeImports,
     HlmTabsImports,
+    ScrollRevealDirective,
+    TextRevealDirective,
     CarouselComponent,
     ProductCardComponent,
     ProductGalleryComponent,
   ],
-  providers: [provideIcons({ lucideAlertCircle })],
+  providers: [provideIcons({ lucideAlertCircle, lucideStore })],
   template: `
-    <section class="py-10 pb-8" data-reveal>
+    <section class="pt-10 md:pt-12 pb-16">
       <div class="max-w-6xl mx-auto px-4">
-        <nav class="mb-6" hlmBreadcrumb aria-label="Breadcrumb">
-          <ol hlmBreadcrumbList>
-            <li hlmBreadcrumbItem>
-              <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
-            </li>
-            <li hlmBreadcrumbSeparator></li>
-            <li hlmBreadcrumbItem>
-              <a hlmBreadcrumbLink [link]="['/tienda']">Tienda</a>
-            </li>
-            @if (product()?.categoryName) {
-              <li hlmBreadcrumbSeparator></li>
-              <li hlmBreadcrumbItem>
-                <a
-                  hlmBreadcrumbLink
-                  [link]="['/tienda']"
-                  [queryParams]="{ categoria: product()!.categoryName }"
-                >
-                  {{ product()!.categoryName }}
-                </a>
-              </li>
-            }
-            <li hlmBreadcrumbSeparator></li>
-            <li hlmBreadcrumbItem>
-              <span hlmBreadcrumbPage class="truncate max-w-[200px] md:max-w-md">{{
-                product()?.name ?? 'Producto'
-              }}</span>
-            </li>
-          </ol>
-        </nav>
-      </div>
-    </section>
-
-    <section class="pb-16" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
-        @if (product(); as product) {
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        @if (productResource.value(); as product) {
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
+            appScrollReveal
+            [y]="24"
+            [duration]="0.6"
+          >
             <app-product-gallery [images]="product.images" />
 
             <div class="grid content-start gap-5">
@@ -144,6 +125,17 @@ import { ProductGalleryComponent } from './product-gallery.component';
                   >
                     @if (addingIds().has(product.id)) {
                       Agregando...
+                    } @else if (productResource.error()) {
+                      <div hlmAlert variant="destructive" class="max-w-xl mx-auto">
+                        <ng-icon hlmIcon name="lucideAlertCircle" class="w-5 h-5" />
+                        <h4 hlmAlertTitle>No pudimos cargar el producto</h4>
+                        <p hlmAlertDescription>
+                          Ocurrió un error al conectar con la tienda. Inténtalo de nuevo.
+                        </p>
+                        <div hlmAlertAction>
+                          <button type="button" hlmBtn routerLink="/tienda">Reintentar</button>
+                        </div>
+                      </div>
                     } @else {
                       Agregar al carrito
                     }
@@ -172,9 +164,19 @@ import { ProductGalleryComponent } from './product-gallery.component';
 
           @if (product.relatedProducts?.length) {
             <div class="mt-16">
-              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-primary mb-6">
-                Productos relacionados
-              </h2>
+              <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+                <h2
+                  class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+                >
+                  <ng-icon hlmIcon name="lucideStore" class="w-5 h-5 md:w-6 md:h-6" />
+                  <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+                    >Productos relacionados</span
+                  >
+                </h2>
+                <p class="text-base md:text-lg font-bold text-muted-foreground">
+                  También te puede gustar
+                </p>
+              </div>
               <app-carousel [items]="product.relatedProducts ?? []">
                 <ng-template let-related>
                   <div
@@ -191,9 +193,14 @@ import { ProductGalleryComponent } from './product-gallery.component';
             </div>
           }
         } @else {
-          <div hlmCard class="text-center">
+          <div
+            class="text-center rounded-[2.5rem] bg-surface px-6 py-16 max-w-2xl mx-auto"
+            appScrollReveal
+            [y]="24"
+            [duration]="0.6"
+          >
             <ng-icon hlmIcon name="lucideAlertCircle" class="w-14 h-14 mx-auto text-primary mb-4" />
-            <h2 class="text-xl md:text-2xl font-extrabold text-primary mb-2">
+            <h2 class="text-h3 font-extrabold uppercase tracking-widest text-foreground mb-2">
               Producto no encontrado
             </h2>
             <p class="text-muted-foreground text-sm md:text-base mb-6 max-w-md mx-auto">
@@ -215,16 +222,18 @@ export class ProductDetailComponent {
   protected readonly addingIds = signal<Set<string>>(new Set());
   protected readonly activeTab = signal<string>('details');
 
-  protected readonly product = toSignal(
-    this.route.paramMap.pipe(
-      map((params) => params.get('slug')),
-      switchMap((slug) => (slug ? this.content.getProduct(slug) : [null])),
-    ),
-  );
+  private readonly slug = toSignal(this.route.paramMap.pipe(map((params) => params.get('slug'))), {
+    initialValue: null,
+  });
+
+  protected readonly productResource = resource<ProductPick | null, string | null>({
+    params: () => this.slug(),
+    loader: ({ params }) => (params ? this.content.getProduct(params) : Promise.resolve(null)),
+  });
 
   constructor() {
     effect(() => {
-      const product = this.product();
+      const product = this.productResource.value();
       if (!product) return;
 
       this.seo.setPage(
