@@ -53,3 +53,6 @@ debug-storybook.log
 
 # Isolated worktrees
 .worktrees/
+
+# Cache volátil del skill-registry (regenerable)
+.atl/

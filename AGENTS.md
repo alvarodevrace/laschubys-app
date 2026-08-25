@@ -1,7 +1,7 @@
 # AGENTS.md — Las Chubys Frontend
 
-> Instrucciones de proyecto para Kimi Code operando en `LasChubys-Front`.
-> Lee siempre `../../KIMI.md`, `../../agents/KIMI-AGENTS.md` y `../../vault/laschubys/00-Index/INDEX.md` antes de este archivo.
+> Instrucciones de proyecto para opencode (Alvaro2.0) operando en `LasChubys-Front`.
+> Lee siempre `../../AGENTS.md` (reglas absolutas del workspace), `../../vault/laschubys/00-Index/INDEX.md` y `../../vault/INFRA-GLOBAL.md` antes de este archivo.
 
 ## Proyecto
 
@@ -87,3 +87,28 @@ rama feature (feature/LCH-N-nombre) → commits locales → build OK
 - Decisiones técnicas: `../../vault/laschubys/20-Tech/decisions/`.
 - Especificaciones de producto: `../../vault/laschubys/30-Product/specs/`.
 - Log diario: `../../vault/laschubys/10-Log/LOG.md`.
+
+## Estándares (revisión pre-commit GGA)
+
+REJECT if:
+
+- Secrets, credenciales o tokens hardcodeados (solo refs `bitwarden:global/*` o variables de entorno)
+- NgModule nuevo (todo componente standalone)
+- `zone.js` o eliminación de `provideZonelessChangeDetection()`
+- Control flow legacy (`*ngIf`, `*ngFor`) en componentes nuevos
+- Lifecycle hooks nuevos (`ngOnInit`, `ngOnChanges`, `ngOnDestroy`) sin justificación explícita
+- Código usado por 2+ features fuera de `shared/` (Scope Rule)
+- `any` sin justificación
+
+REQUIRE:
+
+- `input()` / `output()` para inputs y outputs; `inject()` para DI
+- Signals para estado; OnPush en componentes
+- Tailwind CSS 4 para estilos; Spartan NG para componentes UI base
+- Pasar `bun run typecheck`, `bun run test:ci` y `bun run build` antes de entregar
+- Commits en español, conventional commits
+
+PREFER:
+
+- `@if` / `@for` / `@switch` sobre directivas estructurales
+- `effect()` + `DestroyRef` sobre lifecycle hooks
