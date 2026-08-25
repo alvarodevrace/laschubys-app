@@ -2,17 +2,22 @@ import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
 import {
+  lucideBookOpen,
   lucideCamera,
-  lucideCrown,
-  lucideFlame,
+  lucideCat,
+  lucideClapperboard,
+  lucideFilm,
   lucideHome,
+  lucideInstagram,
+  lucidePencil,
+  lucideSearch,
+  lucideSofa,
+  lucideSparkles,
   lucideTv,
   lucideUser,
   lucideUsers,
 } from '@ng-icons/lucide';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
-import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
-import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 
 import {
@@ -29,6 +34,8 @@ import {
   StaggerChildrenDirective,
   TextRevealDirective,
 } from '../../shared/animations';
+import { SectionShellComponent } from '../../shared/ui/section-shell/section-shell.component';
+import { productPalette } from '../../shared/ui/product-visuals';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,97 +44,134 @@ import {
   imports: [
     RouterLink,
     HlmButtonImports,
-    HlmBreadcrumbImports,
-    HlmCardImports,
     HlmIconImports,
     ScrollRevealDirective,
     ParallaxDirective,
     StaggerChildrenDirective,
     TextRevealDirective,
+    SectionShellComponent,
   ],
   providers: [
     provideIcons({
+      lucideBookOpen,
       lucideCamera,
-      lucideCrown,
-      lucideFlame,
+      lucideCat,
+      lucideClapperboard,
+      lucideFilm,
       lucideHome,
+      lucideInstagram,
+      lucidePencil,
+      lucideSearch,
+      lucideSofa,
+      lucideSparkles,
       lucideTv,
       lucideUser,
       lucideUsers,
     }),
   ],
   template: `
-    <!-- Hero -->
+    <!-- Header band -->
     <section class="relative bg-surface overflow-hidden" aria-labelledby="about-title">
-      <div
-        class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center pt-10 pb-20 md:pt-12 md:pb-28"
-      >
-        <nav class="col-span-full mb-4" hlmBreadcrumb aria-label="Breadcrumb">
-          <ol hlmBreadcrumbList>
-            <li hlmBreadcrumbItem>
-              <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
-            </li>
-            <li hlmBreadcrumbSeparator></li>
-            <li hlmBreadcrumbItem>
-              <span hlmBreadcrumbPage>Nosotras</span>
-            </li>
-          </ol>
-        </nav>
+      <div class="relative max-w-6xl mx-auto px-4 pt-10 pb-24 md:pt-12 md:pb-28">
+        <svg
+          class="absolute top-6 right-[5%] w-10 h-10 text-primary/10 rotate-[25deg]"
+          appParallax
+          [speed]="-0.3"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+          />
+        </svg>
 
-        <div class="max-w-xl z-10" appScrollReveal [y]="30" [duration]="0.7">
-          <p
-            class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-primary mb-4"
-          >
-            <ng-icon hlmIcon name="lucideHome" class="w-4 h-4" />
-            <span>Bienvenidos a la Casa Chuby</span>
-          </p>
+        <div class="text-center" appScrollReveal [y]="24" [duration]="0.6">
           <h1
             id="about-title"
-            class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-dark mb-5"
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
           >
-            <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
-              >Dos gatas.</span
-            >
-            <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
-              >Dos humanas.</span
-            >
-            <span class="block" appTextReveal [duration]="0.6" [staggerDelay]="0.06"
-              >Un universo.</span
+            <ng-icon hlmIcon name="lucideCat" class="w-5 h-5 md:w-6 md:h-6" />
+            <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+              >Dos gatas. Dos humanas. Un universo.</span
             >
           </h1>
-          <p class="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+          <p class="text-base md:text-lg font-bold text-muted-foreground">
+            Bienvenidos a la Casa Chuby
+          </p>
+        </div>
+      </div>
+
+      <!-- Wave: header → universo -->
+      <svg
+        class="absolute bottom-0 w-full h-16 md:h-20 pointer-events-none z-10 text-white"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
+    </section>
+
+    <!-- El universo / intro -->
+    <app-section-shell variant="white">
+      <div class="relative">
+        <svg
+          class="absolute -top-6 right-[5%] w-10 h-10 text-primary/10 rotate-[25deg]"
+          appParallax
+          [speed]="-0.3"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+          />
+        </svg>
+
+        <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+          <h2
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+          >
+            <ng-icon hlmIcon name="lucideHome" class="w-5 h-5 md:w-6 md:h-6" />
+            <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+              >El universo</span
+            >
+          </h2>
+          <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">
+            {{ casaChuby.title }}
+          </p>
+        </div>
+        <div class="max-w-2xl mx-auto text-center" appScrollReveal [y]="24" [duration]="0.6">
+          <p class="text-base md:text-lg text-foreground leading-relaxed mb-6">
             Las Chubys es un reality show y sitcom parodia protagonizada por gatos. No es una cuenta
             de mascotas: es una franquicia con lore, personajes con arcos propios y un mundo
             coherente donde cada publicación funciona como un nuevo episodio.
           </p>
-          <p class="text-base md:text-lg text-muted-foreground leading-relaxed mb-8">
+          <p class="text-base md:text-lg text-foreground leading-relaxed mb-6">
             La casa está habitada por dos hermanas gatas completamente opuestas —Iris y Rubí— y sus
             dos humanas subordinadas, Karen y Karencio, quienes conviven (y sobreviven) al caos
             diario que las gatas convierten en drama épico.
           </p>
-          <div class="flex flex-wrap items-center gap-4">
-            <a routerLink="/contact" hlmBtn>Escríbenos</a>
-            <a
-              [href]="socialChannels[0].href"
-              target="_blank"
-              rel="noopener"
-              hlmBtn
-              variant="outline"
-            >
-              Síguenos en Instagram
-            </a>
-          </div>
+          <p class="text-body text-muted-foreground leading-relaxed mb-4">
+            {{ casaChuby.description }}
+          </p>
+          <p class="text-base font-semibold text-foreground/80 italic">"{{ casaChuby.lema }}"</p>
         </div>
 
-        <div class="relative z-10">
-          <div class="relative h-[380px] md:h-[480px]">
+        <div class="relative z-10 max-w-3xl mx-auto mt-12 md:mt-16">
+          <div class="relative h-[320px] md:h-[420px]">
             <img
               src="/images/cats/iris.jpeg"
               alt="Iris, la Reina de la Casa Chuby"
               loading="eager"
               appParallax
               [speed]="-0.25"
-              class="absolute top-0 left-0 w-[72%] h-[82%] object-cover rounded-[2rem] shadow-xl"
+              class="absolute top-0 left-0 w-[68%] h-[85%] object-cover rounded-[2.5rem] shadow-xl"
             />
             <img
               src="/images/cats/rubi.jpeg"
@@ -135,248 +179,364 @@ import {
               loading="eager"
               appParallax
               [speed]="0.2"
-              class="absolute bottom-0 right-0 w-[58%] h-[58%] object-cover rounded-[2rem] shadow-xl border-[6px] border-surface"
+              class="absolute bottom-0 right-0 w-[52%] h-[62%] object-cover rounded-[2.5rem] shadow-xl border-[6px] border-surface"
             />
           </div>
         </div>
-      </div>
 
-      <svg
-        class="absolute bottom-0 left-0 w-full h-[70px] md:h-[100px]"
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M0,64 C288,120 720,0 1440,64 L1440,120 L0,120 Z" fill="#ffffff"></path>
-      </svg>
-    </section>
-
-    <!-- La Casa Chuby -->
-    <section class="py-16 md:py-24 bg-white" aria-labelledby="casa-title">
-      <div
-        class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
-        appScrollReveal
-        [y]="30"
-        [duration]="0.6"
-      >
-        <p
-          class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
-        >
-          <ng-icon hlmIcon name="lucideHome" class="w-4 h-4" />
-          <span>El universo</span>
-        </p>
-        <h2 id="casa-title" class="text-h1 mb-6">{{ casaChuby.title }}</h2>
-        <p class="text-muted-foreground leading-relaxed text-lg max-w-2xl mx-auto mb-4">
-          {{ casaChuby.description }}
-        </p>
-        <p class="text-base font-semibold text-foreground/60 italic">"{{ casaChuby.lema }}"</p>
-      </div>
-    </section>
-
-    <!-- Iris -->
-    <section class="py-16 md:py-24 bg-surface" aria-labelledby="iris-title">
-      <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
-      >
-        <div appScrollReveal [x]="-40" [duration]="0.7">
-          <img
-            src="/images/cats/iris3.jpeg"
-            alt="Iris Lourdes"
-            loading="lazy"
-            class="w-full rounded-[2rem] shadow-xl"
-          />
-        </div>
-        <div appScrollReveal [x]="40" [duration]="0.7">
-          <ng-icon hlmIcon name="lucideCrown" class="w-8 h-8 mb-3 text-primary" />
-          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-            {{ irisData.archetype }} — {{ irisData.role }}
-          </p>
-          <h2 id="iris-title" class="text-h1 mb-4">{{ irisData.fullName }}</h2>
-          <div class="space-y-4 text-muted-foreground leading-relaxed">
-            <p>{{ irisData.bio }}</p>
-            <p class="font-semibold text-foreground/80">{{ irisData.personality }}</p>
-            <p class="text-sm italic">{{ irisData.rolNarrativo }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Rubí -->
-    <section class="py-16 md:py-24 bg-white" aria-labelledby="rubi-title">
-      <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center"
-      >
-        <div class="order-2 lg:order-1" appScrollReveal [x]="-40" [duration]="0.7">
-          <ng-icon hlmIcon name="lucideFlame" class="w-8 h-8 mb-3 text-primary" />
-          <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-            {{ rubiData.archetype }} — {{ rubiData.role }}
-          </p>
-          <h2 id="rubi-title" class="text-h1 mb-4">{{ rubiData.fullName }}</h2>
-          <div class="space-y-4 text-muted-foreground leading-relaxed">
-            <p>{{ rubiData.bio }}</p>
-            <p class="font-semibold text-foreground/80">{{ rubiData.personality }}</p>
-            <p class="text-sm italic">{{ rubiData.rolNarrativo }}</p>
-          </div>
-        </div>
-        <div class="order-1 lg:order-2" appScrollReveal [x]="40" [duration]="0.7">
-          <img
-            src="/images/cats/rubi4.jpeg"
-            alt="Rubí Lucrecia"
-            loading="lazy"
-            class="w-full rounded-[2rem] shadow-xl"
-          />
-        </div>
-      </div>
-    </section>
-
-    <!-- Humanas -->
-    <section class="py-16 md:py-24 bg-surface" aria-labelledby="humans-title">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header class="text-center mb-12" appScrollReveal [y]="24" [duration]="0.6">
-          <p
-            class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
+        <div class="flex flex-wrap items-center justify-center gap-4 mt-12">
+          <a routerLink="/contact" hlmBtn>Escríbenos</a>
+          <a
+            [href]="socialChannels[0].href"
+            target="_blank"
+            rel="noopener"
+            hlmBtn
+            variant="outline"
           >
-            <ng-icon hlmIcon name="lucideUsers" class="w-4 h-4" />
-            <span>El staff humano</span>
-          </p>
-          <h2 id="humans-title" class="text-h1 mb-3">Karen y Karencio</h2>
-          <p class="text-muted-foreground max-w-xl mx-auto">
-            Las subordinadas humanas que conviven (y sobreviven) al caos de la Casa Chuby.
-          </p>
-        </header>
+            <ng-icon hlmIcon name="lucideInstagram" class="w-4 h-4" />
+            Síguenos en Instagram
+          </a>
+        </div>
+      </div>
+    </app-section-shell>
 
+    <!-- Wave: universo → protagonistas -->
+    <div class="relative h-16 md:h-20 overflow-hidden bg-white -mb-1" aria-hidden="true">
+      <svg
+        class="absolute bottom-0 w-full h-full text-surface"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
+    </div>
+
+    <!-- Las Protagonistas -->
+    <app-section-shell variant="warm">
+      <div class="relative">
+        <svg
+          class="absolute -top-10 right-[10%] w-12 h-12 text-primary/10 rotate-[15deg]"
+          appParallax
+          [speed]="0.3"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+          />
+        </svg>
+        <svg
+          class="absolute -bottom-6 left-[8%] w-10 h-10 text-primary/15 rotate-[-20deg]"
+          appParallax
+          [speed]="-0.2"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+          />
+        </svg>
+
+        <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+          <h2
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+          >
+            <ng-icon hlmIcon name="lucideCat" class="w-5 h-5 md:w-6 md:h-6" />
+            <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+              >Las protagonistas</span
+            >
+          </h2>
+          <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">Iris y Rubí</p>
+        </div>
         <div
           class="grid grid-cols-1 md:grid-cols-2 gap-6"
           appStaggerChildren
           childSelector="article"
           [staggerDelay]="0.1"
           [duration]="0.5"
-          [y]="24"
+          [y]="30"
         >
-          @for (human of humans; track human.name) {
-            <article hlmCard class="border-t-[3px] border-orange-500">
-              <div hlmCardHeader>
-                <ng-icon hlmIcon name="lucideUser" class="w-7 h-7 text-muted-foreground/60" />
-                <h3 hlmCardTitle>{{ human.name }}</h3>
-                <p hlmCardDescription>{{ human.role }}</p>
+          @for (cat of characters; track cat.name) {
+            <article
+              class="group relative overflow-hidden rounded-[2.5rem] bg-white transition-all duration-500 ease-bounce hover:-translate-y-3 hover:shadow-xl"
+            >
+              <div class="relative aspect-[4/3] overflow-hidden">
+                <img
+                  [src]="cat.image"
+                  [alt]="cat.fullName"
+                  loading="lazy"
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
-              <div hlmCardContent>
-                <p class="text-body text-muted-foreground leading-relaxed mb-3">
-                  {{ human.personality }}
-                </p>
-                <p class="text-body italic text-muted-foreground/70">{{ human.rolNarrativo }}</p>
+              <div
+                class="flex flex-col items-center text-center gap-2 px-6 pt-5 pb-6 rounded-[1.75rem] mx-2 mb-2"
+                [style.background]="catVisual(cat).card"
+              >
+                <h3 class="text-2xl md:text-3xl font-bold" [style.color]="catVisual(cat).text">
+                  {{ cat.fullName }}
+                </h3>
+                <span class="text-small font-semibold" [style.color]="catVisual(cat).accent">
+                  {{ cat.archetype }} — {{ cat.role }}
+                </span>
+                <p class="text-base text-muted-foreground leading-relaxed">{{ cat.bio }}</p>
+                <p class="text-base font-semibold text-foreground/80">{{ cat.personality }}</p>
+                <p class="text-sm italic text-muted-foreground/70">{{ cat.rolNarrativo }}</p>
               </div>
             </article>
           }
         </div>
       </div>
-    </section>
+    </app-section-shell>
+
+    <!-- Wave: protagonistas → humanas -->
+    <div class="relative h-16 md:h-20 overflow-hidden bg-surface -mb-1" aria-hidden="true">
+      <svg
+        class="absolute bottom-0 w-full h-full text-white"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
+    </div>
+
+    <!-- El staff humano -->
+    <app-section-shell variant="white">
+      <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+        <h2
+          class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+        >
+          <ng-icon hlmIcon name="lucideUsers" class="w-5 h-5 md:w-6 md:h-6" />
+          <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+            >El staff humano</span
+          >
+        </h2>
+        <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">Karen y Karencio</p>
+      </div>
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-6"
+        appStaggerChildren
+        childSelector="article"
+        [staggerDelay]="0.1"
+        [duration]="0.5"
+        [y]="30"
+      >
+        @for (human of humans; track human.name) {
+          <article
+            class="group relative overflow-hidden rounded-[2.5rem] bg-white border border-border transition-all duration-500 ease-bounce hover:-translate-y-3 hover:shadow-xl"
+          >
+            <div
+              class="flex flex-col items-center text-center gap-2 px-6 pt-8 pb-8 rounded-[1.75rem] m-2 bg-human-bg"
+            >
+              <ng-icon hlmIcon name="lucideUser" class="w-8 h-8 text-human" />
+              <h3 class="text-2xl md:text-3xl font-bold text-human-text">{{ human.name }}</h3>
+              <span class="text-small font-semibold text-human">{{ human.role }}</span>
+              <p class="text-base text-muted-foreground leading-relaxed">
+                {{ human.personality }}
+              </p>
+              <p class="text-sm italic text-muted-foreground/70">{{ human.rolNarrativo }}</p>
+            </div>
+          </article>
+        }
+      </div>
+    </app-section-shell>
+
+    <!-- Wave: humanas → series -->
+    <div class="relative h-16 md:h-20 overflow-hidden bg-white -mb-1" aria-hidden="true">
+      <svg
+        class="absolute bottom-0 w-full h-full text-surface"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
+    </div>
 
     <!-- Series / Formatos -->
     @defer (on viewport) {
-      <section class="py-16 md:py-24 bg-white" aria-labelledby="series-title">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header class="text-center mb-12" appScrollReveal [y]="24" [duration]="0.6">
-            <p
-              class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
-            >
-              <ng-icon hlmIcon name="lucideTv" class="w-4 h-4" />
-              <span>Las series</span>
-            </p>
-            <h2 id="series-title" class="text-h1 mb-3">Formatos del universo Chuby</h2>
-            <p class="text-muted-foreground max-w-xl mx-auto">
-              Cada contenido de Las Chubys pertenece a una de estas series recurrentes. Ocho
-              formatos, un solo universo.
-            </p>
-          </header>
+      <app-section-shell variant="warm">
+        <div class="relative">
+          <svg
+            class="absolute -top-6 left-[5%] w-10 h-10 text-primary/10 rotate-[25deg]"
+            appParallax
+            [speed]="-0.3"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+            />
+          </svg>
 
+          <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+            <h2
+              class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+            >
+              <ng-icon hlmIcon name="lucideTv" class="w-5 h-5 md:w-6 md:h-6" />
+              <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+                >Las series</span
+              >
+            </h2>
+            <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">
+              Ocho formatos, un solo universo
+            </p>
+          </div>
           <div
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"
             appStaggerChildren
             childSelector="article"
             [staggerDelay]="0.06"
             [duration]="0.5"
-            [y]="24"
+            [y]="30"
           >
             @for (s of chubySeries; track s.title) {
               <article
-                class="group rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-default"
+                class="group rounded-[2.5rem] p-6 transition-all duration-500 ease-bounce hover:-translate-y-2 hover:shadow-xl cursor-default"
                 [class]="s.color"
               >
-                <ng-icon hlmIcon [name]="s.icon" class="w-7 h-7 block mb-3 text-foreground/70" />
-                <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-1">
+                <ng-icon hlmIcon [name]="s.icon" class="w-7 h-7 block mb-3" />
+                <p class="text-xs font-bold uppercase tracking-wider opacity-70 mb-1">
                   {{ s.subtitle }}
                 </p>
-                <h3 class="text-base font-bold text-foreground mb-2 leading-snug">{{ s.title }}</h3>
-                <p class="text-xs text-muted-foreground leading-relaxed">{{ s.description }}</p>
+                <h3 class="text-base font-bold mb-2 leading-snug">{{ s.title }}</h3>
+                <p class="text-xs leading-relaxed opacity-80">{{ s.description }}</p>
               </article>
             }
           </div>
         </div>
-      </section>
+      </app-section-shell>
     } @placeholder {
-      <div class="h-48 bg-white" aria-hidden="true"></div>
+      <div class="h-96 bg-surface" aria-hidden="true"></div>
     }
+
+    <!-- Wave: series → galería -->
+    <div class="relative h-16 md:h-20 overflow-hidden bg-surface -mb-1" aria-hidden="true">
+      <svg
+        class="absolute bottom-0 w-full h-full text-white"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
+    </div>
 
     <!-- Galería -->
     @defer (on viewport) {
-      <section class="py-16 md:py-24 bg-surface" aria-labelledby="gallery-title">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <header class="text-center mb-12" appScrollReveal [y]="30" [duration]="0.6">
-            <p
-              class="text-xs font-extrabold uppercase tracking-widest text-primary mb-2 flex items-center justify-center gap-1.5"
-            >
-              <ng-icon hlmIcon name="lucideCamera" class="w-4 h-4" />
-              <span>Momentos</span>
-            </p>
-            <h2 id="gallery-title" class="text-h1 mb-3">La vida en la Casa Chuby</h2>
-          </header>
-
-          <div
-            class="columns-2 md:columns-3 gap-4 space-y-4"
-            appStaggerChildren
-            childSelector="figure"
-            [staggerDelay]="0.08"
-            [duration]="0.5"
-            [y]="30"
+      <app-section-shell variant="white">
+        <div class="text-center mb-10" appScrollReveal [y]="24" [duration]="0.6">
+          <h2
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
           >
-            @for (photo of galleryPhotos; track photo) {
-              <figure class="break-inside-avoid rounded-2xl overflow-hidden shadow-sm">
-                <img
-                  [src]="photo"
-                  alt="Momento de Las Chubys"
-                  loading="lazy"
-                  class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </figure>
-            }
-          </div>
+            <ng-icon hlmIcon name="lucideCamera" class="w-5 h-5 md:w-6 md:h-6" />
+            <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+              >Momentos</span
+            >
+          </h2>
+          <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">
+            La vida en la Casa Chuby
+          </p>
         </div>
-      </section>
+        <div
+          class="columns-2 md:columns-3 gap-4 space-y-4"
+          appStaggerChildren
+          childSelector="figure"
+          [staggerDelay]="0.08"
+          [duration]="0.5"
+          [y]="30"
+        >
+          @for (photo of galleryPhotos; track photo) {
+            <figure class="break-inside-avoid rounded-2xl overflow-hidden shadow-md">
+              <img
+                [src]="photo"
+                alt="Momento de Las Chubys"
+                loading="lazy"
+                class="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+              />
+            </figure>
+          }
+        </div>
+      </app-section-shell>
     } @placeholder {
-      <div class="h-48 bg-surface" aria-hidden="true"></div>
+      <div class="h-96 bg-white" aria-hidden="true"></div>
     }
+
+    <!-- Wave: galería → CTA -->
+    <div class="relative h-16 md:h-20 overflow-hidden bg-white -mb-1" aria-hidden="true">
+      <svg
+        class="absolute bottom-0 w-full h-full text-surface"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
+    </div>
 
     <!-- CTA -->
     @defer (on viewport) {
-      <section class="py-16 md:py-24 bg-white" aria-labelledby="cta-title">
-        <div
-          class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
-          appScrollReveal
-          [y]="35"
-          [duration]="0.7"
-          [scale]="0.98"
-        >
-          <h2 id="cta-title" class="text-h1 mb-4">¿Quieres ser parte del Comité?</h2>
-          <p class="text-muted-foreground leading-relaxed mb-8 md:text-lg">
-            Únete al CGA (Comité de Gatos Asociados). Marcas, contenido, fotografía y todo lo que
-            tenga que ver con gatas.
-          </p>
-          <a routerLink="/contact" hlmBtn class="animate-subtle-pulse">Contáctanos</a>
+      <app-section-shell variant="warm">
+        <div class="relative">
+          <svg
+            class="absolute -top-4 right-[12%] w-14 h-14 text-primary/8 -rotate-12"
+            appParallax
+            [speed]="0.4"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+            />
+          </svg>
+
+          <div
+            class="max-w-2xl mx-auto text-center"
+            appScrollReveal
+            [y]="35"
+            [duration]="0.7"
+            [scale]="0.98"
+          >
+            <h2
+              class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
+            >
+              <ng-icon hlmIcon name="lucideSparkles" class="w-5 h-5 md:w-6 md:h-6" />
+              <span appTextReveal splitBy="word" [duration]="0.5" [staggerDelay]="0.08"
+                >¿Quieres ser parte del Comité?</span
+              >
+            </h2>
+            <p class="text-base md:text-lg font-bold text-muted-foreground mb-3">
+              Únete al CGA — Comité de Gatos Asociados
+            </p>
+            <p class="text-body text-muted-foreground leading-relaxed mb-8">
+              Marcas, contenido, fotografía y todo lo que tenga que ver con gatas.
+            </p>
+            <a routerLink="/contact" hlmBtn class="animate-subtle-pulse">Contáctanos</a>
+          </div>
         </div>
-      </section>
+      </app-section-shell>
     } @placeholder {
-      <div class="h-40 bg-white" aria-hidden="true"></div>
+      <div class="h-64 bg-surface" aria-hidden="true"></div>
     }
   `,
   styles: [
@@ -384,7 +544,7 @@ import {
       @keyframes subtle-pulse {
         0%,
         100% {
-          box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.45);
+          box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-orange-400) 45%, transparent);
         }
         50% {
           box-shadow: 0 0 0 10px rgba(251, 191, 36, 0);
@@ -404,8 +564,7 @@ import {
 export class AboutComponent {
   private readonly seo = inject(SeoService);
 
-  protected readonly irisData = characters[0];
-  protected readonly rubiData = characters[1];
+  protected readonly characters = characters;
   protected readonly humans = humans;
   protected readonly chubySeries = chubySeries;
   protected readonly casaChuby = casaChuby;
@@ -417,6 +576,13 @@ export class AboutComponent {
     '/images/cats/rubi3.jpeg',
     '/images/cats/rubi4.jpeg',
   ];
+
+  protected readonly productPalette = productPalette;
+
+  protected catVisual(cat: (typeof this.characters)[number]) {
+    const idx = cat.name.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    return productPalette[idx % productPalette.length];
+  }
 
   constructor() {
     this.seo.setPage(
