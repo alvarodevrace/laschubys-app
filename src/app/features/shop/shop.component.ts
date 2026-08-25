@@ -7,7 +7,7 @@ import {
   signal,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
 import {
   lucideAlertCircle,
@@ -15,6 +15,7 @@ import {
   lucideSearch,
   lucideCat,
   lucideHeart,
+  lucideStore,
 } from '@ng-icons/lucide';
 
 import { ProductPick } from '../../core/models/content.model';
@@ -23,13 +24,17 @@ import { ContentService } from '../../core/services/content.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ToastService } from '../../shared/ui/toast/toast.service';
 import { HlmAlertImports } from '@spartan-ng/helm/alert';
-import { HlmBreadcrumbImports } from '@spartan-ng/helm/breadcrumb';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
 import { HlmBadgeImports } from '@spartan-ng/helm/badge';
 import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
-import { StaggerChildrenDirective } from '../../shared/animations';
+import {
+  ScrollRevealDirective,
+  ParallaxDirective,
+  StaggerChildrenDirective,
+} from '../../shared/animations';
+import { SectionShellComponent } from '../../shared/ui/section-shell/section-shell.component';
 import { CategorySidebarComponent } from './category-sidebar.component';
 import { ProductCardComponent } from './product-card.component';
 
@@ -38,9 +43,7 @@ import { ProductCardComponent } from './product-card.component';
   selector: 'app-shop',
   standalone: true,
   imports: [
-    RouterLink,
     HlmAlertImports,
-    HlmBreadcrumbImports,
     HlmButtonImports,
     HlmIconImports,
     HlmInputGroupImports,
@@ -48,147 +51,176 @@ import { ProductCardComponent } from './product-card.component';
     HlmSkeletonImports,
     CategorySidebarComponent,
     ProductCardComponent,
+    ScrollRevealDirective,
+    ParallaxDirective,
     StaggerChildrenDirective,
+    SectionShellComponent,
   ],
   providers: [
-    provideIcons({ lucideAlertCircle, lucideLayoutGrid, lucideSearch, lucideCat, lucideHeart }),
+    provideIcons({
+      lucideAlertCircle,
+      lucideLayoutGrid,
+      lucideSearch,
+      lucideCat,
+      lucideHeart,
+      lucideStore,
+    }),
   ],
   template: `
-    <section class="py-10 pb-8" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
-        <nav class="mb-4" hlmBreadcrumb aria-label="Breadcrumb">
-          <ol hlmBreadcrumbList>
-            <li hlmBreadcrumbItem>
-              <a hlmBreadcrumbLink [link]="['/']">Inicio</a>
-            </li>
-            <li hlmBreadcrumbSeparator></li>
-            <li hlmBreadcrumbItem>
-              <span hlmBreadcrumbPage>Tienda</span>
-            </li>
-            @if (activeCategoryName()) {
-              <li hlmBreadcrumbSeparator></li>
-              <li hlmBreadcrumbItem>
-                <span hlmBreadcrumbPage>{{ activeCategoryName() }}</span>
-              </li>
-            }
-          </ol>
-        </nav>
-        <h1 class="text-h1 text-primary mb-2">
-          {{ pageTitle() }}
-        </h1>
-        <p class="text-muted-foreground max-w-2xl">{{ pageSub() }}</p>
-      </div>
-    </section>
+    <!-- Header band -->
+    <section class="relative bg-surface overflow-hidden" aria-labelledby="tienda-title">
+      <div class="relative max-w-6xl mx-auto px-4 pt-10 pb-24 md:pt-12 md:pb-28">
+        <svg
+          class="absolute top-6 right-[5%] w-10 h-10 text-primary/10 rotate-[25deg]"
+          appParallax
+          [speed]="-0.3"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            d="M11.73 2.225c1.434 0 2.597 1.162 2.597 2.597 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.597 2.598-2.597zm-6.39 4.648c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zm12.78 0c1.163 0 2.106.943 2.106 2.106s-.943 2.106-2.106 2.106-2.106-.943-2.106-2.106.943-2.106 2.106-2.106zM9.875 15.01c1.434 0 2.598 1.163 2.598 2.598 0 1.434-1.164 2.597-2.598 2.597-1.434 0-2.597-1.163-2.597-2.597s1.163-2.598 2.597-2.598zm4.65 0c1.434 0 2.597 1.163 2.597 2.598 0 1.434-1.163 2.597-2.597 2.597-1.435 0-2.598-1.163-2.598-2.597s1.163-2.598 2.598-2.598zM12.2 21.477c1.666 0 3.016 1.35 3.016 3.016s-1.35 3.016-3.016 3.016-3.016-1.35-3.016-3.016 1.35-3.016 3.016-3.016z"
+          />
+        </svg>
 
-    <section class="py-4" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
-        <div class="flex items-center gap-4 flex-wrap py-4 mb-6 border-b border-border">
-          <div class="flex gap-3 flex-wrap">
-            @for (filter of audienceFilters(); track filter.value) {
-              <button
-                type="button"
-                hlmBtn
-                [variant]="audience() === filter.value ? 'default' : 'outline'"
-                (click)="audience.set(filter.value)"
-                [attr.data-testid]="'tienda-filter-' + filter.value"
-              >
-                <ng-icon hlmIcon [name]="filter.icon" class="w-4 h-4 flex-shrink-0" />
-                <span>{{ filter.label }}</span>
-                <span hlmBadge>{{ filter.count }}</span>
-              </button>
-            }
-          </div>
-          <div
-            hlmInputGroup
-            class="ml-auto flex-1 max-w-md bg-input/30 border-input/30 h-9 rounded-lg shadow-none"
+        <div class="text-center" appScrollReveal [y]="24" [duration]="0.6">
+          <h1
+            id="tienda-title"
+            class="text-h2 font-extrabold uppercase tracking-widest text-foreground mb-2 flex items-center justify-center gap-1.5"
           >
-            <input
-              hlmInputGroupInput
-              [value]="query()"
-              (input)="query.set($any($event).target.value)"
-              type="search"
-              placeholder="Buscar por nombre o idea..."
-              data-testid="tienda-search-input"
-            />
-            <hlm-input-group-addon>
-              <ng-icon name="lucideSearch" class="shrink-0 opacity-50" />
-            </hlm-input-group-addon>
-          </div>
+            <ng-icon hlmIcon name="lucideStore" class="w-5 h-5 md:w-6 md:h-6" />
+            <span>{{ pageTitle() }}</span>
+          </h1>
+          <p class="text-base md:text-lg font-bold text-muted-foreground">{{ pageSub() }}</p>
         </div>
       </div>
+
+      <!-- Wave: header → catálogo -->
+      <svg
+        class="absolute bottom-0 w-full h-16 md:h-20 pointer-events-none z-10 text-white"
+        viewBox="0 0 1200 80"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          fill="currentColor"
+          d="M0 20 Q75 0 150 20 T300 20 T450 20 T600 20 T750 20 T900 20 T1050 20 T1200 20 L1200 80 L0 80 Z"
+        />
+      </svg>
     </section>
 
-    <section class="pb-16" data-reveal>
-      <div class="max-w-6xl mx-auto px-4">
-        @if (anyError()) {
-          <div hlmAlert variant="destructive" class="max-w-xl mx-auto">
-            <ng-icon hlmIcon name="lucideAlertCircle" class="w-5 h-5" />
-            <h4 hlmAlertTitle>No pudimos cargar la tienda</h4>
-            <p hlmAlertDescription>{{ anyError() }}</p>
-            <div hlmAlertAction>
-              <button type="button" hlmBtn (click)="reload()">Reintentar</button>
-            </div>
-          </div>
-        } @else if (isLoading()) {
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            @for (_ of [1, 2, 3, 4]; track $index) {
-              <div hlmSkeleton class="rounded-3xl h-80"></div>
-            }
-          </div>
-        } @else {
-          <div class="flex flex-col md:flex-row gap-8 items-start">
-            <app-category-sidebar
-              [categories]="categoriesResource.value() ?? []"
-              [activeSlug]="category()"
-              (select)="category.set($event)"
-            />
-
-            <main class="flex-1 min-w-0">
-              @if (visibleProducts().length) {
-                <div class="flex items-center justify-between mb-4">
-                  <h2 class="text-lg md:text-xl font-extrabold text-foreground">
-                    {{ visibleProducts().length }} producto{{
-                      visibleProducts().length === 1 ? '' : 's'
-                    }}
-                  </h2>
-                  @if (activeCategoryName()) {
-                    <button type="button" hlmBtn variant="link" (click)="category.set('')">
-                      Ver todas
-                    </button>
-                  }
-                </div>
-                <div
-                  class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
-                  appStaggerChildren
-                  childSelector="app-product-card"
-                  [staggerDelay]="0.08"
-                >
-                  @for (product of visibleProducts(); track product.id) {
-                    <app-product-card
-                      [product]="product"
-                      [adding]="addingIds().has(product.id)"
-                      [added]="addedIds().has(product.id)"
-                      (add)="addToCart($event)"
-                    />
-                  }
-                </div>
-              } @else {
-                <div hlmAlert class="max-w-xl mx-auto">
-                  <ng-icon hlmIcon name="lucideAlertCircle" class="w-5 h-5" />
-                  <h4 hlmAlertTitle>{{ emptyTitle() }}</h4>
-                  <p hlmAlertDescription>{{ emptyMessage() }}</p>
-                  @if (query().trim() || audience() !== 'all' || category()) {
-                    <div hlmAlertAction>
-                      <button type="button" hlmBtn (click)="clearFilters()">Limpiar filtros</button>
-                    </div>
-                  }
-                </div>
-              }
-            </main>
-          </div>
-        }
+    <!-- Catálogo -->
+    <app-section-shell variant="white">
+      <!-- Filtros -->
+      <div class="flex items-center gap-4 flex-wrap mb-6" appScrollReveal [y]="16" [duration]="0.5">
+        <div class="flex gap-3 flex-wrap">
+          @for (filter of audienceFilters(); track filter.value) {
+            <button
+              type="button"
+              hlmBtn
+              [variant]="audience() === filter.value ? 'default' : 'outline'"
+              (click)="audience.set(filter.value)"
+              [attr.data-testid]="'tienda-filter-' + filter.value"
+            >
+              <ng-icon hlmIcon [name]="filter.icon" class="w-4 h-4 flex-shrink-0" />
+              <span>{{ filter.label }}</span>
+              <span hlmBadge>{{ filter.count }}</span>
+            </button>
+          }
+        </div>
+        <div
+          hlmInputGroup
+          class="ml-auto flex-1 max-w-md bg-input/30 border-input/30 h-9 rounded-lg shadow-none"
+        >
+          <input
+            hlmInputGroupInput
+            [value]="query()"
+            (input)="query.set($any($event).target.value)"
+            type="search"
+            placeholder="Buscar por nombre o idea..."
+            data-testid="tienda-search-input"
+          />
+          <hlm-input-group-addon>
+            <ng-icon name="lucideSearch" class="shrink-0 opacity-50" />
+          </hlm-input-group-addon>
+        </div>
       </div>
-    </section>
+
+      @if (anyError()) {
+        <div hlmAlert variant="destructive" class="max-w-xl mx-auto">
+          <ng-icon hlmIcon name="lucideAlertCircle" class="w-5 h-5" />
+          <h4 hlmAlertTitle>No pudimos cargar la tienda</h4>
+          <p hlmAlertDescription>{{ anyError() }}</p>
+          <div hlmAlertAction>
+            <button type="button" hlmBtn (click)="reload()">Reintentar</button>
+          </div>
+        </div>
+      } @else if (isLoading()) {
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          @for (_ of [1, 2, 3, 4]; track $index) {
+            <div hlmSkeleton class="rounded-[2.5rem] h-80"></div>
+          }
+        </div>
+      } @else {
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+          <app-category-sidebar
+            [categories]="categoriesResource.value() ?? []"
+            [activeSlug]="category()"
+            (select)="category.set($event)"
+          />
+
+          <main class="flex-1 min-w-0">
+            @if (visibleProducts().length) {
+              <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg md:text-xl font-extrabold text-foreground">
+                  {{ visibleProducts().length }} producto{{
+                    visibleProducts().length === 1 ? '' : 's'
+                  }}
+                </h2>
+                @if (activeCategoryName()) {
+                  <button
+                    type="button"
+                    hlmBtn
+                    variant="link"
+                    class="text-muted-foreground hover:text-primary"
+                    (click)="category.set('')"
+                  >
+                    Ver todas
+                  </button>
+                }
+              </div>
+              <div
+                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+                appStaggerChildren
+                childSelector="app-product-card"
+                [staggerDelay]="0.08"
+              >
+                @for (product of visibleProducts(); track product.id) {
+                  <app-product-card
+                    [product]="product"
+                    [adding]="addingIds().has(product.id)"
+                    [added]="addedIds().has(product.id)"
+                    (add)="addToCart($event)"
+                  />
+                }
+              </div>
+            } @else {
+              <div hlmAlert class="max-w-xl mx-auto">
+                <ng-icon hlmIcon name="lucideAlertCircle" class="w-5 h-5" />
+                <h4 hlmAlertTitle>{{ emptyTitle() }}</h4>
+                <p hlmAlertDescription>{{ emptyMessage() }}</p>
+                @if (query().trim() || audience() !== 'all' || category()) {
+                  <div hlmAlertAction>
+                    <button type="button" hlmBtn (click)="clearFilters()">Limpiar filtros</button>
+                  </div>
+                }
+              </div>
+            }
+          </main>
+        </div>
+      }
+    </app-section-shell>
   `,
 })
 export class ShopComponent {

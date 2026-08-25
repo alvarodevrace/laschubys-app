@@ -41,6 +41,7 @@ import { ToastService } from '../../shared/ui/toast/toast.service';
 import { ProductPick } from '../../core/models/content.model';
 import { CarouselComponent } from '../../shared/ui/carousel/carousel.component';
 import { SectionShellComponent } from '../../shared/ui/section-shell/section-shell.component';
+import { productColor } from '../../shared/ui/product-visuals';
 import {
   ScrollRevealDirective,
   StaggerChildrenDirective,
@@ -226,14 +227,16 @@ import {
                   @if (product.source === 'owned') {
                     <span
                       class="text-[11px] font-bold uppercase tracking-wider rounded-full px-2.5 py-1"
-                      [style.background]="productColor(product).accent + '20'"
+                      [style.background]="
+                        'color-mix(in oklab, ' + productColor(product).accent + ' 20%, transparent)'
+                      "
                       [style.color]="productColor(product).accent"
                     >
                       Las Chubys
                     </span>
                   }
                   <span
-                    class="text-[11px] font-bold uppercase tracking-wider rounded-full px-2.5 py-1 bg-white/70"
+                    class="text-[11px] font-bold uppercase tracking-wider rounded-full px-2.5 py-1 bg-white/70 truncate max-w-[55%]"
                     [style.color]="productColor(product).accent"
                   >
                     {{ product.tag }}
@@ -546,49 +549,7 @@ export class HomeComponent {
   protected readonly characters = characters;
   protected readonly casaChuby = casaChuby;
 
-  protected readonly productPalette = [
-    {
-      card: 'var(--color-orange-50)',
-      light: '#ffffff',
-      accent: 'var(--color-orange-600)',
-      text: 'var(--color-orange-800)',
-    },
-    {
-      card: 'var(--color-orange-100)',
-      light: 'var(--color-orange-50)',
-      accent: 'var(--color-orange-700)',
-      text: 'var(--color-orange-900)',
-    },
-    {
-      card: 'var(--color-orange-200)',
-      light: 'var(--color-orange-100)',
-      accent: 'var(--color-orange-600)',
-      text: 'var(--color-orange-800)',
-    },
-    {
-      card: 'var(--color-orange-100)',
-      light: '#ffffff',
-      accent: 'var(--color-orange-500)',
-      text: 'var(--color-orange-700)',
-    },
-    {
-      card: 'var(--color-orange-50)',
-      light: 'var(--color-orange-100)',
-      accent: 'var(--color-orange-700)',
-      text: 'var(--color-orange-900)',
-    },
-    {
-      card: 'var(--color-orange-200)',
-      light: 'var(--color-orange-50)',
-      accent: 'var(--color-orange-500)',
-      text: 'var(--color-orange-800)',
-    },
-  ] as const;
-
-  protected productColor(product: ProductPick): (typeof this.productPalette)[number] {
-    const idx = product.id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-    return this.productPalette[idx % this.productPalette.length];
-  }
+  protected readonly productColor = productColor;
 
   protected readonly catPalette: Record<string, { bg: string; accent: string; text: string }> = {
     Iris: {

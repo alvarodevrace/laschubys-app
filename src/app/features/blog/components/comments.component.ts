@@ -66,7 +66,7 @@ import { StaggerChildrenDirective } from '../../../shared/animations';
               hlmTextarea
               formControlName="body"
               rows="4"
-              placeholder="Escribe algo digno de Iris y Rubi..."
+              placeholder="Escribe algo digno de Iris y Rubí..."
               data-testid="comment-textarea"
             ></textarea>
 
