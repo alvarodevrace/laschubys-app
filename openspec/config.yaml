@@ -1,0 +1,66 @@
+# openspec/config.yaml — LasChubys-Front SDD config
+schema: spec-driven
+project: laschubys-app
+
+context: |
+  Repo: LasChubys-Front — Angular 21 SSR storefront for Las Chubys (remote: alvarodevrace/laschubys-app).
+  Stack: Angular 21.2 (zoneless, signals), @angular/ssr, Tailwind CSS 4, Spartan NG, Lucide Angular, Motion, Sentry.
+  Package manager/runtime: Bun 1.3.14 (bun.lock); SSR server via server.ts (partial SSR, NG_BUILD_PARTIAL_SSR=1).
+  Architecture: standalone components; src/app/{core,features,shared}; features = admin, auth, blog, cart, checkout, home, linktree, media-kit, placeholder, shop, static.
+  Scope Rule: code used by 2+ features MUST live in shared/; single-feature code stays in its feature folder.
+  CI/CD: GitHub Actions (typecheck + unit test + build) -> Dokploy deploy on main; Playwright smoke workflow on main.
+  Branch law: feature/LCH-N-name -> PR -> develop -> QA pass -> PR develop -> main. Never push direct to main/develop.
+
+strict_tdd: true
+
+testing:
+  unit:
+    available: true
+    runner: vitest
+    builder: "@angular/build:unit-test"
+    command: "bun run test:ci"
+    glob: "src/**/*.spec.ts"
+  e2e:
+    available: true
+    runner: playwright
+    command: "bun run e2e"
+    config: playwright.config.ts
+    dir: e2e/
+    base_url: "http://localhost:4321"
+    project: chromium
+  coverage:
+    available: false
+    command: ""
+  quality:
+    lint: "bun run lint"
+    typecheck: "bun run typecheck"
+    format: "npx prettier --write"
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Respect the Scope Rule when proposing shared/ vs feature/ placement
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+    - Standalone components, signals, zoneless, OnPush mandatory; no NgModules
+    - Prefer effect() + DestroyRef over lifecycle hooks; legacy ngOn* usage migrates progressively
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow existing code patterns (standalone, signals, zoneless, @if/@for/@switch control flow)
+      - Commit messages in Spanish, conventional commits preferred
+      - No direct commits to main/develop; feature branches only
+    tdd: true
+    test_command: "bun run test:ci"
+  verify:
+    test_command: "bun run test:ci"
+    build_command: "bun run build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
