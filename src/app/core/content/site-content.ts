@@ -28,6 +28,12 @@ export const socialChannels = [
     copy: 'Comunidad, actualidades y contenido compartido para cat moms.',
   },
   {
+    name: 'Comunidad Oficial',
+    handle: 'Canal de WhatsApp',
+    href: 'https://whatsapp.com/channel/0029VbD9CXa7dmei2bz9EA2w',
+    copy: 'Únete a la comunidad oficial de Las Chubys en WhatsApp.',
+  },
+  {
     name: 'YouTube',
     handle: 'Las Chubys',
     href: 'https://www.youtube.com/@laschubys',
