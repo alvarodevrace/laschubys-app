@@ -1,8 +1,9 @@
 import { Component, ChangeDetectionStrategy, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { provideIcons } from '@ng-icons/core';
-import { lucideArrowLeft } from '@ng-icons/lucide';
+import { lucideArrowLeft, lucideFileText } from '@ng-icons/lucide';
 
+import { AuthService } from '../../core/auth/auth.service';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmIconImports } from '@spartan-ng/helm/icon';
 import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
@@ -20,7 +21,7 @@ import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
     HlmTabsList,
     HlmTabsTrigger,
   ],
-  providers: [provideIcons({ lucideArrowLeft })],
+  providers: [provideIcons({ lucideArrowLeft, lucideFileText })],
   template: `
     <div class="min-h-screen bg-surface">
       <!-- Header admin -->
@@ -37,18 +38,17 @@ import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
             <span class="text-muted-foreground">·</span>
             <span class="text-sm font-semibold text-muted-foreground">Las Chubys</span>
           </div>
+
+          <button hlmBtn variant="ghost" size="sm" (click)="logout()">Cerrar sesión</button>
         </div>
 
         <!-- Tabs -->
         <div class="max-w-7xl mx-auto px-4">
           <div hlmTabs [tab]="activeTab()" class="w-full">
             <div hlmTabsList variant="line" class="w-full justify-start">
-              <button hlmTabsTrigger="posts" (click)="navigate('/admin/posts')">Blog posts</button>
-              <button hlmTabsTrigger="products" (click)="navigate('/admin/products')">
-                Productos
-              </button>
-              <button hlmTabsTrigger="social-metrics" (click)="navigate('/admin/social-metrics')">
-                Métricas sociales
+              <button hlmTabsTrigger="media-kit" (click)="navigate('/admin/media-kit')">
+                <ng-icon hlmIcon name="lucideFileText" class="w-4 h-4 mr-2" />
+                Media Kit
               </button>
             </div>
           </div>
@@ -63,14 +63,15 @@ import { HlmTabs, HlmTabsList, HlmTabsTrigger } from '@spartan-ng/helm/tabs';
 })
 export class AdminLayoutComponent {
   private readonly router = inject(Router);
-  protected readonly activeTab = computed<'posts' | 'products' | 'social-metrics'>(() => {
-    const url = this.router.url;
-    if (url.startsWith('/admin/products')) return 'products';
-    if (url.startsWith('/admin/social-metrics')) return 'social-metrics';
-    return 'posts';
-  });
+  private readonly auth = inject(AuthService);
+  protected readonly activeTab = computed(() => 'media-kit');
 
   protected navigate(path: string) {
     void this.router.navigate([path]);
+  }
+
+  protected logout() {
+    void this.auth.logout();
+    void this.router.navigate(['/']);
   }
 }

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from './core/auth/admin.guard';
 
 const linktreeRoute: Routes = [
   {
@@ -73,15 +74,22 @@ export const routes: Routes = [
       },
       {
         path: 'auth/callback',
-        loadComponent: () =>
-          import('./features/auth/auth-callback.component').then((m) => m.AuthCallbackComponent),
+        redirectTo: 'auth/login',
       },
       {
         path: 'admin',
+        canActivate: [adminGuard],
         loadComponent: () =>
           import('./features/admin/admin-layout.component').then((m) => m.AdminLayoutComponent),
         children: [
-          { path: '', redirectTo: 'posts', pathMatch: 'full' },
+          { path: '', redirectTo: 'media-kit', pathMatch: 'full' },
+          {
+            path: 'media-kit',
+            loadComponent: () =>
+              import('./features/admin/media-kit/admin-media-kit.component').then(
+                (m) => m.AdminMediaKitComponent,
+              ),
+          },
           {
             path: 'posts',
             loadComponent: () =>
@@ -122,13 +130,6 @@ export const routes: Routes = [
             loadComponent: () =>
               import('./features/admin/products/admin-product-form.component').then(
                 (m) => m.AdminProductFormComponent,
-              ),
-          },
-          {
-            path: 'social-metrics',
-            loadComponent: () =>
-              import('./features/admin/social-metrics/admin-social-metrics.component').then(
-                (m) => m.AdminSocialMetricsComponent,
               ),
           },
         ],
