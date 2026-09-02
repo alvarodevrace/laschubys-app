@@ -12,8 +12,12 @@ export const adminGuard: CanActivateFn = async (_, state) => {
   }
 
   if (!auth.isLoggedIn()) {
-    return router.createUrlTree(['/auth/login'], { queryParams: { redirect: state.url, mode: 'admin-only' } });
+    return router.createUrlTree(['/auth/login'], {
+      queryParams: { redirect: state.url, mode: 'admin-only' },
+    });
   }
 
-  return auth.isAdmin() ? true : router.createUrlTree(['/']);
+  return auth.isAdmin()
+    ? true
+    : router.createUrlTree(['/'], { queryParams: { mode: 'admin-only' } });
 };

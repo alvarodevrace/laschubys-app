@@ -56,6 +56,28 @@ export class AuthService {
     window.location.assign(target.toString());
   }
 
+  async loginWithPassword(email: string, password: string, next = '/blog') {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+    this._loading.set(true);
+
+    try {
+      const response = await this.api.post<AuthMeResponse>(`${environment.apiUrl}/auth/login`, {
+        email,
+        password,
+      });
+      this._user.set(response.user);
+      window.location.assign(this.normalizeNextPath(next));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'No se pudo iniciar sesión';
+      throw new Error(message);
+    } finally {
+      this._loading.set(false);
+    }
+  }
+
   async logout() {
     try {
       await this.api.get(`${environment.apiUrl}/auth/logout`);
