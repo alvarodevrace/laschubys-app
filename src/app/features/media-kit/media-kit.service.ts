@@ -153,6 +153,100 @@ export const DEFAULT_MEDIA_KIT: MediaKitData = {
     email: 'laschubys.oficial@gmail.com',
     whatsapp: 'https://wa.me/593960463743',
     whatsappLabel: '+593 96 046 3743',
+    website: 'laschubys.com',
+    phone: '+593 96 046 3743',
+    location: 'Ecuador — Trabajamos 100% remoto',
+  },
+  // Secciones nuevas (diseño media kit PDF, datos dinámicos desde la base)
+  cover: {
+    title: 'Las Chubys · Media Kit',
+    subtitle:
+      'Un reality show felino con Iris y Rubí: contenido 100% original, orgánico y con audiencia real.',
+    photos: [],
+  },
+  socialMetrics: [
+    {
+      name: 'Instagram',
+      handle: '@laschubys',
+      followers: '31.3K',
+      engagement: '21%',
+      reachMonthly: '963K',
+      viewsMonthly: '1.8M',
+      href: 'https://www.instagram.com/laschubys/',
+    },
+    {
+      name: 'Facebook',
+      handle: 'Las Chubys',
+      followers: '3.8K',
+      engagement: '9.9%',
+      reachMonthly: '203.8K',
+      viewsMonthly: '338.5K',
+      href: 'https://www.facebook.com/people/Las-Chubys/61589964727281/',
+    },
+    {
+      name: 'TikTok',
+      handle: '@laschubys.oficial',
+      followers: '23K',
+      engagement: '12.9%',
+      reachMonthly: '35.5K',
+      viewsMonthly: '1.1M',
+      href: 'https://www.tiktok.com/@laschubys.oficial',
+    },
+  ],
+  audienceOverview: {
+    countriesCount: '+10',
+    countriesLabel: 'países',
+    femalePercent: '66%',
+    femaleLabel: 'mujeres',
+    ageRange: '25-44',
+    ageLabel: 'años',
+    countries: ['Ecuador', 'Colombia', 'México', 'España', 'Perú', 'Argentina', 'Chile', 'EE.UU.'],
+  },
+  collabFormats: {
+    title: 'Formatos de colaboración',
+    intro:
+      'Llevamos la magia de las Chubys a tu marca con contenido orgánico y creativo. Elige el formato que mejor se adapte a tu objetivo.',
+    items: [
+      {
+        title: 'Video reel',
+        description: 'Storytelling felino original con tu producto de forma natural y auténtica.',
+      },
+      {
+        title: 'Stories / UGC',
+        description:
+          'Contenido generado por usuario para tus canales: cercano, real y fácil de compartir.',
+      },
+      {
+        title: 'Mención + producto',
+        description:
+          'Integración del producto dentro de un video de la Casa Chuby con mención clara.',
+      },
+      {
+        title: 'Publicación dedicada',
+        description: 'Post y/o video dedicado solo a tu marca con copy orientado a conversión.',
+      },
+      {
+        title: 'Sorteo / dinámica',
+        description:
+          'Activación con la comunidad: sorteos, encuestas y retos que generan interacción.',
+      },
+      {
+        title: 'Embajadoría',
+        description: 'Alianza de largo plazo con contenido recurrente y reportes de resultados.',
+      },
+    ],
+  },
+  houseFormats: {
+    title: 'Formatos de La Casa Chuby',
+    growthNote: 'Crecimiento 100% orgánico.',
+    items: [
+      { title: 'Reality' },
+      { title: 'Día a día' },
+      { title: 'Q&A' },
+      { title: 'Retos' },
+      { title: 'Bloopers' },
+      { title: 'Vlogs' },
+    ],
   },
 };
 
