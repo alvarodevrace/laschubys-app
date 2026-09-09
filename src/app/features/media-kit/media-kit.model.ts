@@ -77,6 +77,56 @@ export interface MediaKitContact {
   email: string;
   whatsapp: string;
   whatsappLabel: string;
+  website?: string;
+  phone?: string;
+  location?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Contrato del rediseño media kit (versión PDF, datos dinámicos desde la base)
+// ---------------------------------------------------------------------------
+
+export interface MediaKitPdfCover {
+  title: string;
+  subtitle: string;
+  photos: Array<{ name: string; image: string }>;
+}
+
+export interface MediaKitPdfNetwork {
+  name: string;
+  handle: string;
+  followers: string;
+  engagement: string;
+  reachMonthly: string;
+  viewsMonthly: string;
+  href?: string;
+}
+
+export interface MediaKitPdfAudience {
+  countriesCount: string;
+  countriesLabel: string;
+  femalePercent: string;
+  femaleLabel: string;
+  ageRange: string;
+  ageLabel: string;
+  countries: string[];
+}
+
+export interface MediaKitPdfCollabItem {
+  title: string;
+  description: string;
+}
+
+export interface MediaKitPdfCollabFormats {
+  title: string;
+  intro: string;
+  items: MediaKitPdfCollabItem[];
+}
+
+export interface MediaKitPdfHouseFormats {
+  title: string;
+  growthNote: string;
+  items: Array<{ title: string }>;
 }
 
 export interface MediaKitData {
@@ -88,4 +138,10 @@ export interface MediaKitData {
   services: MediaKitServiceItem[];
   rates?: MediaKitRate[];
   contact: MediaKitContact;
+  /** Secciones nuevas (diseño PDF media kit) — dinámicas desde la base. */
+  cover?: MediaKitPdfCover;
+  socialMetrics?: MediaKitPdfNetwork[];
+  audienceOverview?: MediaKitPdfAudience;
+  collabFormats?: MediaKitPdfCollabFormats;
+  houseFormats?: MediaKitPdfHouseFormats;
 }
