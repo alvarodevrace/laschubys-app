@@ -2,8 +2,6 @@ import { Component, inject, resource, ChangeDetectionStrategy } from '@angular/c
 import { provideIcons } from '@ng-icons/core';
 import {
   lucideAlertCircle,
-  lucideBriefcase,
-  lucideCheck,
   lucideHeart,
   lucideMail,
   lucideMessageCircle,
@@ -20,7 +18,7 @@ import { HlmSpinner } from '@spartan-ng/helm/spinner';
 
 import { SeoService } from '../../core/services/seo.service';
 import { MediaKitService } from './media-kit.service';
-import { MediaKitData } from './media-kit.model';
+import { MediaKitData, MediaKitPdfNetwork } from './media-kit.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,8 +36,6 @@ import { MediaKitData } from './media-kit.model';
   providers: [
     provideIcons({
       lucideAlertCircle,
-      lucideBriefcase,
-      lucideCheck,
       lucideHeart,
       lucideMail,
       lucideMessageCircle,
@@ -75,76 +71,165 @@ import { MediaKitData } from './media-kit.model';
 
     @if (mediaKitResource.value(); as data) {
       <main>
-        <!-- Hero -->
+        <!-- 01 · Portada -->
         <section class="bg-surface py-12 md:py-20">
           <div class="max-w-6xl mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-              <div class="order-2 md:order-1">
-                <span hlmBadge class="mb-4">{{ data.hero.pill }}</span>
+              <div>
+                <span hlmBadge class="mb-4">Media Kit</span>
                 <h1
                   class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight text-stone-950 mb-4"
                 >
-                  {{ data.hero.title }}
+                  {{ data.cover?.title || 'Las Chubys · Media Kit' }}
                 </h1>
                 <p class="text-base md:text-lg text-muted-foreground leading-relaxed mb-6 max-w-lg">
-                  {{ data.hero.subtitle }}
+                  {{ data.cover?.subtitle || data.hero.subtitle }}
                 </p>
                 <div class="flex flex-wrap gap-3">
-                  <a [href]="data.hero.ctaDownload.href" hlmBtn size="lg">
+                  <a href="#metricas" hlmBtn size="lg"> Ver métricas </a>
+                  <a [href]="'mailto:' + data.contact.email" hlmBtn variant="outline" size="lg">
                     <ng-icon hlmIcon name="lucideMail" class="w-5 h-5" />
-                    {{ data.hero.ctaDownload.label }}
-                  </a>
-                  <a [href]="data.hero.ctaWrite.href" hlmBtn variant="outline" size="lg">
-                    {{ data.hero.ctaWrite.label }}
+                    Escríbenos
                   </a>
                 </div>
               </div>
 
-              <div class="order-1 md:order-2">
-                <div class="relative rounded-[32px] overflow-hidden shadow-xl">
+              <div>
+                <div class="grid grid-cols-2 gap-4">
                   <img
-                    [src]="data.hero.image"
-                    [alt]="data.hero.imageAlt"
-                    class="w-full aspect-[4/5] object-cover"
+                    src="/images/cats/iris.jpeg"
+                    alt="Iris"
                     loading="eager"
+                    class="w-full aspect-[4/5] object-cover rounded-[32px] shadow-xl"
                   />
-                  <div
-                    class="absolute bottom-0 inset-x-0 h-1/3 bg-gradient-to-t from-black/40 to-transparent"
-                    aria-hidden="true"
-                  ></div>
+                  <img
+                    src="/images/cats/rubi.jpeg"
+                    alt="Rubi"
+                    loading="lazy"
+                    class="w-full aspect-[4/5] object-cover rounded-[32px] shadow-xl mt-8"
+                  />
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Stats -->
-        <section class="py-12 md:py-16 bg-white">
+        <!-- 02 · Métricas (por red social, con logo) -->
+        <section id="metricas" class="py-12 md:py-16 bg-white">
           <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-8 md:mb-10">
               <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-                Números
+                Nuestros números
               </p>
               <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-stone-950">
-                Alcance y engagement
+                Audiencia en redes
               </h2>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              @for (metric of data.metrics; track metric.network) {
-                <a [href]="metric.href" target="_blank" rel="noreferrer" class="block group">
-                  <hlm-card class="h-full">
-                    <div class="grid gap-1">
-                      <p class="text-sm font-bold text-primary">{{ metric.network }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              @for (net of socialNetworks(data); track net.name) {
+                <a [href]="net.href || '#'" target="_blank" rel="noreferrer" class="block group">
+                  <hlm-card class="h-full p-0 overflow-hidden">
+                    <div class="flex items-center justify-between p-4 border-b border-border">
+                      <span class="text-sm font-extrabold text-stone-950">{{ net.name }}</span>
+                      <span class="flex-shrink-0">
+                        @switch (net.name.toLowerCase()) {
+                          @case ('instagram') {
+                            <svg
+                              width="26"
+                              height="26"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              aria-hidden="true"
+                            >
+                              <rect
+                                x="2"
+                                y="2"
+                                width="20"
+                                height="20"
+                                rx="5.5"
+                                fill="url(#instaGrad)"
+                              />
+                              <circle
+                                cx="12"
+                                cy="12"
+                                r="4"
+                                stroke="#fff"
+                                stroke-width="1.8"
+                                fill="none"
+                              />
+                              <circle cx="17.2" cy="6.8" r="1.4" fill="#fff" />
+                              <defs>
+                                <linearGradient id="instaGrad" x1="0" y1="0" x2="24" y2="24">
+                                  <stop stop-color="#feda75" />
+                                  <stop offset="0.5" stop-color="#d62976" />
+                                  <stop offset="1" stop-color="#962fbf" />
+                                </linearGradient>
+                              </defs>
+                            </svg>
+                          }
+                          @case ('facebook') {
+                            <svg
+                              width="26"
+                              height="26"
+                              viewBox="0 0 24 24"
+                              fill="#1877f2"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.52 1.5-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47H15.2c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33V22c4.78-.76 8.43-4.92 8.43-9.94Z"
+                              />
+                            </svg>
+                          }
+                          @case ('tiktok') {
+                            <svg
+                              width="26"
+                              height="26"
+                              viewBox="0 0 24 24"
+                              fill="#000"
+                              aria-hidden="true"
+                            >
+                              <path
+                                d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1Z"
+                              />
+                            </svg>
+                          }
+                          @default {
+                            <ng-icon hlmIcon name="lucideHeart" class="w-6 h-6" />
+                          }
+                        }
+                      </span>
+                    </div>
+                    <div class="grid gap-1 p-4">
+                      <p class="text-xs font-medium text-muted-foreground">{{ net.handle }}</p>
                       <p class="text-3xl md:text-4xl font-extrabold text-stone-950">
-                        {{ metric.value }}
+                        {{ net.followers }}
                       </p>
-                      <p class="text-sm text-muted-foreground">{{ metric.label }}</p>
-                      @if (metric.engagement) {
-                        <p class="text-xs font-medium text-muted-foreground mt-1">
-                          Engagement {{ metric.engagement }}
-                        </p>
-                      }
+                      <p class="text-xs font-bold text-primary">Seguidores</p>
+                      <div class="grid grid-cols-3 gap-2 mt-3 border-t border-border pt-3">
+                        <div class="text-center">
+                          <p class="text-sm font-extrabold text-stone-950">{{ net.engagement }}</p>
+                          <p class="text-[10px] uppercase tracking-wide text-muted-foreground">
+                            Engagement
+                          </p>
+                        </div>
+                        <div class="text-center">
+                          <p class="text-sm font-extrabold text-stone-950">
+                            {{ net.reachMonthly }}
+                          </p>
+                          <p class="text-[10px] uppercase tracking-wide text-muted-foreground">
+                            Alcance/mes
+                          </p>
+                        </div>
+                        <div class="text-center">
+                          <p class="text-sm font-extrabold text-stone-950">
+                            {{ net.viewsMonthly }}
+                          </p>
+                          <p class="text-[10px] uppercase tracking-wide text-muted-foreground">
+                            Vistas/mes
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </hlm-card>
                 </a>
@@ -153,62 +238,8 @@ import { MediaKitData } from './media-kit.model';
           </div>
         </section>
 
-        <!-- About -->
+        <!-- 03 · Audiencia -->
         <section class="py-12 md:py-16 bg-surface">
-          <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-8 md:mb-10">
-              <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-                Nosotros
-              </p>
-              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-stone-950">
-                {{ data.about.headline }}
-              </h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-12">
-              <div>
-                <p class="text-muted-foreground leading-relaxed text-base md:text-lg">
-                  {{ data.about.story }}
-                </p>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <img
-                  src="/images/cats/iris.jpeg"
-                  alt="Iris"
-                  loading="lazy"
-                  class="w-full aspect-[3/4] object-cover rounded-2xl"
-                />
-                <img
-                  src="/images/cats/rubi.jpeg"
-                  alt="Rubi"
-                  loading="lazy"
-                  class="w-full aspect-[3/4] object-cover rounded-2xl mt-6"
-                />
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              @for (member of data.about.team; track member.name) {
-                <hlm-card class="h-full">
-                  <img
-                    [src]="member.image"
-                    [alt]="member.name"
-                    loading="lazy"
-                    class="w-full aspect-square object-cover rounded-xl mb-3"
-                  />
-                  <p class="text-xs font-extrabold uppercase tracking-wide text-primary mb-0.5">
-                    {{ member.role }}
-                  </p>
-                  <h3 class="text-base font-extrabold text-stone-950 mb-1">{{ member.name }}</h3>
-                  <p class="text-sm text-muted-foreground leading-relaxed">{{ member.bio }}</p>
-                </hlm-card>
-              }
-            </div>
-          </div>
-        </section>
-
-        <!-- Audience -->
-        <section class="py-12 md:py-16 bg-white">
           <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-8 md:mb-10">
               <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
@@ -219,48 +250,81 @@ import { MediaKitData } from './media-kit.model';
               </h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-              @for (segment of data.audience.segments; track segment.title) {
-                <hlm-card class="h-full">
-                  <div
-                    class="w-11 h-11 rounded-xl bg-primary/10 text-primary inline-flex items-center justify-center mb-3"
-                  >
-                    @switch (segment.icon) {
-                      @case ('heart') {
-                        <ng-icon hlmIcon name="lucideHeart" class="w-6 h-6" />
-                      }
-                      @case ('users') {
-                        <ng-icon hlmIcon name="lucideUsers" class="w-6 h-6" />
-                      }
-                      @default {
-                        <ng-icon hlmIcon name="lucideBriefcase" class="w-6 h-6" />
-                      }
-                    }
-                  </div>
-                  <h3 class="text-lg font-extrabold text-stone-950 mb-1">{{ segment.title }}</h3>
-                  <p class="text-sm text-muted-foreground leading-relaxed">
-                    {{ segment.description }}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+              <hlm-card class="h-full">
+                <div class="grid gap-1 text-center p-4">
+                  <p class="text-4xl font-extrabold text-primary">
+                    {{ data.audienceOverview?.countriesCount || '—' }}
                   </p>
-                </hlm-card>
-              }
+                  <p class="text-sm font-bold text-stone-950">
+                    {{ data.audienceOverview?.countriesLabel || 'países' }}
+                  </p>
+                </div>
+              </hlm-card>
+              <hlm-card class="h-full">
+                <div class="grid gap-1 text-center p-4">
+                  <p class="text-4xl font-extrabold text-primary">
+                    {{ data.audienceOverview?.femalePercent || '—' }}
+                  </p>
+                  <p class="text-sm font-bold text-stone-950">
+                    {{ data.audienceOverview?.femaleLabel || 'mujeres' }}
+                  </p>
+                </div>
+              </hlm-card>
+              <hlm-card class="h-full">
+                <div class="grid gap-1 text-center p-4">
+                  <p class="text-4xl font-extrabold text-primary">
+                    {{ data.audienceOverview?.ageRange || '—' }}
+                  </p>
+                  <p class="text-sm font-bold text-stone-950">
+                    {{ data.audienceOverview?.ageLabel || 'años' }}
+                  </p>
+                </div>
+              </hlm-card>
             </div>
 
-            <div class="bg-surface rounded-2xl p-6 md:p-8">
-              <h3 class="text-lg font-extrabold text-stone-950 mb-4">Demografía principal</h3>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                @for (item of data.audience.demographics; track item.label) {
-                  <div class="text-center">
-                    <p class="text-2xl md:text-3xl font-extrabold text-primary">{{ item.value }}</p>
-                    <p class="text-sm font-bold text-stone-950">{{ item.label }}</p>
-                    <p class="text-xs text-muted-foreground">{{ item.detail }}</p>
-                  </div>
+            <div class="bg-white rounded-2xl p-6 md:p-8">
+              <h3 class="text-lg font-extrabold text-stone-950 mb-4">Principales países</h3>
+              <div class="flex flex-wrap gap-2">
+                @for (country of audienceCountries(data); track country) {
+                  <span hlmBadge variant="secondary">{{ country }}</span>
                 }
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Content -->
+        <!-- 04 · Formatos de colaboración -->
+        <section class="py-12 md:py-16 bg-white">
+          <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-8 md:mb-10">
+              <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
+                Colaboración
+              </p>
+              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-stone-950">
+                {{ data.collabFormats?.title || 'Formatos de colaboración' }}
+              </h2>
+              @if (data.collabFormats?.intro) {
+                <p class="text-muted-foreground max-w-2xl mx-auto mt-2 leading-relaxed">
+                  {{ data.collabFormats?.intro }}
+                </p>
+              }
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              @for (item of data.collabFormats?.items ?? []; track item.title) {
+                <hlm-card class="h-full">
+                  <h3 class="text-lg font-extrabold text-stone-950 mb-2">{{ item.title }}</h3>
+                  <p class="text-sm text-muted-foreground leading-relaxed">
+                    {{ item.description }}
+                  </p>
+                </hlm-card>
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- 05 · Casa Chuby -->
         <section class="py-12 md:py-16 bg-surface">
           <div class="max-w-6xl mx-auto px-4">
             <div class="text-center mb-8 md:mb-10">
@@ -268,75 +332,30 @@ import { MediaKitData } from './media-kit.model';
                 Contenido
               </p>
               <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-stone-950">
-                Formatos que funcionan
+                {{ data.houseFormats?.title || 'Formatos de La Casa Chuby' }}
               </h2>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              @for (item of data.content; track item.title) {
-                <article class="group rounded-2xl overflow-hidden bg-white border border-border">
-                  <div class="relative aspect-[4/5] overflow-hidden">
-                    <img
-                      [src]="item.image"
-                      [alt]="item.title"
-                      loading="lazy"
-                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div
-                      class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"
-                      aria-hidden="true"
-                    ></div>
-                    <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
-                      <p class="text-xs font-extrabold uppercase tracking-wide opacity-90">
-                        {{ item.metric }}
-                      </p>
-                      <h3 class="text-lg font-extrabold">{{ item.title }}</h3>
-                    </div>
-                  </div>
-                </article>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              @for (item of data.houseFormats?.items ?? []; track item.title) {
+                <div class="bg-white border border-border rounded-2xl p-4 text-center">
+                  <p class="text-sm font-extrabold text-stone-950">{{ item.title }}</p>
+                </div>
               }
             </div>
+
+            @if (data.houseFormats?.growthNote) {
+              <div class="flex justify-center mt-8">
+                <span hlmBadge class="gap-1">
+                  <ng-icon hlmIcon name="lucideHeart" class="w-4 h-4" />
+                  {{ data.houseFormats?.growthNote }}
+                </span>
+              </div>
+            }
           </div>
         </section>
 
-        <!-- Services -->
-        <section class="py-12 md:py-16 bg-white">
-          <div class="max-w-6xl mx-auto px-4">
-            <div class="text-center mb-8 md:mb-10">
-              <p class="text-xs font-extrabold uppercase tracking-widest text-primary mb-1">
-                Servicios
-              </p>
-              <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight text-stone-950">
-                ¿Qué podemos crear juntos?
-              </h2>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              @for (service of data.services; track service.name) {
-                <hlm-card class="h-full">
-                  <h3 class="text-lg font-extrabold text-stone-950 mb-2">{{ service.name }}</h3>
-                  <p class="text-sm text-muted-foreground leading-relaxed mb-4">
-                    {{ service.description }}
-                  </p>
-                  <ul class="grid gap-2">
-                    @for (item of service.deliverables; track item) {
-                      <li class="flex items-start gap-2 text-sm text-muted-foreground">
-                        <ng-icon
-                          hlmIcon
-                          name="lucideCheck"
-                          class="w-5 h-5 text-primary flex-shrink-0 mt-0.5"
-                        />
-                        {{ item }}
-                      </li>
-                    }
-                  </ul>
-                </hlm-card>
-              }
-            </div>
-          </div>
-        </section>
-
-        <!-- Final CTA -->
+        <!-- 06 · Contacto -->
         <section id="contacto" class="py-16 md:py-24 bg-stone-950">
           <div class="max-w-4xl mx-auto px-4 text-center">
             <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
@@ -345,6 +364,54 @@ import { MediaKitData } from './media-kit.model';
             <p class="text-muted-foreground mb-8 max-w-xl mx-auto">
               Cuéntanos tu idea, producto o campaña. Armamos una propuesta a la medida de tu marca.
             </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              @if (data.contact.website) {
+                <a
+                  [href]="'https://' + data.contact.website"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="bg-white/5 rounded-2xl p-4 hover:bg-white/10 transition-colors block"
+                >
+                  <p class="text-xs uppercase tracking-wide text-muted-foreground mb-1">Web</p>
+                  <p class="text-sm font-bold text-white break-words">
+                    {{ data.contact.website }}
+                  </p>
+                </a>
+              }
+              @if (data.contact.phone) {
+                <a
+                  [href]="'tel:' + data.contact.phone"
+                  class="bg-white/5 rounded-2xl p-4 hover:bg-white/10 transition-colors block"
+                >
+                  <p class="text-xs uppercase tracking-wide text-muted-foreground mb-1">Teléfono</p>
+                  <p class="text-sm font-bold text-white break-words">{{ data.contact.phone }}</p>
+                </a>
+              }
+              <a
+                [href]="'mailto:' + data.contact.email"
+                class="bg-white/5 rounded-2xl p-4 hover:bg-white/10 transition-colors block"
+              >
+                <p class="text-xs uppercase tracking-wide text-muted-foreground mb-1">Email</p>
+                <p class="text-sm font-bold text-white break-words">{{ data.contact.email }}</p>
+              </a>
+              @if (data.contact.location) {
+                <a
+                  [href]="data.contact.whatsapp"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="bg-white/5 rounded-2xl p-4 hover:bg-white/10 transition-colors block"
+                >
+                  <p class="text-xs uppercase tracking-wide text-muted-foreground mb-1">
+                    Ubicación
+                  </p>
+                  <p class="text-sm font-bold text-white break-words">
+                    {{ data.contact.location }}
+                  </p>
+                </a>
+              }
+            </div>
+
             <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a [href]="'mailto:' + data.contact.email" hlmBtn size="lg">
                 <ng-icon hlmIcon name="lucideMail" class="w-5 h-5" />
@@ -379,9 +446,19 @@ export class MediaKitComponent {
   constructor() {
     this.seo.setPage(
       'Media Kit | Las Chubys',
-      'Descubre el alcance, audiencia, servicios y tarifas de Las Chubys para colaboraciones con marcas en Ecuador y LATAM.',
+      'Descubre el alcance, audiencia y formatos de colaboración de Las Chubys para marcas.',
       '/images/cats/iris2.jpeg',
       '/media-kit',
     );
+  }
+
+  /** Devuelve las métricas de redes desde la sección nueva (fallback a metrics antiguas). */
+  protected socialNetworks(data: MediaKitData): MediaKitPdfNetwork[] {
+    return data.socialMetrics ?? [];
+  }
+
+  /** Devuelve la lista de países desde la sección nueva (fallback vacío). */
+  protected audienceCountries(data: MediaKitData): string[] {
+    return data.audienceOverview?.countries ?? [];
   }
 }
