@@ -16,7 +16,6 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 ENV NODE_ENV=production
 ENV PORT=4321
-COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 EXPOSE 4321
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
