@@ -47,6 +47,24 @@ const allowedHosts = (process.env['NG_ALLOWED_HOSTS'] ?? 'laschubys.com,www.lasc
 
 const engine = new AngularNodeAppEngine({ allowedHosts, trustProxyHeaders: true });
 
+const TRUSTED_FORWARDED_HEADERS: ReadonlySet<string> = new Set([
+  'x-forwarded-for',
+  'x-forwarded-host',
+  'x-forwarded-port',
+  'x-forwarded-proto',
+  'x-forwarded-prefix',
+]);
+
+function stripUntrustedForwardedHeaders(req: IncomingMessage): void {
+  // Traefik sends X-Forwarded-Server, which Angular treats as an untrusted proxy header
+  // and silently downgrades the whole request to CSR.
+  for (const name of Object.keys(req.headers)) {
+    if (name.startsWith('x-forwarded-') && !TRUSTED_FORWARDED_HEADERS.has(name)) {
+      delete req.headers[name];
+    }
+  }
+}
+
 // In production, proxy to the public backend API.
 const API_TARGET = process.env['API_URL'] || 'https://api.laschubys.com';
 
@@ -162,6 +180,7 @@ async function renderWithCsp(
   res: ServerResponse,
   next: () => void,
 ): Promise<void> {
+  stripUntrustedForwardedHeaders(req);
   const response = await engine.handle(req, { server: { browserDistFolder } });
   if (!response) {
     next();
@@ -233,6 +252,7 @@ if (isMainModule(import.meta.url)) {
     // 2. SSR for page routes only
     // Wrap response to add anti-cache headers to HTML (prevents stale chunk references)
     const origWriteHead = res.writeHead.bind(res);
+    // any is unavoidable here: ServerResponse.writeHead is overloaded (statusMessage?, headers?) and the arguments are forwarded untouched to the original.
     res.writeHead = (statusCode: number, ...args: any[]) => {
       const headers = args[0] as Record<string, string | string[]> | undefined;
       if (headers && typeof headers === 'object' && !Array.isArray(headers)) {
